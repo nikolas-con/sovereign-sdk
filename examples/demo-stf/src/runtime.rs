@@ -12,6 +12,9 @@ use sov_bank::query::{BankRpcImpl, BankRpcServer};
 #[cfg(feature = "native")]
 use sov_election::query::{ElectionRpcImpl, ElectionRpcServer};
 #[cfg(feature = "native")]
+#[cfg(feature = "experimental")]
+use sov_evm::query::{EvmRpcImpl, EvmRpcServer};
+#[cfg(feature = "native")]
 use sov_sequencer_registry::query::{SequencerRegistryRpcImpl, SequencerRegistryRpcServer};
 #[cfg(feature = "native")]
 use sov_value_setter::query::{ValueSetterRpcImpl, ValueSetterRpcServer};
@@ -64,4 +67,6 @@ pub struct Runtime<C: Context> {
     pub election: sov_election::Election<C>,
     pub value_setter: sov_value_setter::ValueSetter<C>,
     pub accounts: sov_accounts::Accounts<C>,
+    #[cfg(feature = "experimental")]
+    pub evm: sov_evm::Evm<C>,
 }

@@ -60,6 +60,7 @@ pub fn create_demo_genesis_config<C: Context>(
         election_config,
         value_setter_config,
         sov_accounts::AccountConfig { pub_keys: vec![] },
+        (),
     )
 }
 

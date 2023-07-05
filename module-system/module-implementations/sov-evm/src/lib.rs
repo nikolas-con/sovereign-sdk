@@ -4,8 +4,8 @@ pub mod call;
 pub mod evm;
 #[cfg(feature = "experimental")]
 pub mod genesis;
-#[cfg(feature = "experimental")]
 #[cfg(feature = "native")]
+#[cfg(feature = "experimental")]
 pub mod query;
 #[cfg(feature = "experimental")]
 #[cfg(test)]
@@ -45,7 +45,7 @@ mod experimental {
             _config: &Self::Config,
             _working_set: &mut WorkingSet<C::Storage>,
         ) -> Result<(), Error> {
-            todo!()
+            Ok(())
         }
 
         fn call(
