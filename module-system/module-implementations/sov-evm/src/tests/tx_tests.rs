@@ -8,6 +8,7 @@ use ethers_core::{
 use ethers_middleware::SignerMiddleware;
 use ethers_providers::{Middleware, Provider};
 use ethers_signers::{LocalWallet, Signer};
+use primitive_types::H160;
 use std::str::FromStr;
 
 #[tokio::test]
@@ -49,20 +50,36 @@ async fn tx_rlp_encoding_test() -> Result<(), Box<dyn std::error::Error>> {
 #[tokio::test]
 async fn send_tx_test_to_eth_node() -> Result<(), Box<dyn std::error::Error>> {
     let chain_id: u64 = 1;
-    let anvil = Anvil::new().chain_id(chain_id).spawn();
+    let from_addr = Address::from_str("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266").unwrap();
+    // let anvil = Anvil::new().chain_id(chain_id).spawn();
+    //let endpoint = anvil.endpoint();
+    let endpoint = format!("http://localhost:{}", 12345);
+    //let endpoint = format!("http://localhost:{}", 8545);
 
-    let provider = Provider::try_from(anvil.endpoint())?;
+    let provider = Provider::try_from(endpoint)?;
+    //provider
+    //   .get_transaction_count(from_addr, None)
+    //   .await
+    //   .unwrap();
+
+    println!("1");
+
     let key = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
         .parse::<LocalWallet>()
         .unwrap()
         .with_chain_id(chain_id);
 
+    println!("11");
     let client = SignerMiddleware::new_with_provider_chain(provider, key).await?;
 
+    println!("111");
     let contract = SimpleStorageContract::new();
+
+    println!("2");
     // Create contract
+
     let contract_address = {
-        let from_addr = anvil.addresses()[0];
+        //let from_addr = anvil.addresses()[0];
 
         let request = Eip1559TransactionRequest::new()
             .from(from_addr)
@@ -82,12 +99,14 @@ async fn send_tx_test_to_eth_node() -> Result<(), Box<dyn std::error::Error>> {
         receipt.unwrap().contract_address.unwrap()
     };
 
+    println!("3");
+
     // Call contract
     let set_arg = 923;
     {
-        let from = anvil.addresses()[0];
+        // let from = anvil.addresses()[0];
         let request = Eip1559TransactionRequest::new()
-            .from(from)
+            .from(from_addr)
             .to(contract_address)
             .chain_id(chain_id)
             .nonce(1u64)
@@ -106,10 +125,10 @@ async fn send_tx_test_to_eth_node() -> Result<(), Box<dyn std::error::Error>> {
 
     // Query contract
     {
-        let from = anvil.addresses()[0];
+        // let from = anvil.addresses()[0];
 
         let request = Eip1559TransactionRequest::new()
-            .from(from)
+            .from(from_addr)
             .to(contract_address)
             .chain_id(chain_id)
             .data(contract.get_call_data());
