@@ -1,14 +1,13 @@
-/// Creates config for a rollup with some default settings, the config is used in demos and tests.
-use crate::runtime::GenesisConfig;
 use sov_election::ElectionConfig;
+use sov_evm::EvmConfig;
 pub use sov_modules_api::default_context::DefaultContext;
 use sov_modules_api::default_signature::private_key::DefaultPrivateKey;
-use sov_modules_api::Context;
-use sov_modules_api::Hasher;
-use sov_modules_api::PublicKey;
-use sov_modules_api::Spec;
+use sov_modules_api::{Context, Hasher, PublicKey, Spec};
 pub use sov_state::config::Config as StorageConfig;
 use sov_value_setter::ValueSetterConfig;
+
+/// Creates config for a rollup with some default settings, the config is used in demos and tests.
+use crate::runtime::GenesisConfig;
 
 pub const DEMO_SEQUENCER_DA_ADDRESS: [u8; 32] = [1; 32];
 pub const LOCKED_AMOUNT: u64 = 200;
@@ -60,7 +59,7 @@ pub fn create_demo_genesis_config<C: Context>(
         election_config,
         value_setter_config,
         sov_accounts::AccountConfig { pub_keys: vec![] },
-        (),
+        EvmConfig { data: vec![] },
     )
 }
 
