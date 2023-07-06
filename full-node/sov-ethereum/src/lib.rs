@@ -65,10 +65,10 @@ fn register_rpc_methods(rpc: &mut RpcModule<Ethereum>) -> Result<(), jsonrpsee::
 
     rpc.register_method("eth_getTransactionCount", |p, e| Ok(unimplemented!()))?;
 
-    rpc.register_method("eth_chainId", |params, e| {
-        println!("eth_chainId");
-        Ok(Some(U64::from(1u64)))
-    })?;
+    // rpc.register_method("eth_chainId", |params, e| {
+    //    println!("eth_chainId");
+    //   Ok(Some(U64::from(1u64)))
+    //})?;
 
     rpc.register_method("eth_getBlockByNumber", |params, e| {
         println!("eth_getBlockByNumber");
