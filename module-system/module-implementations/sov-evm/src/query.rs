@@ -1,9 +1,49 @@
 use ethereum_types::{Address, H256, U256, U64};
-use ethers_core::types::{Block, BlockId, FeeHistory, Transaction, TransactionReceipt, TxHash};
+use ethers_core::types::transaction::eip2930::AccessListItem;
+use ethers_core::types::{
+    Block, BlockId, Bytes, FeeHistory, Transaction, TransactionReceipt, TxHash,
+};
 use sov_modules_macros::rpc_gen;
 use sov_state::WorkingSet;
 
 use crate::Evm;
+
+#[derive(Clone, Debug, PartialEq, Eq, Default, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(feature = "serde", serde(deny_unknown_fields))]
+#[cfg_attr(feature = "serde", serde(rename_all = "camelCase"))]
+pub struct EthTransactionRequest {
+    /// from address
+    pub from: Option<Address>,
+    /// to address
+    pub to: Option<Address>,
+    /// legacy, gas Price
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub gas_price: Option<U256>,
+    /// max base fee per gas sender is willing to pay
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub max_fee_per_gas: Option<U256>,
+    /// miner tip
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub max_priority_fee_per_gas: Option<U256>,
+    /// gas
+    pub gas: Option<U256>,
+    /// value of th tx in wei
+    pub value: Option<U256>,
+    /// Any additional data sent
+    pub data: Option<Bytes>,
+    /// Transaction nonce
+    pub nonce: Option<U256>,
+    /// chain id
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub chain_id: Option<U64>,
+    /// warm storage access pre-payment
+    #[cfg_attr(feature = "serde", serde(default))]
+    pub access_list: Option<Vec<AccessListItem>>,
+    /// EIP-2718 type
+    #[cfg_attr(feature = "serde", serde(rename = "type"))]
+    pub transaction_type: Option<U256>,
+}
 
 #[rpc_gen(client, server, namespace = "eth")]
 impl<C: sov_modules_api::Context> Evm<C> {
@@ -39,6 +79,15 @@ impl<C: sov_modules_api::Context> Evm<C> {
             oldest_block: Default::default(),
             reward: Default::default(),
         }
+    }
+
+    #[rpc_method(name = "sendTransaction")]
+    pub fn send_transaction(
+        &self,
+        _request: EthTransactionRequest,
+        _working_set: &mut WorkingSet<C::Storage>,
+    ) -> U256 {
+        unimplemented!()
     }
 
     #[rpc_method(name = "blockNumber")]

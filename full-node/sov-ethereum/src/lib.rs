@@ -14,11 +14,6 @@ pub fn get_ethereum_rpc() -> RpcModule<Ethereum> {
 }
 
 fn register_rpc_methods(rpc: &mut RpcModule<Ethereum>) -> Result<(), jsonrpsee::core::Error> {
-    rpc.register_method::<Result<(), ()>, _>("eth_sendTransaction", |p, e| {
-        println!("eth_sendTransaction");
-        unimplemented!()
-    })?;
-
     rpc.register_method("eth_sendRawTransaction", |p, e| {
         println!("eth_sendRawTransaction");
         let data: Bytes = p.one().unwrap();
