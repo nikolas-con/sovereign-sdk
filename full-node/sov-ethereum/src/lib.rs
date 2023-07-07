@@ -64,8 +64,22 @@ fn register_rpc_methods(rpc: &mut RpcModule<Ethereum>) -> Result<(), jsonrpsee::
 
         let h: TxHash = decoded_tx.sighash();
 
+        let d = match decoded_tx {
+            TypedTransaction::Legacy(_) => todo!(),
+            TypedTransaction::Eip2930(_) => todo!(),
+            TypedTransaction::Eip1559(t) => t,
+        };
+
         let tx = EvmTransaction {
-            ..Default::default()
+            caller: d.from.unwrap().into(),
+            data: d.data.unwrap().to_vec(),
+            gas_limit: u64::MAX,                          // todo
+            gas_price: Default::default(),                // todo
+            max_priority_fee_per_gas: Default::default(), //d.max_priority_fee_per_gas.map(|f| f.into()),
+            to: None,                                     //todo
+            value: d.value.unwrap().into(),
+            nonce: d.nonce.unwrap().as_u64(),
+            access_lists: vec![],
         };
 
         let tx = CallMessage { tx };

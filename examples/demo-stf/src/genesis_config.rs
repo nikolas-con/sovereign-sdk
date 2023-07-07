@@ -1,5 +1,5 @@
 use sov_election::ElectionConfig;
-use sov_evm::EvmConfig;
+use sov_evm::{AccountData, EvmConfig};
 pub use sov_modules_api::default_context::DefaultContext;
 use sov_modules_api::default_signature::private_key::DefaultPrivateKey;
 use sov_modules_api::{Context, Hasher, PublicKey, Spec};
@@ -53,13 +53,26 @@ pub fn create_demo_genesis_config<C: Context>(
         admin: election_admin_private_key.pub_key().to_address(),
     };
 
+    let caller = hex::decode("f39Fd6e51aad88F6F4ce6aB8827279cffFb92266")
+        .unwrap()
+        .try_into()
+        .unwrap();
+
     GenesisConfig::new(
         bank_config,
         sequencer_config,
         election_config,
         value_setter_config,
         sov_accounts::AccountConfig { pub_keys: vec![] },
-        EvmConfig { data: vec![] },
+        EvmConfig {
+            data: vec![AccountData {
+                address: caller,
+                balance: AccountData::balance(1000000000),
+                code_hash: AccountData::empty_code(),
+                code: vec![],
+                nonce: 0,
+            }],
+        },
     )
 }
 
