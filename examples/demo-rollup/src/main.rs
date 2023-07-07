@@ -142,12 +142,12 @@ async fn main() -> Result<(), anyhow::Error> {
     let r = get_sequencer_rpc(batch_builder, da_service.clone());
     methods.merge(r).expect("Failed to merge Txs RPC modules");
 
-    let ethereum_rpc = get_ethereum_rpc();
+    let ethereum_rpc = get_ethereum_rpc(rollup_config.da.clone());
     methods.merge(ethereum_rpc).unwrap();
 
-    // let _handle = tokio::spawn(async move {
-    start_rpc_server(methods, address).await;
-    // });
+    let _handle = tokio::spawn(async move {
+        start_rpc_server(methods, address).await;
+    });
 
     // For demonstration, we also initialize the DaVerifier interface.
     // Running the verifier is only *necessary* during proof generation not normal execution
