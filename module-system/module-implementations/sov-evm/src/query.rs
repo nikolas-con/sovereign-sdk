@@ -5,6 +5,7 @@ use ethers_core::types::{
 };
 use sov_modules_macros::rpc_gen;
 use sov_state::WorkingSet;
+use tracing::info;
 
 use crate::Evm;
 
@@ -49,7 +50,7 @@ pub struct EthTransactionRequest {
 impl<C: sov_modules_api::Context> Evm<C> {
     #[rpc_method(name = "chainId")]
     pub fn chain_id(&self, _working_set: &mut WorkingSet<C::Storage>) -> Option<U64> {
-        println!("eth_chainId!");
+        info!("evm module: eth_chainId");
         Some(U64::from(1u64))
     }
 
@@ -60,19 +61,19 @@ impl<C: sov_modules_api::Context> Evm<C> {
         l: Option<bool>,
         _working_set: &mut WorkingSet<C::Storage>,
     ) -> Option<Block<TxHash>> {
-        println!("eth_getBlockByNumber!");
-        println!("{:?} {:?}", b, l);
+        info!("evm module: eth_getBlockByNumber");
 
-        let b = Block::<TxHash> {
+        let block = Block::<TxHash> {
             base_fee_per_gas: Some(100.into()),
             ..Default::default()
         };
 
-        Some(b)
+        Some(block)
     }
 
     #[rpc_method(name = "feeHistory")]
     pub fn fee_history(&self, _working_set: &mut WorkingSet<C::Storage>) -> FeeHistory {
+        info!("evm module: eth_feeHistory");
         FeeHistory {
             base_fee_per_gas: Default::default(),
             gas_used_ratio: Default::default(),
@@ -87,12 +88,12 @@ impl<C: sov_modules_api::Context> Evm<C> {
         _request: EthTransactionRequest,
         _working_set: &mut WorkingSet<C::Storage>,
     ) -> U256 {
-        unimplemented!()
+        unimplemented!("eth_sendTransaction not implemented")
     }
 
     #[rpc_method(name = "blockNumber")]
     pub fn block_number(&self, _working_set: &mut WorkingSet<C::Storage>) -> U256 {
-        unimplemented!()
+        unimplemented!("eth_blockNumber not implemented")
     }
 
     #[rpc_method(name = "getTransactionByHash")]
@@ -101,7 +102,7 @@ impl<C: sov_modules_api::Context> Evm<C> {
         _hash: H256,
         _working_set: &mut WorkingSet<C::Storage>,
     ) -> Option<Transaction> {
-        unimplemented!()
+        unimplemented!("eth_blockNumber not implemented")
     }
 
     #[rpc_method(name = "getTransactionReceipt")]
@@ -110,16 +111,16 @@ impl<C: sov_modules_api::Context> Evm<C> {
         _hash: H256,
         _working_set: &mut WorkingSet<C::Storage>,
     ) -> Option<TransactionReceipt> {
-        unimplemented!()
+        unimplemented!("eth_getTransactionReceipt not implemented")
     }
 
-    #[rpc_method(name = "eth_getTransactionCount")]
+    #[rpc_method(name = "getTransactionCount")]
     pub fn get_transaction_count(
         &self,
         _address: Address,
         _block_number: Option<BlockId>,
         _working_set: &mut WorkingSet<C::Storage>,
     ) -> Option<U256> {
-        unimplemented!()
+        unimplemented!("eth_getTransactionCount not implemented")
     }
 }
