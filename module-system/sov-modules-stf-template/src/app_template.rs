@@ -77,8 +77,6 @@ where
         &mut self,
         blob: &mut impl BlobTransactionTrait,
     ) -> ApplyBatchResult<BatchReceipt<SequencerOutcome, TxEffect>> {
-        println!("apply_blob");
-
         debug!(
             "Applying batch from sequencer: 0x{}",
             hex::encode(blob.sender())
