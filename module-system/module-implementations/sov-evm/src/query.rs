@@ -57,8 +57,8 @@ impl<C: sov_modules_api::Context> Evm<C> {
     #[rpc_method(name = "getBlockByNumber")]
     pub fn get_block_by_number(
         &self,
-        b: Option<String>,
-        l: Option<bool>,
+        _block_number: Option<String>,
+        _details: Option<bool>,
         _working_set: &mut WorkingSet<C::Storage>,
     ) -> Option<Block<TxHash>> {
         info!("evm module: eth_getBlockByNumber");

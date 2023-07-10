@@ -25,18 +25,12 @@ impl<C: sov_modules_api::Context> Evm<C> {
         _context: &C,
         working_set: &mut WorkingSet<C::Storage>,
     ) -> Result<CallResponse> {
-        println!("");
-        println!("=======execute_call EVM!!!");
-        println!("");
-
         let cfg_env = CfgEnv::default();
         let block_env = self.block_env.get(working_set).unwrap_or_default();
         let evm_db: EvmDb<'_, C> = self.get_db(working_set);
 
         // It is ok to use the unwrap here because the error type is `Infallible`.
-        let res = executor::execute_tx(evm_db, block_env, tx, cfg_env).unwrap();
-
-        println!("Res {:?}", res);
+        let _res = executor::execute_tx(evm_db, block_env, tx, cfg_env).unwrap();
         Ok(CallResponse::default())
     }
 }
