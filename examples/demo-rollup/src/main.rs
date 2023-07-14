@@ -75,6 +75,7 @@ struct HexKey {
 /// const SEQUENCER_DA_ADDRESS: [u8;47] = *b"celestia1qp09ysygcx6npted5yc0au6k9lner05yvs9208"
 /// ```
 pub fn get_genesis_config() -> GenesisConfig<DefaultContext> {
+    qwe
     let hex_key: HexKey = serde_json::from_slice(include_bytes!(
         "../../test-data/keys/token_deployer_private_key.json"
     ))
