@@ -1,3 +1,23 @@
+// Separate tool
+//
+// Cons
+// 1. Duplicated priv key
+// 2. duplicated nonce
+// 3. Separate binary
+//Pros
+// 1. Simple integration and a lot of design freedom
+// 2. We can give it to antother team
+// 3. We don't have to wait for components (tx pool etc)
+// 4 Easy to extend to solana etc..
+
+// Integrated
+// Cons:
+// 1. Make everything very ethereum centric
+// 2. Introduces egdge cases, and we pay cost even without EVM module
+// 3. Can't easly give to another team
+// Pros:
+// 1 No Key & nonce duplication
+
 #[cfg(feature = "experimental")]
 pub mod call;
 #[cfg(feature = "experimental")]
