@@ -5,7 +5,7 @@ use anyhow::Context;
 use const_rollup_config::{ROLLUP_NAMESPACE_RAW, SEQUENCER_DA_ADDRESS};
 use demo_stf::app::{App, DefaultContext, DefaultPrivateKey};
 use demo_stf::genesis_config::create_demo_genesis_config;
-use demo_stf::runtime::{get_rpc_methods, GenesisConfig, Runtime};
+use demo_stf::runtime::{get_rpc_methods, GenesisConfig};
 use jupiter::da_service::CelestiaService;
 #[cfg(feature = "experimental")]
 use jupiter::da_service::DaServiceConfig;
@@ -15,8 +15,7 @@ use risc0_adapter::host::Risc0Verifier;
 use sov_db::ledger_db::LedgerDB;
 #[cfg(feature = "experimental")]
 use sov_ethereum::get_ethereum_rpc;
-use sov_modules_stf_template::{AppTemplate, SequencerOutcome, TxEffect};
-use sov_rollup_interface::da::DaSpec;
+use sov_modules_stf_template::{SequencerOutcome, TxEffect};
 use sov_rollup_interface::services::da::DaService;
 use sov_sequencer::get_sequencer_rpc;
 use sov_state::storage::Storage;
@@ -103,7 +102,7 @@ async fn main() -> Result<(), anyhow::Error> {
     )
     .await;
 
-    let mut app: App<Runtime<DefaultContext>, Risc0Verifier, jupiter::BlobWithSender> =
+    let mut app: App<Risc0Verifier, jupiter::BlobWithSender> =
         App::new(rollup_config.runner.storage.clone());
 
     let storage = app.get_storage();
@@ -120,16 +119,7 @@ async fn main() -> Result<(), anyhow::Error> {
     let storage = app.get_storage();
     let genesis_config = get_genesis_config();
 
-    let mut runner = RollupRunner::<
-        AppTemplate<
-            DefaultContext,
-            Runtime<DefaultContext>,
-            Risc0Verifier,
-            <<CelestiaService as DaService>::Spec as DaSpec>::BlobTransaction,
-        >,
-        CelestiaService,
-        Risc0Verifier,
-    >::new(
+    let mut runner = RollupRunner::new(
         rollup_config,
         da_service,
         ledger_db,
@@ -146,7 +136,7 @@ async fn main() -> Result<(), anyhow::Error> {
 
 fn register_sequencer<DA>(
     da_service: DA,
-    demo_runner: &mut App<Runtime<DefaultContext>, Risc0Verifier, jupiter::BlobWithSender>,
+    demo_runner: &mut App<Risc0Verifier, jupiter::BlobWithSender>,
     methods: &mut jsonrpsee::RpcModule<()>,
 ) -> Result<(), anyhow::Error>
 where

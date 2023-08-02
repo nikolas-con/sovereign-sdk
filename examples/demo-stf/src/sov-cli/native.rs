@@ -444,10 +444,7 @@ mod test {
 
             Self {
                 config: genesis_config,
-                demo: App::<Runtime<DefaultContext>, MockZkvm, TestBlob>::new(
-                    runner_config.storage,
-                )
-                .stf,
+                demo: App::<MockZkvm, TestBlob>::new(runner_config.storage).stf,
             }
         }
     }
