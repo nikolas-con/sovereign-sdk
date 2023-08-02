@@ -347,7 +347,7 @@ mod test {
     use demo_stf::app::{DemoApp, DemoAppRunner};
     use demo_stf::genesis_config::{create_demo_config, DEMO_SEQUENCER_DA_ADDRESS, LOCKED_AMOUNT};
     use demo_stf::runner_config::Config;
-    use demo_stf::runtime::GenesisConfig;
+    use demo_stf::runtime::{GenesisConfig, Runtime};
     use sov_modules_api::Address;
     use sov_modules_stf_template::{Batch, RawTx, SequencerOutcome};
     use sov_rollup_interface::mocks::MockZkvm;
@@ -425,7 +425,7 @@ mod test {
     // Test helpers
     struct TestDemo {
         config: GenesisConfig<C>,
-        demo: DemoApp<C, MockZkvm, TestBlob>,
+        demo: DemoApp<Runtime<C>, C, MockZkvm, TestBlob>,
     }
 
     impl TestDemo {
@@ -445,7 +445,7 @@ mod test {
 
             Self {
                 config: genesis_config,
-                demo: DemoAppRunner::<DefaultContext, MockZkvm, TestBlob>::new(runner_config).stf,
+                demo: DemoAppRunner::<Runtime<DefaultContext>, DefaultContext, MockZkvm, TestBlob>::new(runner_config.storage).stf,
             }
         }
     }
@@ -501,7 +501,7 @@ mod test {
     }
 
     fn execute_txs(
-        demo: &mut DemoApp<C, MockZkvm, TestBlob>,
+        demo: &mut DemoApp<Runtime<C>, C, MockZkvm, TestBlob>,
         config: GenesisConfig<C>,
         txs: Vec<RawTx>,
     ) {
@@ -527,7 +527,7 @@ mod test {
     }
 
     fn get_balance(
-        demo: &mut DemoApp<DefaultContext, MockZkvm, TestBlob>,
+        demo: &mut DemoApp<Runtime<C>, DefaultContext, MockZkvm, TestBlob>,
         token_deployer_address: &Address,
         user_address: Address,
     ) -> Option<u64> {

@@ -9,7 +9,7 @@ use demo_stf::app::{
 };
 use demo_stf::genesis_config::create_demo_genesis_config;
 use demo_stf::runner_config::from_toml_path;
-use demo_stf::runtime::{get_rpc_methods, GenesisConfig};
+use demo_stf::runtime::{get_rpc_methods, GenesisConfig, Runtime};
 use jsonrpsee::core::server::Methods;
 use jupiter::da_service::CelestiaService;
 #[cfg(feature = "experimental")]
@@ -156,7 +156,11 @@ where
 {
     start_height: u64,
     da_service: DA,
-    app: NativeAppRunner<Risc0Verifier, <<DA as DaService>::Spec as DaSpec>::BlobTransaction>,
+    app: NativeAppRunner<
+        Runtime<DefaultContext>,
+        Risc0Verifier,
+        <<DA as DaService>::Spec as DaSpec>::BlobTransaction,
+    >,
     ledger_db: LedgerDB,
     state_root: [u8; 32],
 }
@@ -171,6 +175,7 @@ where
         ledger_db: LedgerDB,
     ) -> Result<Self, anyhow::Error> {
         let mut app = NativeAppRunner::<
+            Runtime<DefaultContext>,
             Risc0Verifier,
             <<DA as DaService>::Spec as DaSpec>::BlobTransaction,
         >::new(rollup_config.runner.storage);
@@ -264,6 +269,7 @@ where
 fn register_sequencer<DA>(
     da_service: DA,
     demo_runner: &mut NativeAppRunner<
+        Runtime<DefaultContext>,
         Risc0Verifier,
         <<DA as DaService>::Spec as DaSpec>::BlobTransaction,
     >,
