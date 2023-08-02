@@ -3,7 +3,7 @@ use std::sync::Arc;
 
 use anyhow::Context;
 use const_rollup_config::{ROLLUP_NAMESPACE_RAW, SEQUENCER_DA_ADDRESS};
-use demo_stf::app::{App, DefaultContext, DefaultPrivateKey, DemoBatchReceipt, DemoTxReceipt};
+use demo_stf::app::{App, DefaultContext, DefaultPrivateKey};
 use demo_stf::genesis_config::create_demo_genesis_config;
 use demo_stf::runtime::{get_rpc_methods, GenesisConfig, Runtime};
 use jupiter::da_service::CelestiaService;
@@ -15,7 +15,7 @@ use risc0_adapter::host::Risc0Verifier;
 use sov_db::ledger_db::LedgerDB;
 #[cfg(feature = "experimental")]
 use sov_ethereum::get_ethereum_rpc;
-use sov_modules_stf_template::AppTemplate;
+use sov_modules_stf_template::{AppTemplate, SequencerOutcome, TxEffect};
 use sov_rollup_interface::da::DaSpec;
 use sov_rollup_interface::services::da::DaService;
 use sov_sequencer::get_sequencer_rpc;
@@ -169,7 +169,7 @@ fn register_ledger(
     ledger_db: LedgerDB,
     methods: &mut jsonrpsee::RpcModule<()>,
 ) -> Result<(), anyhow::Error> {
-    let ledger_rpc = ledger_rpc::get_ledger_rpc::<DemoBatchReceipt, DemoTxReceipt>(ledger_db);
+    let ledger_rpc = ledger_rpc::get_ledger_rpc::<SequencerOutcome, TxEffect>(ledger_db);
     methods
         .merge(ledger_rpc)
         .context("Failed to merge ledger RPC modules")

@@ -5,16 +5,12 @@ pub use sov_modules_api::default_context::ZkDefaultContext;
 pub use sov_modules_api::default_signature::private_key::DefaultPrivateKey;
 use sov_modules_api::hooks::{ApplyBlobHooks, TxHooks};
 #[cfg(feature = "native")]
-use sov_modules_api::RpcRunner;
-#[cfg(feature = "native")]
 use sov_modules_api::Spec;
 use sov_modules_api::{Context, DispatchCall, Genesis};
 pub use sov_modules_stf_template::Batch;
-use sov_modules_stf_template::{AppTemplate, SequencerOutcome, TxEffect};
+use sov_modules_stf_template::{AppTemplate, SequencerOutcome};
 use sov_rollup_interface::da::BlobReaderTrait;
-use sov_rollup_interface::services::stf_runner::StateTransitionRunner;
 #[cfg(feature = "native")]
-use sov_rollup_interface::stf::ProverConfig;
 use sov_rollup_interface::zk::Zkvm;
 #[cfg(feature = "native")]
 use sov_state::ProverStorage;
@@ -23,20 +19,6 @@ use sov_state::Storage;
 use sov_stf_runner::runner_config::StorageConfig;
 
 use crate::batch_builder::FiFoStrictBatchBuilder;
-
-pub struct DemoAppRunner<RT, C: Context, Vm: Zkvm, B: BlobReaderTrait> {
-    pub stf: DemoApp<RT, C, Vm, B>,
-    pub batch_builder: Option<FiFoStrictBatchBuilder<RT, C>>,
-}
-
-pub type ZkAppRunner<RT, Vm, B> = DemoAppRunner<RT, ZkDefaultContext, Vm, B>;
-
-pub type DemoApp<RT, C, Vm, B> = AppTemplate<C, RT, Vm, B>;
-
-/// Batch receipt type used by the demo app. We export this type so that it's easily accessible to the full node.
-pub type DemoBatchReceipt = SequencerOutcome;
-/// Tx receipt type used by the demo app. We export this type so that it's easily accessible to the full node.
-pub type DemoTxReceipt = TxEffect;
 
 #[cfg(feature = "native")]
 pub struct App<RT, Vm: Zkvm, B: BlobReaderTrait> {
