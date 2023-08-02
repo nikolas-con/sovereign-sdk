@@ -6273,6 +6273,7 @@ dependencies = [
  "demo-stf",
  "futures",
  "hex",
+ "jmt",
  "jsonrpsee 0.18.2",
  "jupiter",
  "prettytable-rs",

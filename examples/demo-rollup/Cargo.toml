@@ -20,6 +20,7 @@ serde_json = { workspace = true }
 tracing = { workspace = true }
 hex = { workspace = true }
 bytes = { workspace = true }
+jmt = { workspace = true }
 futures = "0.3"
 
 # Crates which only this package depends on 

@@ -142,7 +142,6 @@ async fn main() -> Result<(), anyhow::Error> {
     >::new(rollup_config.runner.storage.clone());
 
     let storage = app.get_storage();
-
     let mut methods = get_rpc_methods::<DefaultContext>(storage);
 
     // register rpc methods
@@ -155,7 +154,15 @@ async fn main() -> Result<(), anyhow::Error> {
 
     let storage = app.get_storage();
 
-    let mut runner = RollupRunner::<CelestiaService>::new(
+    let mut runner = RollupRunner::<
+        AppTemplate<
+            DefaultContext,
+            Runtime<DefaultContext>,
+            Risc0Verifier,
+            <<CelestiaService as DaService>::Spec as DaSpec>::BlobTransaction,
+        >,
+        CelestiaService,
+    >::new(
         rollup_config,
         da_service,
         ledger_db,
@@ -169,42 +176,38 @@ async fn main() -> Result<(), anyhow::Error> {
     Ok(())
 }
 
-struct RollupRunner<DA>
+struct RollupRunner<ST, DA>
 where
     DA: DaService,
-{
-    start_height: u64,
-    da_service: DA,
-    /*app: NativeAppRunner<
-        Runtime<DefaultContext>,
-        Risc0Verifier,
-        <<DA as DaService>::Spec as DaSpec>::BlobTransaction,
-    >,*/
-    app: AppTemplate<
-        DefaultContext,
-        Runtime<DefaultContext>,
+    ST: StateTransitionFunction<
         Risc0Verifier,
         <<DA as DaService>::Spec as DaSpec>::BlobTransaction,
     >,
+{
+    start_height: u64,
+    da_service: DA,
+
+    app: ST,
     ledger_db: LedgerDB,
     state_root: [u8; 32],
     socket_address: SocketAddr,
 }
 
-impl<DA> RollupRunner<DA>
+impl<ST, DA> RollupRunner<ST, DA>
 where
     DA: DaService<Error = anyhow::Error> + Clone + Send + Sync + 'static,
+    ST: StateTransitionFunction<
+        Risc0Verifier,
+        <<DA as DaService>::Spec as DaSpec>::BlobTransaction,
+        InitialState = GenesisConfig<DefaultContext>,
+        StateRoot = jmt::RootHash,
+    >,
 {
     fn new(
         rollup_config: RollupConfig,
         da_service: DA,
         ledger_db: LedgerDB,
-        mut app: AppTemplate<
-            DefaultContext,
-            Runtime<DefaultContext>,
-            Risc0Verifier,
-            <<DA as DaService>::Spec as DaSpec>::BlobTransaction,
-        >,
+        mut app: ST,
         is_storage_empty: bool,
     ) -> Result<Self, anyhow::Error> {
         let rpc_config = rollup_config.rpc_config;
