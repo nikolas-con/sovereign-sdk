@@ -22,7 +22,7 @@ use sov_state::{Storage, ZkStorage};
 
 use crate::batch_builder::FiFoStrictBatchBuilder;
 #[cfg(feature = "native")]
-use crate::runner_config::Config;
+use crate::runner_config::StorageConfig;
 use crate::runtime::Runtime;
 
 pub struct DemoAppRunner<C: Context, Vm: Zkvm, B: BlobReaderTrait> {
@@ -43,16 +43,10 @@ pub type DemoBatchReceipt = SequencerOutcome;
 pub type DemoTxReceipt = TxEffect;
 
 #[cfg(feature = "native")]
-impl<Vm: Zkvm, B: BlobReaderTrait> StateTransitionRunner<ProverConfig, Vm, B>
-    for DemoAppRunner<DefaultContext, Vm, B>
-{
-    type RuntimeConfig = Config;
-    type Inner = DemoApp<DefaultContext, Vm, B>;
-    type BatchBuilder = FiFoStrictBatchBuilder<Runtime<DefaultContext>, DefaultContext>;
-
-    fn new(runtime_config: Self::RuntimeConfig) -> Self {
-        let storage = ProverStorage::with_config(runtime_config.storage)
-            .expect("Failed to open prover storage");
+impl<Vm: Zkvm, B: BlobReaderTrait> DemoAppRunner<DefaultContext, Vm, B> {
+    pub fn new(storage_config: StorageConfig) -> Self {
+        let storage =
+            ProverStorage::with_config(storage_config).expect("Failed to open prover storage");
         let app = AppTemplate::new(storage.clone(), Runtime::default());
         let batch_size_bytes = 1024 * 100; // 100 KB
         let batch_builder = FiFoStrictBatchBuilder::new(
@@ -66,6 +60,14 @@ impl<Vm: Zkvm, B: BlobReaderTrait> StateTransitionRunner<ProverConfig, Vm, B>
             batch_builder: Some(batch_builder),
         }
     }
+}
+
+#[cfg(feature = "native")]
+impl<Vm: Zkvm, B: BlobReaderTrait> StateTransitionRunner<ProverConfig, Vm, B>
+    for DemoAppRunner<DefaultContext, Vm, B>
+{
+    type Inner = DemoApp<DefaultContext, Vm, B>;
+    type BatchBuilder = FiFoStrictBatchBuilder<Runtime<DefaultContext>, DefaultContext>;
 
     fn inner(&self) -> &Self::Inner {
         &self.stf
@@ -80,14 +82,8 @@ impl<Vm: Zkvm, B: BlobReaderTrait> StateTransitionRunner<ProverConfig, Vm, B>
     }
 }
 
-impl<Vm: Zkvm, B: BlobReaderTrait> StateTransitionRunner<ZkConfig, Vm, B>
-    for DemoAppRunner<ZkDefaultContext, Vm, B>
-{
-    type RuntimeConfig = [u8; 32];
-    type Inner = DemoApp<ZkDefaultContext, Vm, B>;
-    type BatchBuilder = FiFoStrictBatchBuilder<Runtime<ZkDefaultContext>, ZkDefaultContext>;
-
-    fn new(runtime_config: Self::RuntimeConfig) -> Self {
+impl<Vm: Zkvm, B: BlobReaderTrait> DemoAppRunner<ZkDefaultContext, Vm, B> {
+    fn new(runtime_config: [u8; 32]) -> Self {
         let storage = ZkStorage::with_config(runtime_config).expect("Failed to open zk storage");
         let app: AppTemplate<ZkDefaultContext, Runtime<ZkDefaultContext>, Vm, B> =
             AppTemplate::new(storage.clone(), Runtime::default());
@@ -104,6 +100,13 @@ impl<Vm: Zkvm, B: BlobReaderTrait> StateTransitionRunner<ZkConfig, Vm, B>
             batch_builder: Some(batch_builder),
         }
     }
+}
+
+impl<Vm: Zkvm, B: BlobReaderTrait> StateTransitionRunner<ZkConfig, Vm, B>
+    for DemoAppRunner<ZkDefaultContext, Vm, B>
+{
+    type Inner = DemoApp<ZkDefaultContext, Vm, B>;
+    type BatchBuilder = FiFoStrictBatchBuilder<Runtime<ZkDefaultContext>, ZkDefaultContext>;
 
     fn inner(&self) -> &Self::Inner {
         &self.stf

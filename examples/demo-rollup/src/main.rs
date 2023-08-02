@@ -173,7 +173,7 @@ where
         let mut app = NativeAppRunner::<
             Risc0Verifier,
             <<DA as DaService>::Spec as DaSpec>::BlobTransaction,
-        >::new(rollup_config.runner.clone());
+        >::new(rollup_config.runner.storage);
 
         let storage = app.get_storage();
         let is_storage_empty = storage.is_empty();

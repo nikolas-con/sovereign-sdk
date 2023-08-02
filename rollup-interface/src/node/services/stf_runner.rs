@@ -25,20 +25,12 @@ use crate::zk::Zkvm;
 ///
 /// TODO: Why is it called runner? It only creates. Creator, Factory: <https://github.com/Sovereign-Labs/sovereign-sdk/issues/447>
 pub trait StateTransitionRunner<T: StateTransitionConfig, Vm: Zkvm, B: BlobReaderTrait> {
-    /// The parameters of the state transition function which are set at runtime. For example,
-    /// the runtime config might contain path to a data directory.
-    type RuntimeConfig;
-
     /// The inner [`StateTransitionFunction`] which is being run.
     type Inner: StateTransitionFunction<Vm, B>;
 
     /// The [`BatchBuilder`] accepts transactions from the mempool and returns bundles of transactions
     /// on request from the full node.
     type BatchBuilder: BatchBuilder;
-
-    // TODO: decide if `new` also requires <Self as StateTransitionFunction>::ChainParams as an argument
-    /// Creates a [`StateTransitionRunner`] from the given runtime config.
-    fn new(runtime_config: Self::RuntimeConfig) -> Self;
 
     /// Return a reference to the inner STF implementation
     fn inner(&self) -> &Self::Inner;

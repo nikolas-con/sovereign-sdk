@@ -9,3 +9,9 @@ rust-version = { workspace = true }
 version = { workspace = true }
 readme = "README.md"
 resolver = "2"
+
+[dependencies]
+sov-rollup-interface = { path = "../../rollup-interface", version = "0.1" }
+sov-state = { path = "../sov-state", version = "0.1", default-features = false }
+sov-modules-api = { path = "../sov-modules-api", version = "0.1", default-features = false }
+sov-modules-stf-template = { path = "../sov-modules-stf-template", version = "0.1", default-features = false }
