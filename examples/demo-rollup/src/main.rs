@@ -106,12 +106,6 @@ async fn main() -> Result<(), anyhow::Error> {
     let mut app: App<Runtime<DefaultContext>, Risc0Verifier, jupiter::BlobWithSender> =
         App::new(rollup_config.runner.storage.clone());
 
-    /*NativeAppRunner::<
-        Runtime<DefaultContext>,
-        Risc0Verifier,
-        <<CelestiaService as DaService>::Spec as DaSpec>::BlobTransaction,
-    >::new(rollup_config.runner.storage.clone());*/
-
     let storage = app.get_storage();
     let mut methods = get_rpc_methods::<DefaultContext>(storage);
 
