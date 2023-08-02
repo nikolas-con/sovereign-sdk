@@ -11,6 +11,7 @@ use demo_stf::genesis_config::create_demo_genesis_config;
 use demo_stf::runner_config::from_toml_path;
 use demo_stf::runtime::{get_rpc_methods, GenesisConfig, Runtime};
 use jsonrpsee::core::server::Methods;
+use jsonrpsee::RpcModule;
 use jupiter::da_service::CelestiaService;
 #[cfg(feature = "experimental")]
 use jupiter::da_service::DaServiceConfig;
@@ -50,17 +51,6 @@ const ROLLUP_NAMESPACE: NamespaceId = NamespaceId(ROLLUP_NAMESPACE_RAW);
 
 pub fn initialize_ledger(path: impl AsRef<std::path::Path>) -> LedgerDB {
     LedgerDB::with_path(path).expect("Ledger DB failed to open")
-}
-
-async fn start_rpc_server(methods: impl Into<Methods>, address: SocketAddr) {
-    let server = jsonrpsee::server::ServerBuilder::default()
-        .build([address].as_ref())
-        .await
-        .unwrap();
-
-    info!("Starting RPC server at {} ", server.local_addr().unwrap());
-    let _server_handle = server.start(methods).unwrap();
-    futures::future::pending::<()>().await;
 }
 
 // TODO: Remove this when sov-cli is in its own crate.
@@ -144,7 +134,35 @@ async fn main() -> Result<(), anyhow::Error> {
     )
     .await;
 
-    let mut runner = RollupRunner::<CelestiaService>::new(rollup_config, da_service, ledger_db)?;
+    let mut app = NativeAppRunner::<
+        Runtime<DefaultContext>,
+        Risc0Verifier,
+        <<CelestiaService as DaService>::Spec as DaSpec>::BlobTransaction,
+    >::new(rollup_config.runner.storage.clone());
+
+    let storage = app.get_storage();
+
+    let mut methods = get_rpc_methods::<DefaultContext>(storage);
+
+    // register rpc methods
+    {
+        register_ledger(ledger_db.clone(), &mut methods)?;
+        register_sequencer(da_service.clone(), &mut app, &mut methods)?;
+        #[cfg(feature = "experimental")]
+        register_ethereum(rollup_config.da.clone(), &mut methods)?;
+    }
+
+    let storage = app.get_storage();
+
+    let mut runner = RollupRunner::<CelestiaService>::new(
+        rollup_config,
+        da_service,
+        ledger_db,
+        app,
+        storage.is_empty(),
+    )?;
+
+    runner.start_rpc_server(methods).await;
     runner.run().await?;
 
     Ok(())
@@ -163,6 +181,7 @@ where
     >,
     ledger_db: LedgerDB,
     state_root: [u8; 32],
+    socket_address: SocketAddr,
 }
 
 impl<DA> RollupRunner<DA>
@@ -173,30 +192,14 @@ where
         rollup_config: RollupConfig,
         da_service: DA,
         ledger_db: LedgerDB,
-    ) -> Result<Self, anyhow::Error> {
-        let mut app = NativeAppRunner::<
+        mut app: NativeAppRunner<
             Runtime<DefaultContext>,
             Risc0Verifier,
             <<DA as DaService>::Spec as DaSpec>::BlobTransaction,
-        >::new(rollup_config.runner.storage);
-
-        let storage = app.get_storage();
-        let is_storage_empty = storage.is_empty();
-        let mut methods = get_rpc_methods::<DefaultContext>(storage);
-
-        // register rpc methods
-        {
-            register_ledger(ledger_db.clone(), &mut methods)?;
-            register_sequencer(da_service.clone(), &mut app, &mut methods)?;
-            #[cfg(feature = "experimental")]
-            register_ethereum(rollup_config.da.clone(), &mut methods)?;
-        }
-
+        >,
+        is_storage_empty: bool,
+    ) -> Result<Self, anyhow::Error> {
         let rpc_config = rollup_config.rpc_config;
-        let address = SocketAddr::new(rpc_config.bind_host.parse()?, rpc_config.bind_port);
-        let _handle = tokio::spawn(async move {
-            start_rpc_server(methods, address).await;
-        });
 
         let app_runner = app.inner_mut();
         let prev_state_root = {
@@ -215,6 +218,8 @@ where
             res.state_root.0
         };
 
+        let socket_address = SocketAddr::new(rpc_config.bind_host.parse()?, rpc_config.bind_port);
+
         // Start the main rollup loop
         let item_numbers = ledger_db.get_next_items_numbers();
         let last_slot_processed_before_shutdown = item_numbers.slot_number - 1;
@@ -226,7 +231,22 @@ where
             app,
             ledger_db,
             state_root: prev_state_root,
+            socket_address,
         })
+    }
+
+    pub async fn start_rpc_server(&self, methods: RpcModule<()>) {
+        let socket_address = self.socket_address;
+        let _handle = tokio::spawn(async move {
+            let server = jsonrpsee::server::ServerBuilder::default()
+                .build([socket_address].as_ref())
+                .await
+                .unwrap();
+
+            info!("Starting RPC server at {} ", server.local_addr().unwrap());
+            let _server_handle = server.start(methods).unwrap();
+            futures::future::pending::<()>().await;
+        });
     }
 
     async fn run(&mut self) -> Result<[u8; 32], anyhow::Error> {
