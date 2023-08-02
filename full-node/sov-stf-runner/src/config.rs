@@ -1,6 +1,7 @@
-use demo_stf::runner_config::Config as RunnerConfig;
 use jupiter::da_service::DaServiceConfig;
 use serde::Deserialize;
+
+use crate::runner_config::Config as RunnerConfig;
 
 #[derive(Debug, Clone, PartialEq, Deserialize)]
 pub struct RpcConfig {
@@ -21,10 +22,10 @@ mod tests {
     use std::io::Write;
     use std::path::PathBuf;
 
-    use demo_stf::runner_config::{from_toml_path, StorageConfig};
     use tempfile::NamedTempFile;
 
     use super::*;
+    use crate::runner_config::{from_toml_path, StorageConfig};
 
     fn create_config_from(content: &str) -> NamedTempFile {
         let mut config_file = NamedTempFile::new().unwrap();

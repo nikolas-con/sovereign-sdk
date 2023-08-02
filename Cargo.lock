@@ -1342,6 +1342,7 @@ dependencies = [
  "sov-sequencer",
  "sov-sequencer-registry",
  "sov-state",
+ "sov-stf-runner",
  "sov-value-setter",
  "tempfile",
  "tokio",
@@ -6293,6 +6294,7 @@ dependencies = [
  "sov-rollup-interface",
  "sov-sequencer",
  "sov-state",
+ "sov-stf-runner",
  "sov-value-setter",
  "tempfile",
  "tendermint",
@@ -6550,6 +6552,29 @@ dependencies = [
  "sov-rollup-interface",
  "tempfile",
  "thiserror",
+]
+
+[[package]]
+name = "sov-stf-runner"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "borsh",
+ "futures",
+ "hex",
+ "jsonrpsee 0.18.2",
+ "jupiter",
+ "serde",
+ "serde_json",
+ "sov-db",
+ "sov-modules-api",
+ "sov-rollup-interface",
+ "sov-state",
+ "tempfile",
+ "tokio",
+ "toml 0.7.6",
+ "tracing",
+ "tracing-subscriber",
 ]
 
 [[package]]

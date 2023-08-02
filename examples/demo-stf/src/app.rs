@@ -15,15 +15,14 @@ use sov_rollup_interface::da::BlobReaderTrait;
 use sov_rollup_interface::services::stf_runner::StateTransitionRunner;
 #[cfg(feature = "native")]
 use sov_rollup_interface::stf::ProverConfig;
-use sov_rollup_interface::stf::ZkConfig;
 use sov_rollup_interface::zk::Zkvm;
 #[cfg(feature = "native")]
 use sov_state::ProverStorage;
-use sov_state::{Storage, ZkStorage};
+use sov_state::Storage;
+#[cfg(feature = "native")]
+use sov_stf_runner::runner_config::StorageConfig;
 
 use crate::batch_builder::FiFoStrictBatchBuilder;
-#[cfg(feature = "native")]
-use crate::runner_config::StorageConfig;
 
 pub struct DemoAppRunner<RT, C: Context, Vm: Zkvm, B: BlobReaderTrait> {
     pub stf: DemoApp<RT, C, Vm, B>,
