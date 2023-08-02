@@ -35,6 +35,9 @@ pub trait StateTransitionRunner<T: StateTransitionConfig, Vm: Zkvm, B: BlobReade
     /// Return a reference to the inner STF implementation
     fn inner(&self) -> &Self::Inner;
 
+    ///
+    fn take_inner(self) -> Self::Inner;
+
     /// Return a mutable reference to the inner STF implementation
     fn inner_mut(&mut self) -> &mut Self::Inner;
 

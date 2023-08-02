@@ -85,6 +85,10 @@ where
         &self.stf
     }
 
+    fn take_inner(self) -> Self::Inner {
+        self.stf
+    }
+
     fn inner_mut(&mut self) -> &mut Self::Inner {
         &mut self.stf
     }

@@ -23,6 +23,7 @@ use sov_db::ledger_db::{LedgerDB, SlotCommit};
 #[cfg(feature = "experimental")]
 use sov_ethereum::get_ethereum_rpc;
 use sov_modules_api::RpcRunner;
+use sov_modules_stf_template::AppTemplate;
 use sov_rollup_interface::crypto::NoOpHasher;
 use sov_rollup_interface::da::{BlockHeaderTrait, DaSpec, DaVerifier};
 use sov_rollup_interface::services::da::{DaService, SlotData};
@@ -158,7 +159,7 @@ async fn main() -> Result<(), anyhow::Error> {
         rollup_config,
         da_service,
         ledger_db,
-        app,
+        app.take_inner(),
         storage.is_empty(),
     )?;
 
@@ -174,7 +175,13 @@ where
 {
     start_height: u64,
     da_service: DA,
-    app: NativeAppRunner<
+    /*app: NativeAppRunner<
+        Runtime<DefaultContext>,
+        Risc0Verifier,
+        <<DA as DaService>::Spec as DaSpec>::BlobTransaction,
+    >,*/
+    app: AppTemplate<
+        DefaultContext,
         Runtime<DefaultContext>,
         Risc0Verifier,
         <<DA as DaService>::Spec as DaSpec>::BlobTransaction,
@@ -192,7 +199,8 @@ where
         rollup_config: RollupConfig,
         da_service: DA,
         ledger_db: LedgerDB,
-        mut app: NativeAppRunner<
+        mut app: AppTemplate<
+            DefaultContext,
             Runtime<DefaultContext>,
             Risc0Verifier,
             <<DA as DaService>::Spec as DaSpec>::BlobTransaction,
@@ -201,18 +209,17 @@ where
     ) -> Result<Self, anyhow::Error> {
         let rpc_config = rollup_config.rpc_config;
 
-        let app_runner = app.inner_mut();
         let prev_state_root = {
             // Check if the rollup has previously been initialized
             if is_storage_empty {
                 info!("No history detected. Initializing chain...");
-                app_runner.init_chain(get_genesis_config());
+                app.init_chain(get_genesis_config());
                 info!("Chain initialization is done.");
             } else {
                 debug!("Chain is already initialized. Skipping initialization.");
             }
 
-            let res = app_runner.apply_slot(Default::default(), []);
+            let res = app.apply_slot(Default::default(), []);
             // HACK: Tell the rollup that you're running an empty DA layer block so that it will return the latest state root.
             // This will be removed shortly.
             res.state_root.0
@@ -250,8 +257,6 @@ where
     }
 
     async fn run(&mut self) -> Result<[u8; 32], anyhow::Error> {
-        let app_runner = self.app.inner_mut();
-
         for height in self.start_height.. {
             info!(
                 "Requesting data for height {} and prev_state_root 0x{}",
@@ -272,7 +277,7 @@ where
 
             let mut data_to_commit = SlotCommit::new(filtered_block.clone());
 
-            let slot_result = app_runner.apply_slot(Default::default(), &mut blobs);
+            let slot_result = self.app.apply_slot(Default::default(), &mut blobs);
             for receipt in slot_result.batch_receipts {
                 data_to_commit.add_batch(receipt);
             }
