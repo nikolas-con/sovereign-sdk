@@ -31,9 +31,6 @@ pub struct DemoAppRunner<RT, C: Context, Vm: Zkvm, B: BlobReaderTrait> {
 
 pub type ZkAppRunner<RT, Vm, B> = DemoAppRunner<RT, ZkDefaultContext, Vm, B>;
 
-#[cfg(feature = "native")]
-pub type NativeAppRunner<RT, Vm, B> = DemoAppRunner<RT, DefaultContext, Vm, B>;
-
 pub type DemoApp<RT, C, Vm, B> = AppTemplate<C, RT, Vm, B>;
 
 /// Batch receipt type used by the demo app. We export this type so that it's easily accessible to the full node.
@@ -42,7 +39,13 @@ pub type DemoBatchReceipt = SequencerOutcome;
 pub type DemoTxReceipt = TxEffect;
 
 #[cfg(feature = "native")]
-impl<RT, Vm: Zkvm, B: BlobReaderTrait> DemoAppRunner<RT, DefaultContext, Vm, B>
+pub struct App<RT, Vm: Zkvm, B: BlobReaderTrait> {
+    pub stf: AppTemplate<DefaultContext, RT, Vm, B>,
+    pub batch_builder: Option<FiFoStrictBatchBuilder<RT, DefaultContext>>,
+}
+
+#[cfg(feature = "native")]
+impl<RT, Vm: Zkvm, B: BlobReaderTrait> App<RT, Vm, B>
 where
     RT: DispatchCall<Context = DefaultContext>
         + TxHooks<Context = DefaultContext>
@@ -66,47 +69,8 @@ where
             batch_builder: Some(batch_builder),
         }
     }
-}
 
-#[cfg(feature = "native")]
-impl<RT, Vm: Zkvm, B: BlobReaderTrait> StateTransitionRunner<ProverConfig, Vm, B>
-    for DemoAppRunner<RT, DefaultContext, Vm, B>
-where
-    RT: DispatchCall<Context = DefaultContext>
-        + TxHooks<Context = DefaultContext>
-        + Genesis<Context = DefaultContext>
-        + ApplyBlobHooks<Context = DefaultContext, BlobResult = SequencerOutcome>,
-{
-    type Inner = DemoApp<RT, DefaultContext, Vm, B>;
-    type BatchBuilder = FiFoStrictBatchBuilder<RT, DefaultContext>;
-
-    fn inner(&self) -> &Self::Inner {
-        &self.stf
-    }
-
-    fn take_inner(self) -> Self::Inner {
-        self.stf
-    }
-
-    fn inner_mut(&mut self) -> &mut Self::Inner {
-        &mut self.stf
-    }
-
-    fn take_batch_builder(&mut self) -> Option<Self::BatchBuilder> {
-        self.batch_builder.take()
-    }
-}
-
-#[cfg(feature = "native")]
-impl<RT, Vm: Zkvm, B: BlobReaderTrait> RpcRunner for DemoAppRunner<RT, DefaultContext, Vm, B>
-where
-    RT: DispatchCall<Context = DefaultContext>
-        + TxHooks<Context = DefaultContext>
-        + Genesis<Context = DefaultContext>
-        + ApplyBlobHooks<Context = DefaultContext, BlobResult = SequencerOutcome>,
-{
-    type Context = DefaultContext;
-    fn get_storage(&self) -> <Self::Context as Spec>::Storage {
-        self.inner().current_storage.clone()
+    pub fn get_storage(&self) -> <DefaultContext as Spec>::Storage {
+        self.stf.current_storage.clone()
     }
 }

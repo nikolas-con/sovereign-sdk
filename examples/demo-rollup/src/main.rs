@@ -3,9 +3,7 @@ use std::sync::Arc;
 
 use anyhow::Context;
 use const_rollup_config::{ROLLUP_NAMESPACE_RAW, SEQUENCER_DA_ADDRESS};
-use demo_stf::app::{
-    DefaultContext, DefaultPrivateKey, DemoBatchReceipt, DemoTxReceipt, NativeAppRunner,
-};
+use demo_stf::app::{App, DefaultContext, DefaultPrivateKey, DemoBatchReceipt, DemoTxReceipt};
 use demo_stf::genesis_config::create_demo_genesis_config;
 use demo_stf::runtime::{get_rpc_methods, GenesisConfig, Runtime};
 use jupiter::da_service::CelestiaService;
@@ -17,11 +15,9 @@ use risc0_adapter::host::Risc0Verifier;
 use sov_db::ledger_db::LedgerDB;
 #[cfg(feature = "experimental")]
 use sov_ethereum::get_ethereum_rpc;
-use sov_modules_api::RpcRunner;
 use sov_modules_stf_template::AppTemplate;
 use sov_rollup_interface::da::DaSpec;
 use sov_rollup_interface::services::da::DaService;
-use sov_rollup_interface::services::stf_runner::StateTransitionRunner;
 use sov_sequencer::get_sequencer_rpc;
 use sov_state::storage::Storage;
 use sov_stf_runner::runner_config::from_toml_path;
@@ -107,11 +103,14 @@ async fn main() -> Result<(), anyhow::Error> {
     )
     .await;
 
-    let mut app = NativeAppRunner::<
+    let mut app: App<Runtime<DefaultContext>, Risc0Verifier, jupiter::BlobWithSender> =
+        App::new(rollup_config.runner.storage.clone());
+
+    /*NativeAppRunner::<
         Runtime<DefaultContext>,
         Risc0Verifier,
         <<CelestiaService as DaService>::Spec as DaSpec>::BlobTransaction,
-    >::new(rollup_config.runner.storage.clone());
+    >::new(rollup_config.runner.storage.clone());*/
 
     let storage = app.get_storage();
     let mut methods = get_rpc_methods::<DefaultContext>(storage);
@@ -140,7 +139,7 @@ async fn main() -> Result<(), anyhow::Error> {
         rollup_config,
         da_service,
         ledger_db,
-        app.take_inner(),
+        app.stf,
         storage.is_empty(),
         genesis_config,
     )?;
@@ -153,17 +152,13 @@ async fn main() -> Result<(), anyhow::Error> {
 
 fn register_sequencer<DA>(
     da_service: DA,
-    demo_runner: &mut NativeAppRunner<
-        Runtime<DefaultContext>,
-        Risc0Verifier,
-        <<DA as DaService>::Spec as DaSpec>::BlobTransaction,
-    >,
+    demo_runner: &mut App<Runtime<DefaultContext>, Risc0Verifier, jupiter::BlobWithSender>,
     methods: &mut jsonrpsee::RpcModule<()>,
 ) -> Result<(), anyhow::Error>
 where
     DA: DaService<Error = anyhow::Error> + Send + Sync + 'static,
 {
-    let batch_builder = demo_runner.take_batch_builder().unwrap();
+    let batch_builder = demo_runner.batch_builder.take().unwrap();
     let sequencer_rpc = get_sequencer_rpc(batch_builder, Arc::new(da_service));
     methods
         .merge(sequencer_rpc)
