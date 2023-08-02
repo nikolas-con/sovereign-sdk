@@ -346,14 +346,13 @@ mod test {
     use borsh::BorshDeserialize;
     use demo_stf::app::{DemoApp, DemoAppRunner};
     use demo_stf::genesis_config::{create_demo_config, DEMO_SEQUENCER_DA_ADDRESS, LOCKED_AMOUNT};
-    use demo_stf::runner_config::Config;
     use demo_stf::runtime::{GenesisConfig, Runtime};
     use sov_modules_api::Address;
     use sov_modules_stf_template::{Batch, RawTx, SequencerOutcome};
     use sov_rollup_interface::mocks::MockZkvm;
-    use sov_rollup_interface::services::stf_runner::StateTransitionRunner;
     use sov_rollup_interface::stf::StateTransitionFunction;
     use sov_state::WorkingSet;
+    use sov_stf_runner::runner_config::Config;
 
     use super::*;
 

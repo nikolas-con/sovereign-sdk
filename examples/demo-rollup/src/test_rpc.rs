@@ -12,10 +12,10 @@ use sov_rollup_interface::mocks::{TestBlock, TestBlockHeader, TestHash};
 use sov_rollup_interface::services::da::SlotData;
 use sov_rollup_interface::stf::fuzzing::BatchReceiptStrategyArgs;
 use sov_rollup_interface::stf::{BatchReceipt, Event, TransactionReceipt};
+use sov_stf_runner::config::RpcConfig;
 use tendermint::crypto::Sha256;
 use tokio::sync::oneshot;
 
-use crate::config::RpcConfig;
 use crate::ledger_rpc;
 
 struct TestExpect {
