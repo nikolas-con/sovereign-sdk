@@ -1,16 +1,17 @@
 use std::marker::PhantomData;
 
 use borsh::BorshDeserialize;
-use sov_modules_api::hooks::{ApplyBlobHooks, TxHooks};
-use sov_modules_api::{Context, DispatchCall, Genesis};
+use sov_modules_api::default_context::DefaultContext;
+use sov_modules_api::{Context, DispatchCall};
 use sov_rollup_interface::da::{BlobReaderTrait, CountedBufReader};
 use sov_rollup_interface::stf::{BatchReceipt, TransactionReceipt};
 use sov_rollup_interface::Buf;
-use sov_state::StateCheckpoint;
+use sov_state::config::Config;
+use sov_state::{ProverStorage, StateCheckpoint, Storage};
 use tracing::{debug, error};
 
 use crate::tx_verifier::{verify_txs_stateless, TransactionAndRawHash};
-use crate::{Batch, SequencerOutcome, SlashingReason, TxEffect};
+use crate::{Batch, Runtime, SequencerOutcome, SlashingReason, TxEffect};
 
 type ApplyBatchResult<T> = Result<T, ApplyBatchError>;
 
@@ -62,12 +63,20 @@ impl From<ApplyBatchError> for BatchReceipt<SequencerOutcome, TxEffect> {
     }
 }
 
+impl<RT, Vm, B: BlobReaderTrait> AppTemplate<DefaultContext, RT, Vm, B>
+where
+    RT: Runtime<DefaultContext>,
+{
+    ///
+    pub fn with_config(config: Config, runtime: RT) -> Result<Self, anyhow::Error> {
+        let storage = ProverStorage::with_config(config)?;
+        Ok(Self::new(storage, runtime))
+    }
+}
+
 impl<C: Context, RT, Vm, B: BlobReaderTrait> AppTemplate<C, RT, Vm, B>
 where
-    RT: DispatchCall<Context = C>
-        + Genesis<Context = C>
-        + TxHooks<Context = C>
-        + ApplyBlobHooks<Context = C, BlobResult = SequencerOutcome>,
+    RT: Runtime<C>,
 {
     /// [`AppTemplate`] constructor.
     pub fn new(storage: C::Storage, runtime: RT) -> Self {
