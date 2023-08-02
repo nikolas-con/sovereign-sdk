@@ -1,3 +1,4 @@
+pub mod batch_builder;
 pub mod config;
 pub mod runner_config;
 use std::net::SocketAddr;

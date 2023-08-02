@@ -1,5 +1,5 @@
 pub mod app;
-pub mod batch_builder;
+
 #[cfg(feature = "native")]
 pub mod genesis_config;
 pub mod hooks_impl;

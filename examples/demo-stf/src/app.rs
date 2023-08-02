@@ -15,10 +15,9 @@ use sov_rollup_interface::zk::Zkvm;
 #[cfg(feature = "native")]
 use sov_state::ProverStorage;
 use sov_state::Storage;
+use sov_stf_runner::batch_builder::FiFoStrictBatchBuilder;
 #[cfg(feature = "native")]
 use sov_stf_runner::runner_config::StorageConfig;
-
-use crate::batch_builder::FiFoStrictBatchBuilder;
 
 #[cfg(feature = "native")]
 pub struct App<RT, Vm: Zkvm, B: BlobReaderTrait> {
