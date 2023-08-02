@@ -92,9 +92,8 @@ async fn main() -> Result<(), anyhow::Error> {
 
     let da_service = Arc::new(RngDaService::new());
 
-    let demo_runner = App::<Runtime<DefaultContext>, Risc0Verifier, TestBlob<CelestiaAddress>>::new(
-        rollup_config.runner.storage,
-    );
+    let demo_runner =
+        App::<Risc0Verifier, TestBlob<CelestiaAddress>>::new(rollup_config.runner.storage);
 
     let mut demo = demo_runner.stf;
     let sequencer_private_key = DefaultPrivateKey::generate();

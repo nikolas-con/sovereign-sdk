@@ -8,12 +8,10 @@ use const_rollup_config::SEQUENCER_DA_ADDRESS;
 use criterion::{criterion_group, criterion_main, Criterion};
 use demo_stf::app::App;
 use demo_stf::genesis_config::create_demo_genesis_config;
-use demo_stf::runtime::Runtime;
 use jupiter::verifier::address::CelestiaAddress;
 use risc0_adapter::host::Risc0Verifier;
 use sov_db::ledger_db::{LedgerDB, SlotCommit};
 use sov_demo_rollup::rng_xfers::RngDaService;
-use sov_modules_api::default_context::DefaultContext;
 use sov_modules_api::default_signature::private_key::DefaultPrivateKey;
 use sov_rollup_interface::mocks::{TestBlob, TestBlock, TestBlockHeader, TestHash};
 use sov_rollup_interface::services::da::DaService;
@@ -44,9 +42,8 @@ fn rollup_bench(_bench: &mut Criterion) {
 
     let da_service = Arc::new(RngDaService::new());
 
-    let demo_runner = App::<Runtime<DefaultContext>, Risc0Verifier, TestBlob<CelestiaAddress>>::new(
-        rollup_config.runner.storage,
-    );
+    let demo_runner =
+        App::<Risc0Verifier, TestBlob<CelestiaAddress>>::new(rollup_config.runner.storage);
 
     let mut demo = demo_runner.stf;
     let sequencer_private_key = DefaultPrivateKey::generate();
