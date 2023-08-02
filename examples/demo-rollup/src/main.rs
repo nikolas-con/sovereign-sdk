@@ -153,6 +153,7 @@ async fn main() -> Result<(), anyhow::Error> {
     }
 
     let storage = app.get_storage();
+    let genesis_config = get_genesis_config();
 
     let mut runner = RollupRunner::<
         AppTemplate<
@@ -168,6 +169,7 @@ async fn main() -> Result<(), anyhow::Error> {
         ledger_db,
         app.take_inner(),
         storage.is_empty(),
+        genesis_config,
     )?;
 
     runner.start_rpc_server(methods).await;
@@ -189,7 +191,10 @@ where
 
     app: ST,
     ledger_db: LedgerDB,
-    state_root: [u8; 32],
+    state_root: <ST as StateTransitionFunction<
+        Risc0Verifier,
+        <<DA as DaService>::Spec as DaSpec>::BlobTransaction,
+    >>::StateRoot,
     socket_address: SocketAddr,
 }
 
@@ -199,8 +204,6 @@ where
     ST: StateTransitionFunction<
         Risc0Verifier,
         <<DA as DaService>::Spec as DaSpec>::BlobTransaction,
-        InitialState = GenesisConfig<DefaultContext>,
-        StateRoot = jmt::RootHash,
     >,
 {
     fn new(
@@ -209,6 +212,10 @@ where
         ledger_db: LedgerDB,
         mut app: ST,
         is_storage_empty: bool,
+        genesis_config: <ST as StateTransitionFunction<
+            Risc0Verifier,
+            <<DA as DaService>::Spec as DaSpec>::BlobTransaction,
+        >>::InitialState,
     ) -> Result<Self, anyhow::Error> {
         let rpc_config = rollup_config.rpc_config;
 
@@ -216,7 +223,7 @@ where
             // Check if the rollup has previously been initialized
             if is_storage_empty {
                 info!("No history detected. Initializing chain...");
-                app.init_chain(get_genesis_config());
+                app.init_chain(genesis_config);
                 info!("Chain initialization is done.");
             } else {
                 debug!("Chain is already initialized. Skipping initialization.");
@@ -225,7 +232,7 @@ where
             let res = app.apply_slot(Default::default(), []);
             // HACK: Tell the rollup that you're running an empty DA layer block so that it will return the latest state root.
             // This will be removed shortly.
-            res.state_root.0
+            res.state_root
         };
 
         let socket_address = SocketAddr::new(rpc_config.bind_host.parse()?, rpc_config.bind_port);
@@ -259,13 +266,9 @@ where
         });
     }
 
-    async fn run(&mut self) -> Result<[u8; 32], anyhow::Error> {
+    async fn run(&mut self) -> Result<(), anyhow::Error> {
         for height in self.start_height.. {
-            info!(
-                "Requesting data for height {} and prev_state_root 0x{}",
-                height,
-                hex::encode(self.state_root)
-            );
+            info!("Requesting data for height {}", height,);
 
             // Fetch the relevant subset of the next Celestia block
             let filtered_block = self.da_service.get_finalized_at(height).await?;
@@ -287,10 +290,10 @@ where
             let next_state_root = slot_result.state_root;
 
             self.ledger_db.commit_slot(data_to_commit)?;
-            self.state_root = next_state_root.0;
+            self.state_root = next_state_root;
         }
 
-        Ok(self.state_root)
+        Ok(())
     }
 }
 
