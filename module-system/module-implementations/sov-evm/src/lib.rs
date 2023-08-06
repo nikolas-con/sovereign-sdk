@@ -1,6 +1,8 @@
 #[cfg(feature = "experimental")]
 pub mod call;
 #[cfg(feature = "experimental")]
+pub mod dev_signer;
+#[cfg(feature = "experimental")]
 pub mod evm;
 #[cfg(feature = "experimental")]
 pub mod genesis;

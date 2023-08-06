@@ -6361,6 +6361,7 @@ dependencies = [
  "reth-rpc-types",
  "revm",
  "schemars",
+ "secp256k1",
  "serde",
  "serde_json",
  "sov-modules-api",
