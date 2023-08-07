@@ -1,3 +1,7 @@
+use reth_primitives::{
+    sign_message, Address, Bytes as RethBytes, Signature, Transaction as RethTransaction,
+    TransactionKind, TransactionSigned, TxEip1559 as RethTxEip1559, H256,
+};
 use revm::primitives::{KECCAK_EMPTY, U256};
 use sov_modules_api::default_context::DefaultContext;
 use sov_modules_api::default_signature::private_key::DefaultPrivateKey;
@@ -5,6 +9,7 @@ use sov_modules_api::{Context, Module, PrivateKey, Spec};
 use sov_state::{ProverStorage, WorkingSet};
 
 use crate::call::CallMessage;
+use crate::dev_signer::DevSigner;
 use crate::evm::test_helpers::SimpleStorageContract;
 use crate::evm::transaction::EvmTransaction;
 use crate::evm::EthAddress;
@@ -12,30 +17,38 @@ use crate::{AccountData, Evm, EvmConfig};
 
 type C = DefaultContext;
 
+// ETEHRES
+//pub fn secret_key_to_address(secret_key: &SigningKey) -> Address {
+
 fn create_messages(contract_addr: EthAddress, set_arg: u32) -> Vec<CallMessage> {
+    let ds: DevSigner = todo!();
+
     let mut transactions = Vec::default();
     let contract = SimpleStorageContract::new();
 
     // Contract creation.
     {
+        let signed_tx = ds
+            .sign_default_transaction(TransactionKind::Create, contract.byte_code().to_vec(), 0)
+            .unwrap();
+
         transactions.push(CallMessage {
-            tx: EvmTransaction {
-                to: None,
-                data: contract.byte_code().to_vec(),
-                ..Default::default()
-            },
+            tx: signed_tx.try_into().unwrap(),
         });
     }
 
     // Update contract state.
     {
+        let signed_tx = ds
+            .sign_default_transaction(
+                TransactionKind::Call(contract_addr.into()),
+                hex::decode(hex::encode(&contract.set_call_data(set_arg))).unwrap(),
+                1,
+            )
+            .unwrap();
+
         transactions.push(CallMessage {
-            tx: EvmTransaction {
-                to: Some(contract_addr),
-                data: hex::decode(hex::encode(&contract.set_call_data(set_arg))).unwrap(),
-                nonce: 1,
-                ..Default::default()
-            },
+            tx: signed_tx.try_into().unwrap(),
         });
     }
 

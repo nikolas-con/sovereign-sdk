@@ -124,18 +124,11 @@ use reth_primitives::{
     Bytes as RethBytes, Signature as RethSignature, TransactionSigned as RethTransactionSigned,
 };
 
-impl TryFrom<RethBytes> for EvmTransaction {
+impl TryFrom<RethTransactionSigned> for EvmTransaction {
     type Error = EthApiError;
 
-    fn try_from(data: RethBytes) -> Result<Self, Self::Error> {
-        if data.is_empty() {
-            return Err(EthApiError::EmptyRawTransactionData);
-        }
-
-        let transaction = RethTransactionSigned::decode_enveloped(data)
-            .map_err(|_| EthApiError::FailedToDecodeSignedTransaction)?;
-
-        let transaction = transaction
+    fn try_from(reth_tx: RethTransactionSigned) -> Result<Self, Self::Error> {
+        let transaction = reth_tx
             .into_ecrecovered()
             .ok_or(EthApiError::InvalidTransactionSignature)?;
 
@@ -174,6 +167,21 @@ impl TryFrom<RethBytes> for EvmTransaction {
             hash: tx_hash.into(),
             sig: signed_transaction.signature.into(),
         })
+    }
+}
+
+impl TryFrom<RethBytes> for EvmTransaction {
+    type Error = EthApiError;
+
+    fn try_from(data: RethBytes) -> Result<Self, Self::Error> {
+        if data.is_empty() {
+            return Err(EthApiError::EmptyRawTransactionData);
+        }
+
+        let transaction = RethTransactionSigned::decode_enveloped(data)
+            .map_err(|_| EthApiError::FailedToDecodeSignedTransaction)?;
+
+        transaction.try_into()
     }
 }
 
