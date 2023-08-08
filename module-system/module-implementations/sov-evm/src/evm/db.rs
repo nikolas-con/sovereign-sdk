@@ -44,6 +44,11 @@ impl<'a, C: sov_modules_api::Context> Database for EvmDb<'a, C> {
             U256::default()
         };
 
+        println!(
+            "Add {:?}, key {:?}, value {}",
+            address, index, storage_value
+        );
+
         Ok(storage_value)
     }
 

@@ -1,26 +1,46 @@
+use ethers_core::rand::rngs::StdRng;
+use ethers_core::rand::SeedableRng;
 use reth_primitives::{
-    sign_message, Address, Bytes as RethBytes, Signature, Transaction as RethTransaction,
-    TransactionKind, TransactionSigned, TxEip1559 as RethTxEip1559, H256,
+    public_key_to_address, sign_message, Address, Bytes as RethBytes, Signature,
+    Transaction as RethTransaction, TransactionKind, TransactionSigned, TxEip1559 as RethTxEip1559,
+    H256,
 };
 use reth_rpc::eth::error::SignError;
-use secp256k1::SecretKey;
+use secp256k1::{PublicKey, SecretKey};
 
-use crate::evm::EvmTransaction;
-//let public_key = PublicKey::from_secret_key(SECP256K1, &secret_key);
-type Result<T> = std::result::Result<T, SignError>;
+use crate::evm::{EthAddress, EvmTransaction};
 
 /// Holds developer keys
 pub(crate) struct DevSigner {
     secret_key: SecretKey,
+    pub(crate) address: EthAddress,
 }
 
 impl DevSigner {
-    pub(crate) fn sign_hash(&self, hash: H256) -> Result<Signature> {
+    pub(crate) fn new(secret_key: SecretKey) -> Self {
+        let public_key = PublicKey::from_secret_key(secp256k1::SECP256K1, &secret_key);
+        let addr = public_key_to_address(public_key);
+        Self {
+            secret_key,
+            address: addr.into(),
+        }
+    }
+
+    pub(crate) fn new_random() -> Self {
+        let mut rng = StdRng::seed_from_u64(22);
+        let secret_key = SecretKey::new(&mut rng);
+        Self::new(secret_key)
+    }
+
+    pub(crate) fn sign_hash(&self, hash: H256) -> Result<Signature, SignError> {
         let signature = sign_message(H256::from_slice(self.secret_key.as_ref()), hash);
         signature.map_err(|_| SignError::CouldNotSign)
     }
 
-    pub(crate) fn sign_transaction(&self, transaction: RethTxEip1559) -> Result<TransactionSigned> {
+    pub(crate) fn sign_transaction(
+        &self,
+        transaction: RethTxEip1559,
+    ) -> Result<TransactionSigned, SignError> {
         let transaction = RethTransaction::Eip1559(transaction);
 
         let tx_signature_hash = transaction.signature_hash();
@@ -42,11 +62,13 @@ impl DevSigner {
         to: TransactionKind,
         data: Vec<u8>,
         nonce: u64,
-    ) -> Result<TransactionSigned> {
+    ) -> Result<TransactionSigned, SignError> {
         let reth_tx = RethTxEip1559 {
             to,
             input: RethBytes::from(data),
             nonce,
+            chain_id: 1,
+            gas_limit: u64::MAX,
             ..Default::default()
         };
 

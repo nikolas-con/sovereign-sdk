@@ -38,7 +38,8 @@ fn simple_contract_execution_in_memory_state() {
 fn simple_contract_execution<DB: Database<Error = Infallible> + DatabaseCommit + InitEvmDb>(
     mut evm_db: DB,
 ) {
-    let caller: [u8; 20] = [11; 20];
+    let dev_signer = DevSigner::new_random();
+    let caller = dev_signer.address;
     evm_db.insert_account_info(
         caller,
         AccountInfo {
@@ -49,12 +50,11 @@ fn simple_contract_execution<DB: Database<Error = Infallible> + DatabaseCommit +
         },
     );
 
-    let ds: DevSigner;
     let contract = SimpleStorageContract::new();
 
     let contract_address = {
-        let tx = ds
-            .sign_default_transaction(TransactionKind::Create, contract.byte_code().to_vec(), 0)
+        let tx = dev_signer
+            .sign_default_transaction(TransactionKind::Create, contract.byte_code().to_vec(), 1)
             .unwrap();
 
         let result = executor::execute_tx(
@@ -72,11 +72,11 @@ fn simple_contract_execution<DB: Database<Error = Infallible> + DatabaseCommit +
     {
         let call_data = contract.set_call_data(set_arg);
 
-        let tx = ds
+        let tx = dev_signer
             .sign_default_transaction(
                 TransactionKind::Call(contract_address.as_fixed_bytes().into()),
                 hex::decode(hex::encode(&call_data)).unwrap(),
-                1,
+                2,
             )
             .unwrap();
 
@@ -92,11 +92,11 @@ fn simple_contract_execution<DB: Database<Error = Infallible> + DatabaseCommit +
     let get_res = {
         let call_data = contract.get_call_data();
 
-        let tx = ds
+        let tx = dev_signer
             .sign_default_transaction(
                 TransactionKind::Call(contract_address.as_fixed_bytes().into()),
                 hex::decode(hex::encode(&call_data)).unwrap(),
-                2,
+                3,
             )
             .unwrap();
 
