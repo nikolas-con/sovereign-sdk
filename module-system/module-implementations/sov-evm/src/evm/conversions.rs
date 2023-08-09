@@ -7,7 +7,9 @@ use revm::primitives::{
     TxEnv, B160, B256, U256,
 };
 
-use super::transaction::{AccessListItem, BlockEnv, EvmTransaction, Signature};
+use super::transaction::{
+    AccessListItem, BlockEnv, EvmTransaction, EvmTransactionWithSender, Signature,
+};
 use super::{AccountInfo, EthAddress};
 
 impl From<AccountInfo> for ReVmAccountInfo {
@@ -59,8 +61,11 @@ impl From<AccessListItem> for (B160, Vec<U256>) {
     }
 }
 
-impl From<EvmTransaction> for TxEnv {
-    fn from(tx: EvmTransaction) -> Self {
+impl From<EvmTransactionWithSender> for TxEnv {
+    fn from(evm_tx: EvmTransactionWithSender) -> Self {
+        let sender = evm_tx.sender;
+        let tx = evm_tx.transaction;
+
         let to = match tx.to {
             Some(addr) => TransactTo::Call(B160::from_slice(&addr)),
             None => TransactTo::Create(CreateScheme::Create),
@@ -73,7 +78,7 @@ impl From<EvmTransaction> for TxEnv {
             .collect();
 
         Self {
-            caller: B160::from_slice(&tx.sender),
+            caller: B160::from_slice(&sender),
             data: Bytes::from(tx.data),
             gas_limit: tx.gas_limit,
             gas_price: U256::from(tx.gas_price),
@@ -87,25 +92,27 @@ impl From<EvmTransaction> for TxEnv {
     }
 }
 
-impl From<EvmTransaction> for Transaction {
-    fn from(evm_tx: EvmTransaction) -> Self {
+impl From<EvmTransactionWithSender> for Transaction {
+    fn from(evm_tx: EvmTransactionWithSender) -> Self {
+        let sender = evm_tx.sender;
+        let tx = evm_tx.transaction;
         Self {
-            hash: evm_tx.hash.into(),
-            nonce: evm_tx.nonce.into(),
-            from: evm_tx.sender.into(),
-            to: evm_tx.to.map(|addr| addr.into()),
-            value: evm_tx.value.into(),
+            hash: tx.hash.into(),
+            nonce: tx.nonce.into(),
+            from: sender.into(),
+            to: tx.to.map(|addr| addr.into()),
+            value: tx.value.into(),
             // https://github.com/foundry-rs/foundry/blob/master/anvil/core/src/eth/transaction/mod.rs#L1251
-            gas_price: Some(evm_tx.max_fee_per_gas.into()),
-            input: evm_tx.data.into(),
-            v: (evm_tx.sig.odd_y_parity as u8).into(),
-            r: evm_tx.sig.r.into(),
-            s: evm_tx.sig.s.into(),
+            gas_price: Some(tx.max_fee_per_gas.into()),
+            input: tx.data.into(),
+            v: (tx.sig.odd_y_parity as u8).into(),
+            r: tx.sig.r.into(),
+            s: tx.sig.s.into(),
             transaction_type: Some(2.into()),
             access_list: None,
-            max_priority_fee_per_gas: Some(evm_tx.max_priority_fee_per_gas.into()),
-            max_fee_per_gas: Some(evm_tx.max_fee_per_gas.into()),
-            chain_id: Some(evm_tx.chain_id.into()),
+            max_priority_fee_per_gas: Some(tx.max_priority_fee_per_gas.into()),
+            max_fee_per_gas: Some(tx.max_fee_per_gas.into()),
+            chain_id: Some(tx.chain_id.into()),
             // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/503
             block_hash: Some([0; 32].into()),
             // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/503
@@ -151,7 +158,6 @@ impl TryFrom<RethTransactionSigned> for EvmTransaction {
         };
 
         Ok(Self {
-            sender: signer.into(),
             data: tx_eip_1559.input.to_vec(),
             gas_limit: tx_eip_1559.gas_limit,
             // https://github.com/foundry-rs/foundry/blob/master/anvil/core/src/eth/transaction/mod.rs#L1251C20-L1251C20

@@ -28,6 +28,7 @@ mod experimental {
     use super::evm::db::EvmDb;
     use super::evm::transaction::BlockEnv;
     use super::evm::{DbAccount, EthAddress};
+    use crate::evm::transaction::EvmTransactionWithSender;
     use crate::evm::{Bytes32, EvmTransaction};
     use crate::TransactionReceipt;
 
@@ -69,7 +70,7 @@ mod experimental {
         pub(crate) block_env: sov_state::StateValue<BlockEnv>,
 
         #[state]
-        pub(crate) transactions: sov_state::StateMap<Bytes32, EvmTransaction>,
+        pub(crate) transactions: sov_state::StateMap<Bytes32, EvmTransactionWithSender>,
 
         #[state]
         pub(crate) receipts: sov_state::StateMap<Bytes32, TransactionReceipt>,

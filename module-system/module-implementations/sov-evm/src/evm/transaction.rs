@@ -45,7 +45,7 @@ pub struct AccessListItem {
 )]
 #[derive(borsh::BorshDeserialize, borsh::BorshSerialize, Debug, PartialEq, Clone)]
 pub struct EvmTransaction {
-    pub sender: EthAddress,
+    //    pub sender: EthAddress,
     pub data: Vec<u8>,
     pub gas_limit: u64,
     pub gas_price: u128,
@@ -59,6 +59,18 @@ pub struct EvmTransaction {
     pub sig: Signature,
     // todo remove it
     pub hash: [u8; 32],
+}
+
+#[cfg_attr(
+    feature = "native",
+    derive(serde::Serialize),
+    derive(serde::Deserialize),
+    derive(schemars::JsonSchema)
+)]
+#[derive(borsh::BorshDeserialize, borsh::BorshSerialize, Debug, PartialEq, Clone)]
+pub struct EvmTransactionWithSender {
+    pub sender: EthAddress,
+    pub transaction: EvmTransaction,
 }
 
 #[cfg_attr(

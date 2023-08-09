@@ -9,6 +9,7 @@ use sov_state::{ProverStorage, WorkingSet};
 use super::db::EvmDb;
 use super::db_init::InitEvmDb;
 use super::executor;
+use super::transaction::EvmTransactionWithSender;
 use crate::dev_signer::DevSigner;
 use crate::evm::test_helpers::{output, SimpleStorageContract};
 use crate::evm::transaction::{BlockEnv, EvmTransaction};
@@ -16,6 +17,21 @@ use crate::evm::{contract_address, AccountInfo};
 use crate::Evm;
 
 type C = sov_modules_api::default_context::DefaultContext;
+
+use reth_primitives::{TransactionSigned as RethTransactionSigned, TxEip1559};
+
+impl TryFrom<RethTransactionSigned> for EvmTransactionWithSender {
+    type Error = ();
+
+    fn try_from(tx: RethTransactionSigned) -> Result<Self, Self::Error> {
+        let signer = tx.signature().recover_signer(tx.signature_hash()).unwrap();
+
+        Ok(Self {
+            sender: signer.into(),
+            transaction: tx.try_into().unwrap(),
+        })
+    }
+}
 
 #[test]
 fn simple_contract_execution_sov_state() {

@@ -7,7 +7,7 @@ use sov_state::WorkingSet;
 use crate::evm::contract_address;
 use crate::evm::db::EvmDb;
 use crate::evm::executor::{self};
-use crate::evm::transaction::EvmTransaction;
+use crate::evm::transaction::{EvmTransaction, EvmTransactionWithSender};
 use crate::{Evm, TransactionReceipt};
 
 #[cfg_attr(
@@ -30,6 +30,7 @@ impl<C: sov_modules_api::Context> Evm<C> {
     ) -> Result<CallResponse> {
         let reth_tx: RethTransactionSigned = tx.clone().into();
 
+        reth_tx.hash();
         let signer = reth_tx
             .signature()
             .recover_signer(reth_tx.signature_hash())
@@ -37,11 +38,17 @@ impl<C: sov_modules_api::Context> Evm<C> {
 
         println!("SIG {}", signer);
 
+        let tx = EvmTransactionWithSender {
+            sender: signer.into(),
+            transaction: tx,
+        };
+
         // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/515
         // https://github.com/Sovereign-Labs/sovereign-sdk/issues/516
         let cfg_env = CfgEnv::default();
         let block_env = self.block_env.get(working_set).unwrap_or_default();
-        self.transactions.set(&tx.hash, &tx, working_set);
+        self.transactions
+            .set(&tx.transaction.hash, &tx, working_set);
 
         let evm_db: EvmDb<'_, C> = self.get_db(working_set);
 
@@ -49,15 +56,15 @@ impl<C: sov_modules_api::Context> Evm<C> {
         let result = executor::execute_tx(evm_db, block_env, tx.clone(), cfg_env).unwrap();
 
         let receipt = TransactionReceipt {
-            transaction_hash: tx.hash,
+            transaction_hash: tx.transaction.hash,
             // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/504
             transaction_index: 0,
             // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/504
             block_hash: Default::default(),
             // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/504
             block_number: Some(0),
-            from: tx.sender,
-            to: tx.to,
+            from: signer.into(),
+            to: tx.transaction.to,
             // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/504
             cumulative_gas_used: Default::default(),
             // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/504

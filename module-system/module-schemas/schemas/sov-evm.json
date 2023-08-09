@@ -55,7 +55,6 @@
         "max_fee_per_gas",
         "max_priority_fee_per_gas",
         "nonce",
-        "sender",
         "sig",
         "value"
       ],
@@ -113,16 +112,6 @@
           "type": "integer",
           "format": "uint64",
           "minimum": 0.0
-        },
-        "sender": {
-          "type": "array",
-          "items": {
-            "type": "integer",
-            "format": "uint8",
-            "minimum": 0.0
-          },
-          "maxItems": 20,
-          "minItems": 20
         },
         "sig": {
           "$ref": "#/definitions/Signature"
