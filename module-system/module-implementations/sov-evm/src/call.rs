@@ -1,6 +1,7 @@
 use anyhow::Result;
 use reth_primitives::{
     Signature as RethSignature, TransactionSigned as RethTransactionSigned,
+    TransactionSignedEcRecovered as RethTransactionSignedEcRecovered,
     TransactionSignedNoHash as RethTransactionSignedNoHash,
 };
 use revm::primitives::{CfgEnv, U256};
@@ -9,8 +10,10 @@ use sov_state::WorkingSet;
 
 use crate::evm::db::EvmDb;
 use crate::evm::executor::{self};
-use crate::evm::transaction::{BlockEnv, EvmTransaction, EvmTransactionWithSender};
-use crate::evm::{contract_address, EvmChainCfg};
+use crate::evm::transaction::{
+    BlockEnv, EvmTransaction, EvmTransactionSignedEcRecovered, EvmTransactionWithSender,
+};
+use crate::evm::{contract_address, EvmChainCfg, RawEvmTransaction};
 use crate::experimental::SpecIdWrapper;
 use crate::{Evm, TransactionReceipt};
 
@@ -22,43 +25,38 @@ use crate::{Evm, TransactionReceipt};
 )]
 #[derive(borsh::BorshDeserialize, borsh::BorshSerialize, Debug, PartialEq, Clone)]
 pub struct CallMessage {
-    pub tx: EvmTransaction,
+    pub tx: RawEvmTransaction,
 }
 
 impl<C: sov_modules_api::Context> Evm<C> {
     pub(crate) fn execute_call(
         &self,
-        tx: EvmTransaction,
+        tx: RawEvmTransaction,
         _context: &C,
         working_set: &mut WorkingSet<C::Storage>,
     ) -> Result<CallResponse> {
-        let reth_tx: RethTransactionSignedNoHash = tx.clone().into();
-
+        let reth_tx: RethTransactionSignedNoHash = tx.clone().try_into().unwrap();
+        let reth_tx: RethTransactionSigned = reth_tx.into();
+        let reth_tx: RethTransactionSignedEcRecovered = reth_tx.into_ecrecovered().unwrap();
         let hash = reth_tx.hash();
-        let signer = reth_tx.recover_signer().unwrap();
-
-        println!("SIG {}", signer);
-
-        let tx = EvmTransactionWithSender {
-            sender: signer.into(),
-            transaction: tx,
-            hash: hash.into(),
-        };
-
-        // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/515
+        let signer = reth_tx.signer();
 
         let block_env = self.block_env.get(working_set).unwrap_or_default();
         let cfg = self.cfg.get(working_set).unwrap_or_default();
         let cfg_env = get_cfg_env(&block_env, cfg, None);
-        self.transactions.set(&tx.hash, &tx, working_set);
+        self.transactions.set(&hash, &tx, working_set);
 
         let evm_db: EvmDb<'_, C> = self.get_db(working_set);
 
+        let tx = EvmTransactionSignedEcRecovered {
+            tx: reth_tx.clone(),
+        };
+
         // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/505
-        let result = executor::execute_tx(evm_db, block_env, tx.clone(), cfg_env).unwrap();
+        let result = executor::execute_tx(evm_db, block_env, tx, cfg_env).unwrap();
 
         let receipt = TransactionReceipt {
-            transaction_hash: tx.hash,
+            transaction_hash: hash.into(),
             // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/504
             transaction_index: 0,
             // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/504
@@ -66,7 +64,7 @@ impl<C: sov_modules_api::Context> Evm<C> {
             // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/504
             block_number: Some(0),
             from: signer.into(),
-            to: tx.transaction.to,
+            to: reth_tx.to().map(|to| to.into()),
             // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/504
             cumulative_gas_used: Default::default(),
             // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/504

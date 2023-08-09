@@ -3,6 +3,7 @@ pub use experimental::{get_ethereum_rpc, Ethereum};
 
 #[cfg(feature = "experimental")]
 pub mod experimental {
+
     use std::collections::HashMap;
     use std::sync::Mutex;
 
@@ -17,9 +18,13 @@ pub mod experimental {
     use jsonrpsee::types::ErrorObjectOwned;
     use jsonrpsee::RpcModule;
     use jupiter::da_service::DaServiceConfig;
-    use reth_primitives::Bytes as RethBytes;
+    use reth_primitives::{
+        AccessList, Bytes as RethBytes, Signature as RethSignature, Transaction as RethTransaction,
+        TransactionKind, TransactionSigned as RethTransactionSigned,
+        TransactionSignedNoHash as RethTransactionSignedNoHash, TxEip1559,
+    };
     use sov_evm::call::CallMessage;
-    use sov_evm::evm::{EthAddress, EvmTransaction, EvmTransactionWithSender};
+    use sov_evm::evm::{EthAddress, EvmTransaction, EvmTransactionWithSender, RawEvmTransaction};
     use sov_modules_api::transaction::Transaction;
     use sov_modules_api::utils::to_jsonrpsee_error_object;
 
@@ -46,16 +51,15 @@ pub mod experimental {
     }
 
     impl Ethereum {
-        fn make_raw_tx(&self, evm_tx: EvmTransactionWithSender) -> Result<Vec<u8>, std::io::Error> {
+        fn make_raw_tx(
+            &self,
+            raw_tx: RawEvmTransaction,
+            sender: EthAddress,
+        ) -> Result<Vec<u8>, std::io::Error> {
             let mut nonces = self.nonces.lock().unwrap();
-            let nonce = *nonces
-                .entry(evm_tx.sender)
-                .and_modify(|n| *n += 1)
-                .or_insert(0);
+            let nonce = *nonces.entry(sender).and_modify(|n| *n += 1).or_insert(0);
 
-            let tx = CallMessage {
-                tx: evm_tx.transaction,
-            };
+            let tx = CallMessage { tx: raw_tx };
             let message = Runtime::<DefaultContext>::encode_evm_call(tx);
             let tx = Transaction::<DefaultContext>::new_signed_tx(
                 &self.tx_signer_prov_key,
@@ -109,13 +113,15 @@ pub mod experimental {
             "eth_sendRawTransaction",
             |parameters, ethereum| async move {
                 let data: Bytes = parameters.one().unwrap();
-                let data = RethBytes::from(data.as_ref());
+                let data = RethBytes::from(data.as_ref()).to_vec();
 
-                let evm_transaction: EvmTransactionWithSender = data.try_into()?;
+                let raw_evm_tx = RawEvmTransaction { tx: data };
+                let evm_transaction: RethTransactionSignedNoHash = raw_evm_tx.clone().try_into()?;
 
-                let tx_hash = evm_transaction.hash;
+                let tx_hash = evm_transaction.hash();
+                let sender = evm_transaction.recover_signer().unwrap();
                 let raw_tx = ethereum
-                    .make_raw_tx(evm_transaction)
+                    .make_raw_tx(raw_evm_tx, sender.into())
                     .map_err(|e| to_jsonrpsee_error_object(e, ETH_RPC_ERROR))?;
 
                 ethereum

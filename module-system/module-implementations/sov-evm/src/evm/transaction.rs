@@ -1,3 +1,9 @@
+use reth_primitives::{
+    Signature as RethSignature, TransactionSigned as RethTransactionSigned,
+    TransactionSignedEcRecovered as RethTransactionSignedEcRecovered,
+    TransactionSignedNoHash as RethTransactionSignedNoHash,
+};
+
 use super::{Bytes32, EthAddress};
 
 #[derive(borsh::BorshDeserialize, borsh::BorshSerialize, Debug, PartialEq, Clone)]
@@ -87,4 +93,19 @@ pub struct Signature {
     pub s: [u8; 32],
     /// yParity: Signature Y parity; formally Ty
     pub odd_y_parity: bool,
+}
+
+#[cfg_attr(
+    feature = "native",
+    derive(serde::Serialize),
+    derive(serde::Deserialize),
+    derive(schemars::JsonSchema)
+)]
+#[derive(borsh::BorshDeserialize, borsh::BorshSerialize, Debug, PartialEq, Clone)]
+pub struct RawEvmTransaction {
+    pub tx: Vec<u8>,
+}
+
+pub struct EvmTransactionSignedEcRecovered {
+    pub tx: RethTransactionSignedEcRecovered,
 }

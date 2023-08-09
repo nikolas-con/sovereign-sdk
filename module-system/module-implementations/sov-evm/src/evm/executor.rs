@@ -4,12 +4,14 @@ use reth_revm::tracing::{TracingInspector, TracingInspectorConfig};
 use revm::primitives::{CfgEnv, EVMError, Env, ExecutionResult, ResultAndState, TxEnv};
 use revm::{self, Database, DatabaseCommit};
 
-use super::transaction::{BlockEnv, EvmTransaction, EvmTransactionWithSender};
+use super::transaction::{
+    BlockEnv, EvmTransaction, EvmTransactionSignedEcRecovered, EvmTransactionWithSender,
+};
 
 pub(crate) fn execute_tx<DB: Database<Error = Infallible> + DatabaseCommit>(
     db: DB,
     block_env: BlockEnv,
-    tx: EvmTransactionWithSender,
+    tx: EvmTransactionSignedEcRecovered,
     config_env: CfgEnv,
 ) -> Result<ExecutionResult, EVMError<Infallible>> {
     let mut evm = revm::new();
