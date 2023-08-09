@@ -1,6 +1,6 @@
 use anyhow::Result;
 use reth_primitives::{
-    Signature as RethSignature, TransactionSigned as RethTransactionSigned,
+    TransactionSigned as RethTransactionSigned,
     TransactionSignedEcRecovered as RethTransactionSignedEcRecovered,
     TransactionSignedNoHash as RethTransactionSignedNoHash,
 };
@@ -10,9 +10,7 @@ use sov_state::WorkingSet;
 
 use crate::evm::db::EvmDb;
 use crate::evm::executor::{self};
-use crate::evm::transaction::{
-    BlockEnv, EvmTransaction, EvmTransactionSignedEcRecovered, EvmTransactionWithSender,
-};
+use crate::evm::transaction::{BlockEnv, EvmTransactionSignedEcRecovered};
 use crate::evm::{contract_address, EvmChainCfg, RawEvmTransaction};
 use crate::experimental::SpecIdWrapper;
 use crate::{Evm, TransactionReceipt};
@@ -38,19 +36,20 @@ impl<C: sov_modules_api::Context> Evm<C> {
         let reth_tx: RethTransactionSignedNoHash = tx.clone().try_into().unwrap();
         let reth_tx: RethTransactionSigned = reth_tx.into();
         let reth_tx: RethTransactionSignedEcRecovered = reth_tx.into_ecrecovered().unwrap();
+
         let hash = reth_tx.hash();
         let signer = reth_tx.signer();
+        let to = reth_tx.to().map(|to| to.into());
 
         let block_env = self.block_env.get(working_set).unwrap_or_default();
         let cfg = self.cfg.get(working_set).unwrap_or_default();
         let cfg_env = get_cfg_env(&block_env, cfg, None);
+
         self.transactions.set(&hash, &tx, working_set);
 
-        let evm_db: EvmDb<'_, C> = self.get_db(working_set);
+        let tx = EvmTransactionSignedEcRecovered { tx: reth_tx };
 
-        let tx = EvmTransactionSignedEcRecovered {
-            tx: reth_tx.clone(),
-        };
+        let evm_db: EvmDb<'_, C> = self.get_db(working_set);
 
         // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/505
         let result = executor::execute_tx(evm_db, block_env, tx, cfg_env).unwrap();
@@ -64,7 +63,7 @@ impl<C: sov_modules_api::Context> Evm<C> {
             // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/504
             block_number: Some(0),
             from: signer.into(),
-            to: reth_tx.to().map(|to| to.into()),
+            to,
             // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/504
             cumulative_gas_used: Default::default(),
             // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/504

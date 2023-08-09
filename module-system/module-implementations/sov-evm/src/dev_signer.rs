@@ -8,7 +8,7 @@ use reth_primitives::{
 use reth_rpc::eth::error::SignError;
 use secp256k1::{PublicKey, SecretKey};
 
-use crate::evm::{EthAddress, EvmTransaction};
+use crate::evm::EthAddress;
 
 /// Holds developer keys
 pub(crate) struct DevSigner {

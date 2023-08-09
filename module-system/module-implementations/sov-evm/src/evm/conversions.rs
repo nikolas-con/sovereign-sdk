@@ -8,8 +8,7 @@ use revm::primitives::{
 };
 
 use super::transaction::{
-    AccessListItem, BlockEnv, EvmTransaction, EvmTransactionSignedEcRecovered,
-    EvmTransactionWithSender, RawEvmTransaction, Signature,
+    AccessListItem, BlockEnv, EvmTransactionSignedEcRecovered, RawEvmTransaction,
 };
 use super::{AccountInfo, EthAddress};
 
@@ -50,18 +49,6 @@ impl From<BlockEnv> for ReVmBlockEnv {
     }
 }
 
-impl From<AccessListItem> for (B160, Vec<U256>) {
-    fn from(item: AccessListItem) -> Self {
-        (
-            B160::from_slice(&item.address),
-            item.storage_keys
-                .into_iter()
-                .map(U256::from_le_bytes)
-                .collect(),
-        )
-    }
-}
-
 impl From<EvmTransactionSignedEcRecovered> for TxEnv {
     fn from(tx: EvmTransactionSignedEcRecovered) -> Self {
         let tx = tx.tx;
@@ -83,37 +70,6 @@ impl From<EvmTransactionSignedEcRecovered> for TxEnv {
             nonce: Some(tx.nonce()),
             //TODO
             access_list: vec![],
-        }
-    }
-}
-
-impl From<EvmTransactionWithSender> for TxEnv {
-    fn from(evm_tx: EvmTransactionWithSender) -> Self {
-        let sender = evm_tx.sender;
-        let tx = evm_tx.transaction;
-
-        let to = match tx.to {
-            Some(addr) => TransactTo::Call(B160::from_slice(&addr)),
-            None => TransactTo::Create(CreateScheme::Create),
-        };
-
-        let access_list = tx
-            .access_lists
-            .into_iter()
-            .map(|item| item.into())
-            .collect();
-
-        Self {
-            caller: B160::from_slice(&sender),
-            data: Bytes::from(tx.data),
-            gas_limit: tx.gas_limit,
-            gas_price: U256::from(tx.gas_price),
-            gas_priority_fee: Some(U256::from(tx.max_priority_fee_per_gas)),
-            transact_to: to,
-            value: U256::from(tx.value),
-            nonce: Some(tx.nonce),
-            chain_id: Some(tx.chain_id),
-            access_list,
         }
     }
 }
@@ -154,134 +110,11 @@ impl From<RawEvmTransaction> for Transaction {
     }
 }
 
-impl From<EvmTransactionWithSender> for Transaction {
-    fn from(evm_tx: EvmTransactionWithSender) -> Self {
-        let sender = evm_tx.sender;
-        let tx = evm_tx.transaction;
-        Self {
-            hash: evm_tx.hash.into(),
-            nonce: tx.nonce.into(),
-            from: sender.into(),
-            to: tx.to.map(|addr| addr.into()),
-            value: tx.value.into(),
-            // https://github.com/foundry-rs/foundry/blob/master/anvil/core/src/eth/transaction/mod.rs#L1251
-            gas_price: Some(tx.max_fee_per_gas.into()),
-            input: tx.data.into(),
-            v: (tx.sig.odd_y_parity as u8).into(),
-            r: tx.sig.r.into(),
-            s: tx.sig.s.into(),
-            transaction_type: Some(2.into()),
-            access_list: None,
-            max_priority_fee_per_gas: Some(tx.max_priority_fee_per_gas.into()),
-            max_fee_per_gas: Some(tx.max_fee_per_gas.into()),
-            chain_id: Some(tx.chain_id.into()),
-            // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/503
-            block_hash: Some([0; 32].into()),
-            // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/503
-            block_number: Some(1.into()),
-            // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/503
-            transaction_index: Some(1.into()),
-            // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/503
-            gas: Default::default(),
-            // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/503
-            other: OtherFields::default(),
-        }
-    }
-}
-
 use reth_primitives::{
     AccessList, Bytes as RethBytes, Signature as RethSignature, Transaction as RethTransaction,
     TransactionKind, TransactionSigned as RethTransactionSigned,
     TransactionSignedNoHash as RethTransactionSignedNoHash, TxEip1559,
 };
-
-impl TryFrom<RethTransactionSigned> for EvmTransaction {
-    type Error = EthApiError;
-
-    fn try_from(reth_tx: RethTransactionSigned) -> Result<Self, Self::Error> {
-        let transaction = reth_tx
-            .into_ecrecovered()
-            .ok_or(EthApiError::InvalidTransactionSignature)?;
-
-        let (signed_transaction, signer) = transaction.to_components();
-
-        let tx_hash = signed_transaction.hash();
-        let tx_eip_1559 = match signed_transaction.transaction {
-            reth_primitives::Transaction::Legacy(_) => {
-                return Err(EthApiError::InvalidTransaction(
-                    RpcInvalidTransactionError::TxTypeNotSupported,
-                ))
-            }
-            reth_primitives::Transaction::Eip2930(_) => {
-                return Err(EthApiError::InvalidTransaction(
-                    RpcInvalidTransactionError::TxTypeNotSupported,
-                ))
-            }
-            reth_primitives::Transaction::Eip1559(tx_eip_1559) => tx_eip_1559,
-        };
-
-        Ok(Self {
-            data: tx_eip_1559.input.to_vec(),
-            gas_limit: tx_eip_1559.gas_limit,
-            // https://github.com/foundry-rs/foundry/blob/master/anvil/core/src/eth/transaction/mod.rs#L1251C20-L1251C20
-            gas_price: tx_eip_1559.max_fee_per_gas,
-            max_priority_fee_per_gas: tx_eip_1559.max_priority_fee_per_gas,
-            max_fee_per_gas: tx_eip_1559.max_fee_per_gas,
-            to: tx_eip_1559.to.to().map(|addr| addr.into()),
-            value: tx_eip_1559.value,
-            nonce: tx_eip_1559.nonce,
-            // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/503
-            access_lists: vec![],
-            chain_id: tx_eip_1559.chain_id,
-
-            sig: signed_transaction.signature.into(),
-        })
-    }
-}
-
-impl From<EvmTransaction> for RethTransactionSignedNoHash {
-    fn from(evm_tx: EvmTransaction) -> Self {
-        let to = match evm_tx.to {
-            Some(to) => TransactionKind::Call(to.into()),
-            None => TransactionKind::Create,
-        };
-
-        Self {
-            signature: evm_tx.sig.into(),
-            transaction: reth_primitives::Transaction::Eip1559(TxEip1559 {
-                chain_id: evm_tx.chain_id,
-                nonce: evm_tx.nonce,
-                gas_limit: evm_tx.gas_limit,
-                max_fee_per_gas: evm_tx.max_fee_per_gas,
-                max_priority_fee_per_gas: evm_tx.max_priority_fee_per_gas,
-                to,
-                value: evm_tx.value,
-                // TODO
-                access_list: AccessList::default(),
-                input: RethBytes::from(evm_tx.data),
-            }),
-        }
-    }
-}
-
-impl TryFrom<RethBytes> for EvmTransactionWithSender {
-    type Error = EthApiError;
-
-    fn try_from(data: RethBytes) -> Result<Self, Self::Error> {
-        if data.is_empty() {
-            return Err(EthApiError::EmptyRawTransactionData);
-        }
-
-        let transaction = RethTransactionSigned::decode_enveloped(data)
-            .map_err(|_| EthApiError::FailedToDecodeSignedTransaction)?;
-
-        Ok(Self {
-            sender: transaction.recover_signer().unwrap().into(),
-            hash: transaction.hash().into(),
-            transaction: transaction.try_into()?,
-        })
-    }
-}
 
 impl TryFrom<RawEvmTransaction> for RethTransactionSignedNoHash {
     type Error = EthApiError;
@@ -299,26 +132,6 @@ impl TryFrom<RawEvmTransaction> for RethTransactionSignedNoHash {
             signature: transaction.signature,
             transaction: transaction.transaction,
         })
-    }
-}
-
-impl From<RethSignature> for Signature {
-    fn from(sig: RethSignature) -> Self {
-        Self {
-            s: sig.s.to_be_bytes(),
-            r: sig.r.to_be_bytes(),
-            odd_y_parity: sig.odd_y_parity,
-        }
-    }
-}
-
-impl From<Signature> for RethSignature {
-    fn from(sig: Signature) -> Self {
-        Self {
-            r: U256::from_be_bytes(sig.r),
-            s: U256::from_be_bytes(sig.s),
-            odd_y_parity: sig.odd_y_parity,
-        }
     }
 }
 

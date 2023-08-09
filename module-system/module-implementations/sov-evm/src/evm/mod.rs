@@ -19,7 +19,7 @@ pub type EthAddress = [u8; 20];
 pub(crate) type Bytes32 = [u8; 32];
 
 pub use conversions::prepare_call_env;
-pub use transaction::{EvmTransaction, EvmTransactionWithSender, RawEvmTransaction};
+pub use transaction::RawEvmTransaction;
 
 use crate::experimental::SpecIdWrapper;
 

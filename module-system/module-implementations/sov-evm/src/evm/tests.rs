@@ -9,10 +9,9 @@ use sov_state::{ProverStorage, WorkingSet};
 use super::db::EvmDb;
 use super::db_init::InitEvmDb;
 use super::executor;
-use super::transaction::EvmTransactionWithSender;
 use crate::dev_signer::DevSigner;
 use crate::evm::test_helpers::{output, SimpleStorageContract};
-use crate::evm::transaction::{BlockEnv, EvmTransaction};
+use crate::evm::transaction::{BlockEnv, EvmTransactionSignedEcRecovered};
 use crate::evm::{contract_address, AccountInfo};
 use crate::Evm;
 
@@ -22,20 +21,6 @@ use reth_primitives::{
     TransactionSigned as RethTransactionSigned,
     TransactionSignedNoHash as RethTransactionSignedNoHash, TxEip1559,
 };
-
-impl TryFrom<RethTransactionSigned> for EvmTransactionWithSender {
-    type Error = ();
-
-    fn try_from(tx: RethTransactionSigned) -> Result<Self, Self::Error> {
-        let signer = tx.signature().recover_signer(tx.signature_hash()).unwrap();
-
-        Ok(Self {
-            hash: tx.hash().into(),
-            sender: signer.into(),
-            transaction: tx.try_into().unwrap(),
-        })
-    }
-}
 
 #[test]
 fn simple_contract_execution_sov_state() {
@@ -80,7 +65,9 @@ fn simple_contract_execution<DB: Database<Error = Infallible> + DatabaseCommit +
         let result = executor::execute_tx(
             &mut evm_db,
             BlockEnv::default(),
-            tx.try_into().unwrap(),
+            EvmTransactionSignedEcRecovered {
+                tx: tx.into_ecrecovered().unwrap(),
+            },
             CfgEnv::default(),
         )
         .unwrap();
@@ -103,7 +90,9 @@ fn simple_contract_execution<DB: Database<Error = Infallible> + DatabaseCommit +
         executor::execute_tx(
             &mut evm_db,
             BlockEnv::default(),
-            tx.try_into().unwrap(),
+            EvmTransactionSignedEcRecovered {
+                tx: tx.into_ecrecovered().unwrap(),
+            },
             CfgEnv::default(),
         )
         .unwrap();
@@ -123,7 +112,9 @@ fn simple_contract_execution<DB: Database<Error = Infallible> + DatabaseCommit +
         let result = executor::execute_tx(
             &mut evm_db,
             BlockEnv::default(),
-            tx.try_into().unwrap(),
+            EvmTransactionSignedEcRecovered {
+                tx: tx.into_ecrecovered().unwrap(),
+            },
             CfgEnv::default(),
         )
         .unwrap();

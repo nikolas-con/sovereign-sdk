@@ -4,9 +4,7 @@ use reth_revm::tracing::{TracingInspector, TracingInspectorConfig};
 use revm::primitives::{CfgEnv, EVMError, Env, ExecutionResult, ResultAndState, TxEnv};
 use revm::{self, Database, DatabaseCommit};
 
-use super::transaction::{
-    BlockEnv, EvmTransaction, EvmTransactionSignedEcRecovered, EvmTransactionWithSender,
-};
+use super::transaction::{BlockEnv, EvmTransactionSignedEcRecovered};
 
 pub(crate) fn execute_tx<DB: Database<Error = Infallible> + DatabaseCommit>(
     db: DB,

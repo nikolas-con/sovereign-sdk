@@ -33,8 +33,7 @@ mod experimental {
     use super::evm::db::EvmDb;
     use super::evm::transaction::BlockEnv;
     use super::evm::{DbAccount, EthAddress};
-    use crate::evm::transaction::EvmTransactionWithSender;
-    use crate::evm::{Bytes32, EvmChainCfg, EvmTransaction, RawEvmTransaction};
+    use crate::evm::{Bytes32, EvmChainCfg, RawEvmTransaction};
     use crate::TransactionReceipt;
 
     #[derive(Clone)]

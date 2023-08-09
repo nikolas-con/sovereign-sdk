@@ -24,7 +24,7 @@ pub mod experimental {
         TransactionSignedNoHash as RethTransactionSignedNoHash, TxEip1559,
     };
     use sov_evm::call::CallMessage;
-    use sov_evm::evm::{EthAddress, EvmTransaction, EvmTransactionWithSender, RawEvmTransaction};
+    use sov_evm::evm::{EthAddress, RawEvmTransaction};
     use sov_modules_api::transaction::Transaction;
     use sov_modules_api::utils::to_jsonrpsee_error_object;
 
