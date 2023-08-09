@@ -1,4 +1,5 @@
 use anyhow::Result;
+use reth_primitives::{Signature as RethSignature, TransactionSigned as RethTransactionSigned};
 use revm::primitives::CfgEnv;
 use sov_modules_api::CallResponse;
 use sov_state::WorkingSet;
@@ -27,6 +28,15 @@ impl<C: sov_modules_api::Context> Evm<C> {
         _context: &C,
         working_set: &mut WorkingSet<C::Storage>,
     ) -> Result<CallResponse> {
+        let reth_tx: RethTransactionSigned = tx.clone().into();
+
+        let signer = reth_tx
+            .signature()
+            .recover_signer(reth_tx.signature_hash())
+            .unwrap();
+
+        println!("SIG {}", signer);
+
         // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/515
         // https://github.com/Sovereign-Labs/sovereign-sdk/issues/516
         let cfg_env = CfgEnv::default();

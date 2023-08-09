@@ -17,14 +17,13 @@ use crate::{AccountData, Evm, EvmConfig};
 
 type C = DefaultContext;
 
-// ETEHRES
-//pub fn secret_key_to_address(secret_key: &SigningKey) -> Address {
-
 fn create_messages(
     contract_addr: EthAddress,
     set_arg: u32,
     dev_signer: DevSigner,
 ) -> Vec<CallMessage> {
+    println!("Addr {:?}", hex::encode(dev_signer.address));
+
     let mut transactions = Vec::default();
     let contract = SimpleStorageContract::new();
 
@@ -33,6 +32,12 @@ fn create_messages(
         let signed_tx = dev_signer
             .sign_default_transaction(TransactionKind::Create, contract.byte_code().to_vec(), 0)
             .unwrap();
+
+        let x = signed_tx
+            .signature()
+            .recover_signer(signed_tx.signature_hash());
+
+        println!("X {:?}", x);
 
         transactions.push(CallMessage {
             tx: signed_tx.try_into().unwrap(),

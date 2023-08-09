@@ -8,7 +8,7 @@ use revm::primitives::{
 };
 
 use super::transaction::{AccessListItem, BlockEnv, EvmTransaction, Signature};
-use super::AccountInfo;
+use super::{AccountInfo, EthAddress};
 
 impl From<AccountInfo> for ReVmAccountInfo {
     fn from(info: AccountInfo) -> Self {
@@ -121,7 +121,8 @@ impl From<EvmTransaction> for Transaction {
 }
 
 use reth_primitives::{
-    Bytes as RethBytes, Signature as RethSignature, TransactionSigned as RethTransactionSigned,
+    AccessList, Bytes as RethBytes, Signature as RethSignature, Transaction as RethTransaction,
+    TransactionKind, TransactionSigned as RethTransactionSigned, TxEip1559,
 };
 
 impl TryFrom<RethTransactionSigned> for EvmTransaction {
@@ -170,6 +171,34 @@ impl TryFrom<RethTransactionSigned> for EvmTransaction {
     }
 }
 
+impl From<EvmTransaction> for RethTransactionSigned {
+    fn from(evm_tx: EvmTransaction) -> Self {
+        Self {
+            hash: evm_tx.hash.into(),
+            signature: evm_tx.sig.into(),
+            transaction: reth_primitives::Transaction::Eip1559(TxEip1559 {
+                chain_id: evm_tx.chain_id,
+                nonce: evm_tx.nonce,
+                gas_limit: evm_tx.gas_limit,
+                max_fee_per_gas: evm_tx.max_fee_per_gas,
+                max_priority_fee_per_gas: evm_tx.max_priority_fee_per_gas,
+                to: to_to(evm_tx.to),
+                value: evm_tx.value,
+                // TODO
+                access_list: AccessList::default(),
+                input: RethBytes::from(evm_tx.data),
+            }),
+        }
+    }
+}
+
+fn to_to(address: Option<EthAddress>) -> TransactionKind {
+    match address {
+        Some(a) => TransactionKind::Call(a.into()),
+        None => TransactionKind::Create,
+    }
+}
+
 impl TryFrom<RethBytes> for EvmTransaction {
     type Error = EthApiError;
 
@@ -190,6 +219,16 @@ impl From<RethSignature> for Signature {
         Self {
             s: sig.s.to_be_bytes(),
             r: sig.r.to_be_bytes(),
+            odd_y_parity: sig.odd_y_parity,
+        }
+    }
+}
+
+impl From<Signature> for RethSignature {
+    fn from(sig: Signature) -> Self {
+        Self {
+            r: U256::from_be_bytes(sig.r),
+            s: U256::from_be_bytes(sig.s),
             odd_y_parity: sig.odd_y_parity,
         }
     }
