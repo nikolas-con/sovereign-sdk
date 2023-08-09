@@ -6245,6 +6245,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "sov-cli"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "borsh",
+ "demo-stf",
+ "directories",
+ "serde",
+ "serde_json",
+ "sov-modules-api",
+]
+
+[[package]]
 name = "sov-db"
 version = "0.1.0"
 dependencies = [
@@ -6348,6 +6361,7 @@ dependencies = [
  "borsh",
  "bytes",
  "clap",
+ "derive_more",
  "ethereum-types",
  "ethers",
  "ethers-contract",
@@ -6404,6 +6418,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "bech32 0.9.1",
+ "bincode",
  "borsh",
  "clap",
  "derive_more",
