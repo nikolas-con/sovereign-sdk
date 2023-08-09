@@ -16,7 +16,7 @@ pub type EthAddress = [u8; 20];
 pub(crate) type Bytes32 = [u8; 32];
 
 pub use conversions::prepare_call_env;
-pub use transaction::EvmTransaction;
+pub use transaction::{EvmTransaction, EvmTransactionWithSender};
 // Stores information about an EVM account
 #[derive(borsh::BorshDeserialize, borsh::BorshSerialize, Debug, PartialEq, Clone, Default)]
 pub(crate) struct AccountInfo {

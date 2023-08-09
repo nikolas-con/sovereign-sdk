@@ -202,7 +202,7 @@ impl From<EvmTransaction> for RethTransactionSignedNoHash {
     }
 }
 
-impl TryFrom<RethBytes> for EvmTransaction {
+impl TryFrom<RethBytes> for EvmTransactionWithSender {
     type Error = EthApiError;
 
     fn try_from(data: RethBytes) -> Result<Self, Self::Error> {
@@ -213,7 +213,11 @@ impl TryFrom<RethBytes> for EvmTransaction {
         let transaction = RethTransactionSigned::decode_enveloped(data)
             .map_err(|_| EthApiError::FailedToDecodeSignedTransaction)?;
 
-        transaction.try_into()
+        Ok(Self {
+            sender: transaction.recover_signer().unwrap().into(),
+            hash: transaction.hash().into(),
+            transaction: transaction.try_into()?,
+        })
     }
 }
 

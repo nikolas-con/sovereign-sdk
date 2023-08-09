@@ -19,7 +19,7 @@ pub mod experimental {
     use jupiter::da_service::DaServiceConfig;
     use reth_primitives::Bytes as RethBytes;
     use sov_evm::call::CallMessage;
-    use sov_evm::evm::{EthAddress, EvmTransaction};
+    use sov_evm::evm::{EthAddress, EvmTransaction, EvmTransactionWithSender};
     use sov_modules_api::transaction::Transaction;
     use sov_modules_api::utils::to_jsonrpsee_error_object;
 
@@ -46,14 +46,16 @@ pub mod experimental {
     }
 
     impl Ethereum {
-        fn make_raw_tx(&self, evm_tx: EvmTransaction) -> Result<Vec<u8>, std::io::Error> {
+        fn make_raw_tx(&self, evm_tx: EvmTransactionWithSender) -> Result<Vec<u8>, std::io::Error> {
             let mut nonces = self.nonces.lock().unwrap();
             let nonce = *nonces
                 .entry(evm_tx.sender)
                 .and_modify(|n| *n += 1)
                 .or_insert(0);
 
-            let tx = CallMessage { tx: evm_tx };
+            let tx = CallMessage {
+                tx: evm_tx.transaction,
+            };
             let message = Runtime::<DefaultContext>::encode_evm_call(tx);
             let tx = Transaction::<DefaultContext>::new_signed_tx(
                 &self.tx_signer_prov_key,
@@ -109,7 +111,7 @@ pub mod experimental {
                 let data: Bytes = parameters.one().unwrap();
                 let data = RethBytes::from(data.as_ref());
 
-                let evm_transaction: EvmTransaction = data.try_into()?;
+                let evm_transaction: EvmTransactionWithSender = data.try_into()?;
 
                 let tx_hash = evm_transaction.hash;
                 let raw_tx = ethereum
