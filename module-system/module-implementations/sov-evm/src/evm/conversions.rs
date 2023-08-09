@@ -173,6 +173,11 @@ impl TryFrom<RethTransactionSigned> for EvmTransaction {
 
 impl From<EvmTransaction> for RethTransactionSigned {
     fn from(evm_tx: EvmTransaction) -> Self {
+        let to = match evm_tx.to {
+            Some(to) => TransactionKind::Call(to.into()),
+            None => TransactionKind::Create,
+        };
+
         Self {
             hash: evm_tx.hash.into(),
             signature: evm_tx.sig.into(),
@@ -182,20 +187,13 @@ impl From<EvmTransaction> for RethTransactionSigned {
                 gas_limit: evm_tx.gas_limit,
                 max_fee_per_gas: evm_tx.max_fee_per_gas,
                 max_priority_fee_per_gas: evm_tx.max_priority_fee_per_gas,
-                to: to_to(evm_tx.to),
+                to,
                 value: evm_tx.value,
                 // TODO
                 access_list: AccessList::default(),
                 input: RethBytes::from(evm_tx.data),
             }),
         }
-    }
-}
-
-fn to_to(address: Option<EthAddress>) -> TransactionKind {
-    match address {
-        Some(a) => TransactionKind::Call(a.into()),
-        None => TransactionKind::Create,
     }
 }
 
