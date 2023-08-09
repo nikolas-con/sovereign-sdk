@@ -18,7 +18,10 @@ use crate::Evm;
 
 type C = sov_modules_api::default_context::DefaultContext;
 
-use reth_primitives::{TransactionSigned as RethTransactionSigned, TxEip1559};
+use reth_primitives::{
+    TransactionSigned as RethTransactionSigned,
+    TransactionSignedNoHash as RethTransactionSignedNoHash, TxEip1559,
+};
 
 impl TryFrom<RethTransactionSigned> for EvmTransactionWithSender {
     type Error = ();
@@ -27,6 +30,7 @@ impl TryFrom<RethTransactionSigned> for EvmTransactionWithSender {
         let signer = tx.signature().recover_signer(tx.signature_hash()).unwrap();
 
         Ok(Self {
+            hash: tx.hash().into(),
             sender: signer.into(),
             transaction: tx.try_into().unwrap(),
         })

@@ -57,8 +57,6 @@ pub struct EvmTransaction {
     pub access_lists: Vec<AccessListItem>,
     pub chain_id: u64,
     pub sig: Signature,
-    // todo remove it
-    pub hash: [u8; 32],
 }
 
 #[cfg_attr(
@@ -71,6 +69,8 @@ pub struct EvmTransaction {
 pub struct EvmTransactionWithSender {
     pub sender: EthAddress,
     pub transaction: EvmTransaction,
+
+    pub hash: [u8; 32],
 }
 
 #[cfg_attr(

@@ -1,5 +1,8 @@
 use anyhow::Result;
-use reth_primitives::{Signature as RethSignature, TransactionSigned as RethTransactionSigned};
+use reth_primitives::{
+    Signature as RethSignature, TransactionSigned as RethTransactionSigned,
+    TransactionSignedNoHash as RethTransactionSignedNoHash,
+};
 use revm::primitives::CfgEnv;
 use sov_modules_api::CallResponse;
 use sov_state::WorkingSet;
@@ -28,27 +31,24 @@ impl<C: sov_modules_api::Context> Evm<C> {
         _context: &C,
         working_set: &mut WorkingSet<C::Storage>,
     ) -> Result<CallResponse> {
-        let reth_tx: RethTransactionSigned = tx.clone().into();
+        let reth_tx: RethTransactionSignedNoHash = tx.clone().into();
 
-        reth_tx.hash();
-        let signer = reth_tx
-            .signature()
-            .recover_signer(reth_tx.signature_hash())
-            .unwrap();
+        let hash = reth_tx.hash();
+        let signer = reth_tx.recover_signer().unwrap();
 
         println!("SIG {}", signer);
 
         let tx = EvmTransactionWithSender {
             sender: signer.into(),
             transaction: tx,
+            hash: hash.into(),
         };
 
         // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/515
         // https://github.com/Sovereign-Labs/sovereign-sdk/issues/516
         let cfg_env = CfgEnv::default();
         let block_env = self.block_env.get(working_set).unwrap_or_default();
-        self.transactions
-            .set(&tx.transaction.hash, &tx, working_set);
+        self.transactions.set(&tx.hash, &tx, working_set);
 
         let evm_db: EvmDb<'_, C> = self.get_db(working_set);
 
@@ -56,7 +56,7 @@ impl<C: sov_modules_api::Context> Evm<C> {
         let result = executor::execute_tx(evm_db, block_env, tx.clone(), cfg_env).unwrap();
 
         let receipt = TransactionReceipt {
-            transaction_hash: tx.transaction.hash,
+            transaction_hash: tx.hash,
             // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/504
             transaction_index: 0,
             // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/504

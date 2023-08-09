@@ -97,7 +97,7 @@ impl From<EvmTransactionWithSender> for Transaction {
         let sender = evm_tx.sender;
         let tx = evm_tx.transaction;
         Self {
-            hash: tx.hash.into(),
+            hash: evm_tx.hash.into(),
             nonce: tx.nonce.into(),
             from: sender.into(),
             to: tx.to.map(|addr| addr.into()),
@@ -129,7 +129,8 @@ impl From<EvmTransactionWithSender> for Transaction {
 
 use reth_primitives::{
     AccessList, Bytes as RethBytes, Signature as RethSignature, Transaction as RethTransaction,
-    TransactionKind, TransactionSigned as RethTransactionSigned, TxEip1559,
+    TransactionKind, TransactionSigned as RethTransactionSigned,
+    TransactionSignedNoHash as RethTransactionSignedNoHash, TxEip1559,
 };
 
 impl TryFrom<RethTransactionSigned> for EvmTransaction {
@@ -170,14 +171,13 @@ impl TryFrom<RethTransactionSigned> for EvmTransaction {
             // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/503
             access_lists: vec![],
             chain_id: tx_eip_1559.chain_id,
-            // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/503
-            hash: tx_hash.into(),
+
             sig: signed_transaction.signature.into(),
         })
     }
 }
 
-impl From<EvmTransaction> for RethTransactionSigned {
+impl From<EvmTransaction> for RethTransactionSignedNoHash {
     fn from(evm_tx: EvmTransaction) -> Self {
         let to = match evm_tx.to {
             Some(to) => TransactionKind::Call(to.into()),
@@ -185,7 +185,6 @@ impl From<EvmTransaction> for RethTransactionSigned {
         };
 
         Self {
-            hash: evm_tx.hash.into(),
             signature: evm_tx.sig.into(),
             transaction: reth_primitives::Transaction::Eip1559(TxEip1559 {
                 chain_id: evm_tx.chain_id,
