@@ -1,22 +1,22 @@
 use ethers_core::rand::rngs::StdRng;
 use ethers_core::rand::SeedableRng;
 use reth_primitives::{
-    public_key_to_address, sign_message, Address, Bytes as RethBytes, Signature,
-    Transaction as RethTransaction, TransactionKind, TransactionSigned,
-    TransactionSignedNoHash as RethTransactionSignedNoHash, TxEip1559 as RethTxEip1559, H256,
+    public_key_to_address, sign_message, Bytes as RethBytes, Transaction as RethTransaction,
+    TransactionKind, TransactionSigned, TxEip1559 as RethTxEip1559, H256,
 };
 use reth_rpc::eth::error::SignError;
 use secp256k1::{PublicKey, SecretKey};
 
 use crate::evm::{EthAddress, RawEvmTransaction};
 
-/// Holds developer keys
+/// ETH transactions signer used in tests.
 pub(crate) struct DevSigner {
     secret_key: SecretKey,
     pub(crate) address: EthAddress,
 }
 
 impl DevSigner {
+    /// Creates a new signer.
     pub(crate) fn new(secret_key: SecretKey) -> Self {
         let public_key = PublicKey::from_secret_key(secp256k1::SECP256K1, &secret_key);
         let addr = public_key_to_address(public_key);
@@ -26,17 +26,14 @@ impl DevSigner {
         }
     }
 
+    /// Creates a new signer with random private key.
     pub(crate) fn new_random() -> Self {
         let mut rng = StdRng::seed_from_u64(22);
         let secret_key = SecretKey::new(&mut rng);
         Self::new(secret_key)
     }
 
-    pub(crate) fn sign_hash(&self, hash: H256) -> Result<Signature, SignError> {
-        let signature = sign_message(H256::from_slice(self.secret_key.as_ref()), hash);
-        signature.map_err(|_| SignError::CouldNotSign)
-    }
-
+    /// Signs Eip1559 transaction.
     pub(crate) fn sign_transaction(
         &self,
         transaction: RethTxEip1559,
@@ -57,6 +54,7 @@ impl DevSigner {
         ))
     }
 
+    /// Signs default Eip1559 transaction with to, data and nonce overridden.
     pub(crate) fn sign_default_transaction(
         &self,
         to: TransactionKind,
