@@ -1,5 +1,5 @@
 use bytes::Bytes;
-use ethers_core::types::{OtherFields, Transaction};
+use ethers_core::types::{Bytes as EthBytes, OtherFields, Transaction};
 use reth_rpc::eth::error::{EthApiError, RpcInvalidTransactionError};
 use reth_rpc_types::CallRequest;
 use revm::primitives::{
@@ -77,25 +77,29 @@ impl From<EvmTransactionSignedEcRecovered> for TxEnv {
 impl From<RawEvmTransaction> for Transaction {
     fn from(evm_tx: RawEvmTransaction) -> Self {
         let tx = RethTransactionSignedNoHash::try_from(evm_tx).unwrap();
+        let tx: RethTransactionSigned = tx.into();
+        let tx: RethTransactionSignedEcRecovered = tx.into_ecrecovered().unwrap();
 
         Self {
             hash: tx.hash().into(),
             nonce: tx.nonce().into(),
 
-            from: todo!(),
+            from: tx.signer().into(),
             to: tx.to().map(|addr| addr.into()),
             value: tx.value().into(),
             gas_price: Some(tx.effective_gas_price(None).into()),
 
-            input: todo!(),
-            v: todo!(),
-            r: todo!(),
-            s: todo!(),
+            input: EthBytes::from(tx.input().to_vec()),
+            // TODO
+            v: tx.signature().v(None).into(),
+            r: tx.signature().r.into(),
+            s: tx.signature().s.into(),
             transaction_type: todo!(),
-            access_list: todo!(),
-            max_priority_fee_per_gas: todo!(),
-            max_fee_per_gas: todo!(),
-            chain_id: todo!(),
+            // TODO
+            access_list: None,
+            max_priority_fee_per_gas: tx.max_priority_fee_per_gas().map(From::from),
+            max_fee_per_gas: Some(tx.max_fee_per_gas().into()),
+            chain_id: tx.chain_id().map(|id| id.into()),
             // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/503
             block_hash: Some([0; 32].into()),
             // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/503
@@ -113,6 +117,7 @@ impl From<RawEvmTransaction> for Transaction {
 use reth_primitives::{
     AccessList, Bytes as RethBytes, Signature as RethSignature, Transaction as RethTransaction,
     TransactionKind, TransactionSigned as RethTransactionSigned,
+    TransactionSignedEcRecovered as RethTransactionSignedEcRecovered,
     TransactionSignedNoHash as RethTransactionSignedNoHash, TxEip1559,
 };
 
