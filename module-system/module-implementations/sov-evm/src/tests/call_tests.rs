@@ -32,12 +32,6 @@ fn create_messages(
             .sign_default_transaction(TransactionKind::Create, contract.byte_code().to_vec(), 0)
             .unwrap();
 
-        let x = signed_tx
-            .signature()
-            .recover_signer(signed_tx.signature_hash());
-
-        println!("X {:?}", x);
-
         transactions.push(CallMessage {
             tx: signed_tx.try_into().unwrap(),
         });

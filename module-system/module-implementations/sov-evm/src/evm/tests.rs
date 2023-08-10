@@ -65,9 +65,7 @@ fn simple_contract_execution<DB: Database<Error = Infallible> + DatabaseCommit +
         let result = executor::execute_tx(
             &mut evm_db,
             BlockEnv::default(),
-            EvmTransactionSignedEcRecovered {
-                tx: tx.into_ecrecovered().unwrap(),
-            },
+            tx.try_into().unwrap(),
             CfgEnv::default(),
         )
         .unwrap();
@@ -90,9 +88,7 @@ fn simple_contract_execution<DB: Database<Error = Infallible> + DatabaseCommit +
         executor::execute_tx(
             &mut evm_db,
             BlockEnv::default(),
-            EvmTransactionSignedEcRecovered {
-                tx: tx.into_ecrecovered().unwrap(),
-            },
+            tx.try_into().unwrap(),
             CfgEnv::default(),
         )
         .unwrap();
@@ -112,9 +108,7 @@ fn simple_contract_execution<DB: Database<Error = Infallible> + DatabaseCommit +
         let result = executor::execute_tx(
             &mut evm_db,
             BlockEnv::default(),
-            EvmTransactionSignedEcRecovered {
-                tx: tx.into_ecrecovered().unwrap(),
-            },
+            tx.try_into().unwrap(),
             CfgEnv::default(),
         )
         .unwrap();

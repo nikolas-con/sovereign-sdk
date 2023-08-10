@@ -2,13 +2,13 @@ use ethers_core::rand::rngs::StdRng;
 use ethers_core::rand::SeedableRng;
 use reth_primitives::{
     public_key_to_address, sign_message, Address, Bytes as RethBytes, Signature,
-    Transaction as RethTransaction, TransactionKind, TransactionSigned, TxEip1559 as RethTxEip1559,
-    H256,
+    Transaction as RethTransaction, TransactionKind, TransactionSigned,
+    TransactionSignedNoHash as RethTransactionSignedNoHash, TxEip1559 as RethTxEip1559, H256,
 };
 use reth_rpc::eth::error::SignError;
 use secp256k1::{PublicKey, SecretKey};
 
-use crate::evm::EthAddress;
+use crate::evm::{EthAddress, RawEvmTransaction};
 
 /// Holds developer keys
 pub(crate) struct DevSigner {
@@ -62,7 +62,7 @@ impl DevSigner {
         to: TransactionKind,
         data: Vec<u8>,
         nonce: u64,
-    ) -> Result<TransactionSigned, SignError> {
+    ) -> Result<RawEvmTransaction, SignError> {
         let reth_tx = RethTxEip1559 {
             to,
             input: RethBytes::from(data),
@@ -72,6 +72,10 @@ impl DevSigner {
             ..Default::default()
         };
 
-        self.sign_transaction(reth_tx)
+        let signed = self.sign_transaction(reth_tx)?;
+
+        Ok(RawEvmTransaction {
+            tx: signed.envelope_encoded().to_vec(),
+        })
     }
 }

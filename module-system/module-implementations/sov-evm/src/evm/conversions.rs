@@ -94,7 +94,7 @@ impl From<RawEvmTransaction> for Transaction {
             v: tx.signature().v(None).into(),
             r: tx.signature().r.into(),
             s: tx.signature().s.into(),
-            transaction_type: todo!(),
+            transaction_type: Some(1u64.into()),
             // TODO
             access_list: None,
             max_priority_fee_per_gas: tx.max_priority_fee_per_gas().map(From::from),
@@ -133,9 +133,19 @@ impl TryFrom<RawEvmTransaction> for RethTransactionSignedNoHash {
         let transaction = RethTransactionSigned::decode_enveloped(data)
             .map_err(|_| EthApiError::FailedToDecodeSignedTransaction)?;
 
-        Ok(Self {
-            signature: transaction.signature,
-            transaction: transaction.transaction,
+        Ok(transaction.into())
+    }
+}
+
+impl TryFrom<RawEvmTransaction> for EvmTransactionSignedEcRecovered {
+    type Error = EthApiError;
+
+    fn try_from(tx: RawEvmTransaction) -> Result<Self, Self::Error> {
+        let reth_tx: RethTransactionSignedNoHash = tx.clone().try_into().unwrap();
+        let reth_tx: RethTransactionSigned = reth_tx.into();
+
+        Ok(EvmTransactionSignedEcRecovered {
+            tx: reth_tx.into_ecrecovered().unwrap(),
         })
     }
 }
