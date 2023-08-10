@@ -1,7 +1,4 @@
-use reth_primitives::{
-    sign_message, Address, Bytes as RethBytes, Signature, Transaction as RethTransaction,
-    TransactionKind, TransactionSigned, TxEip1559 as RethTxEip1559, H256,
-};
+use reth_primitives::TransactionKind;
 use revm::primitives::{SpecId, KECCAK_EMPTY, U256};
 use sov_modules_api::default_context::DefaultContext;
 use sov_modules_api::default_signature::private_key::DefaultPrivateKey;
@@ -32,9 +29,7 @@ fn create_messages(
             .sign_default_transaction(TransactionKind::Create, contract.byte_code().to_vec(), 0)
             .unwrap();
 
-        transactions.push(CallMessage {
-            tx: signed_tx.try_into().unwrap(),
-        });
+        transactions.push(CallMessage { tx: signed_tx });
     }
 
     // Update contract state.
@@ -47,9 +42,7 @@ fn create_messages(
             )
             .unwrap();
 
-        transactions.push(CallMessage {
-            tx: signed_tx.try_into().unwrap(),
-        });
+        transactions.push(CallMessage { tx: signed_tx });
     }
 
     transactions

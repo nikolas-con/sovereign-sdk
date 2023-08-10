@@ -1,16 +1,20 @@
 use bytes::Bytes;
 use ethers_core::types::{Bytes as EthBytes, OtherFields, Transaction};
-use reth_rpc::eth::error::{EthApiError, RpcInvalidTransactionError};
+use reth_primitives::{
+    Bytes as RethBytes, TransactionSigned as RethTransactionSigned,
+    TransactionSignedEcRecovered as RethTransactionSignedEcRecovered,
+    TransactionSignedNoHash as RethTransactionSignedNoHash,
+};
+use reth_rpc::eth::error::EthApiError;
 use reth_rpc_types::CallRequest;
 use revm::primitives::{
     AccountInfo as ReVmAccountInfo, BlockEnv as ReVmBlockEnv, Bytecode, CreateScheme, TransactTo,
     TxEnv, B160, B256, U256,
 };
+use thiserror::Error;
 
-use super::transaction::{
-    AccessListItem, BlockEnv, EvmTransactionSignedEcRecovered, RawEvmTransaction,
-};
-use super::{AccountInfo, EthAddress};
+use super::transaction::{BlockEnv, EvmTransactionSignedEcRecovered, RawEvmTransaction};
+use super::AccountInfo;
 
 impl From<AccountInfo> for ReVmAccountInfo {
     fn from(info: AccountInfo) -> Self {
@@ -74,13 +78,13 @@ impl From<&EvmTransactionSignedEcRecovered> for TxEnv {
     }
 }
 
-impl From<RawEvmTransaction> for Transaction {
-    fn from(evm_tx: RawEvmTransaction) -> Self {
-        let tx = RethTransactionSignedNoHash::try_from(evm_tx).unwrap();
-        let tx: RethTransactionSigned = tx.into();
-        let tx: RethTransactionSignedEcRecovered = tx.into_ecrecovered().unwrap();
+impl TryFrom<RawEvmTransaction> for Transaction {
+    type Error = RawEvmTxConversionError;
+    fn try_from(evm_tx: RawEvmTransaction) -> Result<Self, Self::Error> {
+        let tx: EvmTransactionSignedEcRecovered = evm_tx.try_into()?;
+        let tx: &RethTransactionSignedEcRecovered = tx.as_ref();
 
-        Self {
+        Ok(Self {
             hash: tx.hash().into(),
             nonce: tx.nonce().into(),
 
@@ -110,17 +114,9 @@ impl From<RawEvmTransaction> for Transaction {
             gas: Default::default(),
             // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/503
             other: OtherFields::default(),
-        }
+        })
     }
 }
-
-use reth_primitives::{
-    AccessList, Bytes as RethBytes, Signature as RethSignature, Transaction as RethTransaction,
-    TransactionKind, TransactionSigned as RethTransactionSigned,
-    TransactionSignedEcRecovered as RethTransactionSignedEcRecovered,
-    TransactionSignedNoHash as RethTransactionSignedNoHash, TxEip1559,
-};
-use thiserror::Error;
 
 #[derive(Error, Debug)]
 pub enum RawEvmTxConversionError {
@@ -162,11 +158,10 @@ impl TryFrom<RawEvmTransaction> for RethTransactionSignedNoHash {
 impl TryFrom<RawEvmTransaction> for EvmTransactionSignedEcRecovered {
     type Error = RawEvmTxConversionError;
 
-    fn try_from(tx: RawEvmTransaction) -> Result<Self, Self::Error> {
-        let signed_tx_no_hash: RethTransactionSignedNoHash = tx.try_into()?;
-        let signed_tx: RethTransactionSigned = signed_tx_no_hash.into();
-
-        let tx = signed_tx
+    fn try_from(evm_tx: RawEvmTransaction) -> Result<Self, Self::Error> {
+        let tx = RethTransactionSignedNoHash::try_from(evm_tx)?;
+        let tx: RethTransactionSigned = tx.into();
+        let tx = tx
             .into_ecrecovered()
             .ok_or(RawEvmTxConversionError::FailedToDecodeSignedTransaction)?;
 

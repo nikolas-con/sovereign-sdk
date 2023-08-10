@@ -1,7 +1,5 @@
 use reth_primitives::{
-    Signature as RethSignature, TransactionSigned as RethTransactionSigned,
-    TransactionSignedEcRecovered as RethTransactionSignedEcRecovered,
-    TransactionSignedNoHash as RethTransactionSignedNoHash, H160, H256,
+    TransactionSignedEcRecovered as RethTransactionSignedEcRecovered, H160, H256,
 };
 
 use super::{Bytes32, EthAddress};
