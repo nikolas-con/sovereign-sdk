@@ -19,9 +19,7 @@ pub mod experimental {
     use jsonrpsee::RpcModule;
     use jupiter::da_service::DaServiceConfig;
     use reth_primitives::{
-        AccessList, Bytes as RethBytes, Signature as RethSignature, Transaction as RethTransaction,
-        TransactionKind, TransactionSigned as RethTransactionSigned,
-        TransactionSignedNoHash as RethTransactionSignedNoHash, TxEip1559,
+        Bytes as RethBytes, TransactionSignedNoHash as RethTransactionSignedNoHash,
     };
     use sov_evm::call::CallMessage;
     use sov_evm::evm::{EthAddress, RawEvmTransaction};
@@ -54,10 +52,17 @@ pub mod experimental {
         fn make_raw_tx(
             &self,
             raw_tx: RawEvmTransaction,
-            sender: EthAddress,
-        ) -> Result<Vec<u8>, std::io::Error> {
+        ) -> Result<(H256, Vec<u8>), jsonrpsee::core::Error> {
+            let signed_transaction: RethTransactionSignedNoHash = raw_tx.clone().try_into()?;
+
+            let tx_hash = signed_transaction.hash();
+            let sender = signed_transaction.recover_signer().unwrap();
+
             let mut nonces = self.nonces.lock().unwrap();
-            let nonce = *nonces.entry(sender).and_modify(|n| *n += 1).or_insert(0);
+            let nonce = *nonces
+                .entry(sender.into())
+                .and_modify(|n| *n += 1)
+                .or_insert(0);
 
             let tx = CallMessage { tx: raw_tx };
             let message = Runtime::<DefaultContext>::encode_evm_call(tx);
@@ -66,7 +71,7 @@ pub mod experimental {
                 message,
                 nonce,
             );
-            tx.try_to_vec()
+            Ok((H256::from(tx_hash), tx.try_to_vec()?))
         }
     }
 
@@ -113,15 +118,10 @@ pub mod experimental {
             "eth_sendRawTransaction",
             |parameters, ethereum| async move {
                 let data: Bytes = parameters.one().unwrap();
-                let data = RethBytes::from(data.as_ref()).to_vec();
 
-                let raw_evm_tx = RawEvmTransaction { tx: data };
-                let evm_transaction: RethTransactionSignedNoHash = raw_evm_tx.clone().try_into()?;
-
-                let tx_hash = evm_transaction.hash();
-                let sender = evm_transaction.recover_signer().unwrap();
-                let raw_tx = ethereum
-                    .make_raw_tx(raw_evm_tx, sender.into())
+                let raw_evm_tx = RawEvmTransaction { tx: data.to_vec() };
+                let (tx_hash, raw_tx) = ethereum
+                    .make_raw_tx(raw_evm_tx)
                     .map_err(|e| to_jsonrpsee_error_object(e, ETH_RPC_ERROR))?;
 
                 ethereum
@@ -129,7 +129,7 @@ pub mod experimental {
                     .await
                     .map_err(|e| to_jsonrpsee_error_object(e, ETH_RPC_ERROR))?;
 
-                Ok::<_, ErrorObjectOwned>(H256::from(tx_hash))
+                Ok::<_, ErrorObjectOwned>(tx_hash)
             },
         )?;
 
