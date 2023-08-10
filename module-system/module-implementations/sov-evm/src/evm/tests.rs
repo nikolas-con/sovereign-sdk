@@ -11,16 +11,11 @@ use super::db_init::InitEvmDb;
 use super::executor;
 use crate::dev_signer::DevSigner;
 use crate::evm::test_helpers::{output, SimpleStorageContract};
-use crate::evm::transaction::{BlockEnv, EvmTransactionSignedEcRecovered};
+use crate::evm::transaction::BlockEnv;
 use crate::evm::{contract_address, AccountInfo};
 use crate::Evm;
 
 type C = sov_modules_api::default_context::DefaultContext;
-
-use reth_primitives::{
-    TransactionSigned as RethTransactionSigned,
-    TransactionSignedNoHash as RethTransactionSignedNoHash, TxEip1559,
-};
 
 #[test]
 fn simple_contract_execution_sov_state() {
@@ -62,13 +57,9 @@ fn simple_contract_execution<DB: Database<Error = Infallible> + DatabaseCommit +
             .sign_default_transaction(TransactionKind::Create, contract.byte_code().to_vec(), 1)
             .unwrap();
 
-        let result = executor::execute_tx(
-            &mut evm_db,
-            BlockEnv::default(),
-            tx.try_into().unwrap(),
-            CfgEnv::default(),
-        )
-        .unwrap();
+        let tx = &tx.try_into().unwrap();
+        let result =
+            executor::execute_tx(&mut evm_db, BlockEnv::default(), tx, CfgEnv::default()).unwrap();
         contract_address(result).expect("Expected successful contract creation")
     };
 
@@ -85,13 +76,8 @@ fn simple_contract_execution<DB: Database<Error = Infallible> + DatabaseCommit +
             )
             .unwrap();
 
-        executor::execute_tx(
-            &mut evm_db,
-            BlockEnv::default(),
-            tx.try_into().unwrap(),
-            CfgEnv::default(),
-        )
-        .unwrap();
+        let tx = &tx.try_into().unwrap();
+        executor::execute_tx(&mut evm_db, BlockEnv::default(), tx, CfgEnv::default()).unwrap();
     }
 
     let get_res = {
@@ -105,13 +91,9 @@ fn simple_contract_execution<DB: Database<Error = Infallible> + DatabaseCommit +
             )
             .unwrap();
 
-        let result = executor::execute_tx(
-            &mut evm_db,
-            BlockEnv::default(),
-            tx.try_into().unwrap(),
-            CfgEnv::default(),
-        )
-        .unwrap();
+        let tx = &tx.try_into().unwrap();
+        let result =
+            executor::execute_tx(&mut evm_db, BlockEnv::default(), tx, CfgEnv::default()).unwrap();
 
         let out = output(result);
         ethereum_types::U256::from(out.as_ref())

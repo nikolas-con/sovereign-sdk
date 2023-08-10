@@ -75,6 +75,12 @@ impl EvmTransactionSignedEcRecovered {
     }
 }
 
+impl AsRef<RethTransactionSignedEcRecovered> for EvmTransactionSignedEcRecovered {
+    fn as_ref(&self) -> &RethTransactionSignedEcRecovered {
+        &self.tx
+    }
+}
+
 impl From<EvmTransactionSignedEcRecovered> for RethTransactionSignedEcRecovered {
     fn from(tx: EvmTransactionSignedEcRecovered) -> Self {
         tx.tx

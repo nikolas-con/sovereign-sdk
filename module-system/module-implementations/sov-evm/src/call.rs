@@ -39,11 +39,8 @@ impl<C: sov_modules_api::Context> Evm<C> {
 
         let evm_db: EvmDb<'_, C> = self.get_db(working_set);
 
-        let signer = evm_tx_recovered.signer();
-        let to = evm_tx_recovered.to();
-
         // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/505
-        let result = executor::execute_tx(evm_db, block_env, evm_tx_recovered, cfg_env).unwrap();
+        let result = executor::execute_tx(evm_db, block_env, &evm_tx_recovered, cfg_env).unwrap();
 
         let receipt = TransactionReceipt {
             transaction_hash: hash.into(),
@@ -53,8 +50,8 @@ impl<C: sov_modules_api::Context> Evm<C> {
             block_hash: Default::default(),
             // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/504
             block_number: Some(0),
-            from: signer.into(),
-            to,
+            from: evm_tx_recovered.signer().into(),
+            to: evm_tx_recovered.to(),
             // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/504
             cumulative_gas_used: Default::default(),
             // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/504

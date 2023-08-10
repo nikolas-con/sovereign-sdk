@@ -9,7 +9,7 @@ use super::transaction::{BlockEnv, EvmTransactionSignedEcRecovered};
 pub(crate) fn execute_tx<DB: Database<Error = Infallible> + DatabaseCommit>(
     db: DB,
     block_env: BlockEnv,
-    tx: EvmTransactionSignedEcRecovered,
+    tx: &EvmTransactionSignedEcRecovered,
     config_env: CfgEnv,
 ) -> Result<ExecutionResult, EVMError<Infallible>> {
     let mut evm = revm::new();

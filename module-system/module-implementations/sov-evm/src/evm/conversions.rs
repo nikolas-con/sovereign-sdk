@@ -49,9 +49,9 @@ impl From<BlockEnv> for ReVmBlockEnv {
     }
 }
 
-impl From<EvmTransactionSignedEcRecovered> for TxEnv {
-    fn from(tx: EvmTransactionSignedEcRecovered) -> Self {
-        let tx: RethTransactionSignedEcRecovered = tx.into();
+impl From<&EvmTransactionSignedEcRecovered> for TxEnv {
+    fn from(tx: &EvmTransactionSignedEcRecovered) -> Self {
+        let tx: &RethTransactionSignedEcRecovered = tx.as_ref();
 
         let to = match tx.to() {
             Some(addr) => TransactTo::Call(addr),
