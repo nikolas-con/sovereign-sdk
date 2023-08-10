@@ -1,9 +1,4 @@
 use anyhow::Result;
-use reth_primitives::{
-    TransactionSigned as RethTransactionSigned,
-    TransactionSignedEcRecovered as RethTransactionSignedEcRecovered,
-    TransactionSignedNoHash as RethTransactionSignedNoHash,
-};
 use revm::primitives::{CfgEnv, U256};
 use sov_modules_api::CallResponse;
 use sov_state::WorkingSet;
@@ -34,19 +29,18 @@ impl<C: sov_modules_api::Context> Evm<C> {
         working_set: &mut WorkingSet<C::Storage>,
     ) -> Result<CallResponse> {
         let evm_tx_recovered: EvmTransactionSignedEcRecovered = tx.clone().try_into()?;
-        let reth_tx = &evm_tx_recovered.tx;
-
-        let hash = reth_tx.hash();
-        let signer = reth_tx.signer();
-        let to = reth_tx.to().map(|to| to.into());
 
         let block_env = self.block_env.get(working_set).unwrap_or_default();
         let cfg = self.cfg.get(working_set).unwrap_or_default();
         let cfg_env = get_cfg_env(&block_env, cfg, None);
 
+        let hash = evm_tx_recovered.hash();
         self.transactions.set(&hash, &tx, working_set);
 
         let evm_db: EvmDb<'_, C> = self.get_db(working_set);
+
+        let signer = evm_tx_recovered.signer();
+        let to = evm_tx_recovered.to();
 
         // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/505
         let result = executor::execute_tx(evm_db, block_env, evm_tx_recovered, cfg_env).unwrap();

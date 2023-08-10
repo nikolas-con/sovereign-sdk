@@ -1,7 +1,7 @@
 use reth_primitives::{
     Signature as RethSignature, TransactionSigned as RethTransactionSigned,
     TransactionSignedEcRecovered as RethTransactionSignedEcRecovered,
-    TransactionSignedNoHash as RethTransactionSignedNoHash,
+    TransactionSignedNoHash as RethTransactionSignedNoHash, H160, H256,
 };
 
 use super::{Bytes32, EthAddress};
@@ -55,5 +55,28 @@ pub struct RawEvmTransaction {
 }
 
 pub struct EvmTransactionSignedEcRecovered {
-    pub tx: RethTransactionSignedEcRecovered,
+    tx: RethTransactionSignedEcRecovered,
+}
+
+impl EvmTransactionSignedEcRecovered {
+    pub fn new(tx: RethTransactionSignedEcRecovered) -> Self {
+        Self { tx }
+    }
+    pub fn hash(&self) -> H256 {
+        self.tx.hash()
+    }
+
+    pub fn signer(&self) -> H160 {
+        self.tx.signer()
+    }
+
+    pub fn to(&self) -> Option<EthAddress> {
+        self.tx.to().map(|to| to.into())
+    }
+}
+
+impl From<EvmTransactionSignedEcRecovered> for RethTransactionSignedEcRecovered {
+    fn from(tx: EvmTransactionSignedEcRecovered) -> Self {
+        tx.tx
+    }
 }

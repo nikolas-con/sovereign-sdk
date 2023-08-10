@@ -51,7 +51,7 @@ impl From<BlockEnv> for ReVmBlockEnv {
 
 impl From<EvmTransactionSignedEcRecovered> for TxEnv {
     fn from(tx: EvmTransactionSignedEcRecovered) -> Self {
-        let tx = tx.tx;
+        let tx: RethTransactionSignedEcRecovered = tx.into();
 
         let to = match tx.to() {
             Some(addr) => TransactTo::Call(addr),
@@ -170,7 +170,7 @@ impl TryFrom<RawEvmTransaction> for EvmTransactionSignedEcRecovered {
             .into_ecrecovered()
             .ok_or(RawEvmTxConversionError::FailedToDecodeSignedTransaction)?;
 
-        Ok(EvmTransactionSignedEcRecovered { tx })
+        Ok(EvmTransactionSignedEcRecovered::new(tx))
     }
 }
 
