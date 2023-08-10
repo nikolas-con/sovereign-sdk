@@ -33,8 +33,8 @@ impl<C: sov_modules_api::Context> Evm<C> {
         _context: &C,
         working_set: &mut WorkingSet<C::Storage>,
     ) -> Result<CallResponse> {
-        let evm_tx: EvmTransactionSignedEcRecovered = tx.clone().try_into().unwrap();
-        let reth_tx = &evm_tx.tx;
+        let evm_tx_recovered: EvmTransactionSignedEcRecovered = tx.clone().try_into()?;
+        let reth_tx = &evm_tx_recovered.tx;
 
         let hash = reth_tx.hash();
         let signer = reth_tx.signer();
@@ -49,7 +49,7 @@ impl<C: sov_modules_api::Context> Evm<C> {
         let evm_db: EvmDb<'_, C> = self.get_db(working_set);
 
         // TODO https://github.com/Sovereign-Labs/sovereign-sdk/issues/505
-        let result = executor::execute_tx(evm_db, block_env, evm_tx, cfg_env).unwrap();
+        let result = executor::execute_tx(evm_db, block_env, evm_tx_recovered, cfg_env).unwrap();
 
         let receipt = TransactionReceipt {
             transaction_hash: hash.into(),

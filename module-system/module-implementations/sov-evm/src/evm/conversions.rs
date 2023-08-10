@@ -120,33 +120,57 @@ use reth_primitives::{
     TransactionSignedEcRecovered as RethTransactionSignedEcRecovered,
     TransactionSignedNoHash as RethTransactionSignedNoHash, TxEip1559,
 };
+use thiserror::Error;
+
+#[derive(Error, Debug)]
+pub enum RawEvmTxConversionError {
+    #[error("Empty raw transaction data")]
+    EmptyRawTransactionData,
+    #[error("Failed to decode signed transaction")]
+    FailedToDecodeSignedTransaction,
+}
+
+impl From<RawEvmTxConversionError> for EthApiError {
+    fn from(e: RawEvmTxConversionError) -> Self {
+        match e {
+            RawEvmTxConversionError::EmptyRawTransactionData => {
+                EthApiError::EmptyRawTransactionData
+            }
+            RawEvmTxConversionError::FailedToDecodeSignedTransaction => {
+                EthApiError::FailedToDecodeSignedTransaction
+            }
+        }
+    }
+}
 
 impl TryFrom<RawEvmTransaction> for RethTransactionSignedNoHash {
-    type Error = EthApiError;
+    type Error = RawEvmTxConversionError;
 
     fn try_from(data: RawEvmTransaction) -> Result<Self, Self::Error> {
         let data = RethBytes::from(data.tx);
         if data.is_empty() {
-            return Err(EthApiError::EmptyRawTransactionData);
+            return Err(RawEvmTxConversionError::EmptyRawTransactionData);
         }
 
         let transaction = RethTransactionSigned::decode_enveloped(data)
-            .map_err(|_| EthApiError::FailedToDecodeSignedTransaction)?;
+            .map_err(|_| RawEvmTxConversionError::FailedToDecodeSignedTransaction)?;
 
         Ok(transaction.into())
     }
 }
 
 impl TryFrom<RawEvmTransaction> for EvmTransactionSignedEcRecovered {
-    type Error = EthApiError;
+    type Error = RawEvmTxConversionError;
 
     fn try_from(tx: RawEvmTransaction) -> Result<Self, Self::Error> {
-        let reth_tx: RethTransactionSignedNoHash = tx.clone().try_into().unwrap();
-        let reth_tx: RethTransactionSigned = reth_tx.into();
+        let signed_tx_no_hash: RethTransactionSignedNoHash = tx.try_into()?;
+        let signed_tx: RethTransactionSigned = signed_tx_no_hash.into();
 
-        Ok(EvmTransactionSignedEcRecovered {
-            tx: reth_tx.into_ecrecovered().unwrap(),
-        })
+        let tx = signed_tx
+            .into_ecrecovered()
+            .ok_or(RawEvmTxConversionError::FailedToDecodeSignedTransaction)?;
+
+        Ok(EvmTransactionSignedEcRecovered { tx })
     }
 }
 
