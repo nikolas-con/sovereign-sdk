@@ -12,13 +12,14 @@
   },
   "definitions": {
     "RawEvmTransaction": {
-      "description": "Serialized rlp encoded evm transaction.",
+      "description": "Rlp encoded evm transaction.",
       "type": "object",
       "required": [
         "tx"
       ],
       "properties": {
         "tx": {
+          "description": "Rlp data.",
           "type": "array",
           "items": {
             "type": "integer",

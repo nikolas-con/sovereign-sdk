@@ -29,7 +29,7 @@ impl Default for BlockEnv {
     }
 }
 
-/// Serialized rlp encoded evm transaction.
+/// Rlp encoded evm transaction.
 #[cfg_attr(
     feature = "native",
     derive(serde::Serialize),
@@ -38,6 +38,7 @@ impl Default for BlockEnv {
 )]
 #[derive(borsh::BorshDeserialize, borsh::BorshSerialize, Debug, PartialEq, Clone)]
 pub struct RawEvmTransaction {
+    /// Rlp data.
     pub tx: Vec<u8>,
 }
 
