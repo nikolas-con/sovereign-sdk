@@ -29,18 +29,7 @@ impl Default for BlockEnv {
     }
 }
 
-#[cfg_attr(
-    feature = "native",
-    derive(serde::Serialize),
-    derive(serde::Deserialize),
-    derive(schemars::JsonSchema)
-)]
-#[derive(borsh::BorshDeserialize, borsh::BorshSerialize, Debug, PartialEq, Clone)]
-pub struct AccessListItem {
-    pub address: EthAddress,
-    pub storage_keys: Vec<Bytes32>,
-}
-
+/// Serialized rlp encoded evm transaction.
 #[cfg_attr(
     feature = "native",
     derive(serde::Serialize),
@@ -52,22 +41,28 @@ pub struct RawEvmTransaction {
     pub tx: Vec<u8>,
 }
 
+/// Ec recovered evm transaction.
 pub struct EvmTransactionSignedEcRecovered {
     tx: RethTransactionSignedEcRecovered,
 }
 
 impl EvmTransactionSignedEcRecovered {
+    ///
     pub fn new(tx: RethTransactionSignedEcRecovered) -> Self {
         Self { tx }
     }
+
+    /// Transaction hash. Used to identify transaction.
     pub fn hash(&self) -> H256 {
         self.tx.hash()
     }
 
+    /// Signer of transaction recovered from signature.
     pub fn signer(&self) -> H160 {
         self.tx.signer()
     }
 
+    /// Receiver of the transaction.
     pub fn to(&self) -> Option<EthAddress> {
         self.tx.to().map(|to| to.into())
     }

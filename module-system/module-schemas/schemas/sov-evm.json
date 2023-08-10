@@ -12,6 +12,7 @@
   },
   "definitions": {
     "RawEvmTransaction": {
+      "description": "Serialized rlp encoded evm transaction.",
       "type": "object",
       "required": [
         "tx"
