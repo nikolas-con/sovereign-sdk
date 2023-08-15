@@ -5,19 +5,18 @@ use sov_state::WorkingSet;
 
 use crate::{SequencerOutcome, SequencerRegistry};
 
-impl<C: Context> ApplyBlobHooks for SequencerRegistry<C> {
+impl<C: Context, B: BlobReaderTrait> ApplyBlobHooks<B> for SequencerRegistry<C> {
     type Context = C;
     type BlobResult = SequencerOutcome;
 
     fn begin_blob_hook(
         &self,
-        blob: &mut impl BlobReaderTrait,
+        blob: &mut B,
         working_set: &mut WorkingSet<<Self::Context as sov_modules_api::Spec>::Storage>,
     ) -> anyhow::Result<()> {
-        // Clone to satisfy StateMap API
-        // TODO: can be fixed after https://github.com/Sovereign-Labs/sovereign-sdk/issues/427
-        let sender = blob.sender().as_ref().to_vec();
-        self.allowed_sequencers.get_or_err(&sender, working_set)?;
+        if !self.is_sender_allowed(&blob.sender(), working_set) {
+            anyhow::bail!("sender {} is not allowed to submit blobs", blob.sender());
+        }
         Ok(())
     }
 
