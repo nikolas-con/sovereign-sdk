@@ -1,8 +1,9 @@
 use core::marker::PhantomData;
+use std::borrow::Borrow;
 
 use thiserror::Error;
 
-use crate::codec::{BorshCodec, StateCodec, StateKeyCodec};
+use crate::codec::{BorshCodec, StateCodec, StateKeyEncodePreservingBorrow};
 use crate::storage::StorageKey;
 use crate::{Prefix, Storage, WorkingSet};
 
@@ -71,7 +72,8 @@ where
     pub fn set<S, Q>(&self, key: &Q, value: &V, working_set: &mut WorkingSet<S>)
     where
         S: Storage,
-        C: StateKeyCodec<K, Q>,
+        K: Borrow<Q>,
+        C: StateKeyEncodePreservingBorrow<K, Q>,
     {
         working_set.set_value(self.prefix(), &self.codec, key, value)
     }
@@ -111,7 +113,8 @@ where
     pub fn get<S, Q>(&self, key: &Q, working_set: &mut WorkingSet<S>) -> Option<V>
     where
         S: Storage,
-        C: StateKeyCodec<K, Q>,
+        K: Borrow<Q>,
+        C: StateKeyEncodePreservingBorrow<K, Q>,
     {
         working_set.get_value(self.prefix(), &self.codec, key)
     }
@@ -122,7 +125,8 @@ where
     pub fn get_or_err<S, Q>(&self, key: &Q, working_set: &mut WorkingSet<S>) -> Result<V, Error>
     where
         S: Storage,
-        C: StateKeyCodec<K, Q>,
+        K: Borrow<Q>,
+        C: StateKeyEncodePreservingBorrow<K, Q>,
     {
         self.get(key, working_set).ok_or_else(|| {
             Error::MissingValue(
@@ -136,7 +140,8 @@ where
     pub fn remove<S, Q>(&self, key: &Q, working_set: &mut WorkingSet<S>) -> Option<V>
     where
         S: Storage,
-        C: StateKeyCodec<K, Q>,
+        K: Borrow<Q>,
+        C: StateKeyEncodePreservingBorrow<K, Q>,
     {
         working_set.remove_value(self.prefix(), &self.codec, key)
     }
@@ -145,7 +150,8 @@ where
     pub fn remove_or_err<S, Q>(&self, key: &Q, working_set: &mut WorkingSet<S>) -> Result<V, Error>
     where
         S: Storage,
-        C: StateKeyCodec<K, Q>,
+        K: Borrow<Q>,
+        C: StateKeyEncodePreservingBorrow<K, Q>,
     {
         self.remove(key, working_set).ok_or_else(|| {
             Error::MissingValue(
@@ -159,7 +165,8 @@ where
     pub fn delete<S, Q>(&self, key: &Q, working_set: &mut WorkingSet<S>)
     where
         S: Storage,
-        C: StateKeyCodec<K, Q>,
+        K: Borrow<Q>,
+        C: StateKeyEncodePreservingBorrow<K, Q>,
     {
         working_set.delete_value(self.prefix(), &self.codec, key);
     }
