@@ -1,5 +1,3 @@
-use std::borrow::Borrow;
-
 use ethereum_types::{Address, H256, U256, U64};
 use ethers::types::Bytes;
 use ethers_core::types::{Block, BlockId, FeeHistory, Transaction, TransactionReceipt, TxHash};
