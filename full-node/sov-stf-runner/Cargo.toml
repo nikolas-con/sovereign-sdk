@@ -23,19 +23,19 @@ tracing = { workspace = true }
 futures = "0.3"
 tracing-subscriber = "0.3.17"
 
-sov-db = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" }
-sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", version = "0.1" }
-sov-state = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", version = "0.1"}
-sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", version = "0.1" }
-jupiter = {  git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" }
+sov-db = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
+sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", version = "0.1" }
+sov-state = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", version = "0.1"}
+sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", version = "0.1" }
+jupiter = {  git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
 
 [dev-dependencies]
 tempfile = { workspace = true }
 rand = { workspace = true }
 
 sov-election = { path = "../../module-system/module-implementations/examples/sov-election", default-features = false }
-sov-sequencer-registry = { path = "../../module-system/module-implementations/sov-sequencer-registry", default-features = false }
-sov-bank = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", default-features = false }
-sov-modules-stf-template = { path = "../../module-system/sov-modules-stf-template" }
+sov-sequencer-registry = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false }
+sov-bank = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false }
+sov-modules-stf-template = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
 sov-value-setter = { path = "../../module-system/module-implementations/examples/sov-value-setter", default-features = false }
-sov-accounts = { path = "../../module-system/module-implementations/sov-accounts", default-features = false }
+sov-accounts = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false }

@@ -15,9 +15,9 @@ jsonrpsee = { workspace = true, features = ["http-client", "server"] }
 
 sov-evm = { path = "../../module-system/module-implementations/sov-evm", default-features = false }
 demo-stf = { path = "../../examples/demo-stf", features = ["native"] }
-sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", default-features = false }
+sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false }
 const-rollup-config = { path = "../../examples/const-rollup-config" }
-jupiter = {  git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", features = ["native"] }
+jupiter = {  git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", features = ["native"] }
 
 borsh = { workspace = true }
 serde_json = { workspace = true }
@@ -28,7 +28,7 @@ reth-rpc = { workspace = true }
 ethers = { workspace = true }
 
 [dev-dependencies]
-sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", features = ["mocks"] }
+sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", features = ["mocks"] }
 tokio = { workspace = true }
 
 

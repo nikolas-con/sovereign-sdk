@@ -27,28 +27,29 @@ hex = { workspace = true }
 tracing = { workspace = true }
 
 
-sov-sequencer-registry = { path = "../../module-system/module-implementations/sov-sequencer-registry", default-features = false }
-sov-bank = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", default-features = false }
 sov-bank-a = { path = "../../module-system/module-implementations/sov-bank-a", default-features = false }
-sov-accounts = { path = "../../module-system/module-implementations/sov-accounts", default-features = false }
-sov-modules-stf-template = { path = "../../module-system/sov-modules-stf-template" } # no features available
 
-sov-value-setter = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", default-features = false }
-sov-blob-storage = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" , default-features = false }
-const-rollup-config = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" }
-sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly"  }
-sov-election = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" , default-features = false }
-sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", default-features = false, features = ["macros"] }
-sov-sequencer = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", optional = true }
-sov-state = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", default-features = false }
-sov-stf-runner = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" , optional = true }
+sov-modules-stf-template = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" } # no features available
+
+sov-sequencer-registry = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false }
+sov-accounts = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false }
+sov-bank = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false }
+sov-value-setter = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false }
+sov-blob-storage = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" , default-features = false }
+const-rollup-config = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
+sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32"  }
+sov-election = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" , default-features = false }
+sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false, features = ["macros"] }
+sov-sequencer = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", optional = true }
+sov-state = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false }
+sov-stf-runner = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" , optional = true }
 
 # Only enable the evm on "experimental" feature
 # sov-evm = { path = "../../module-system/module-implementations/sov-evm", default-features = false, optional = true }
 
 [dev-dependencies]
-sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" , features = ["mocks"] }
-sov-data-generators = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" }
+sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" , features = ["mocks"] }
+sov-data-generators = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
 tempfile = { workspace = true }
 rand = "0.8"
 

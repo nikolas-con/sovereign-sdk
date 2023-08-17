@@ -18,7 +18,7 @@ path = "src/lib.rs"
 
 [dependencies]
 demo-stf = { path = "../../examples/demo-stf" }
-sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", version = "0.1", features = ["native"] }
+sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", version = "0.1", features = ["native"] }
 directories = "5.0.1"
 anyhow = { workspace = true }
 borsh = { workspace = true }

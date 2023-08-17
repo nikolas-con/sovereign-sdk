@@ -27,26 +27,26 @@ futures = "0.3"
 tokio = { workspace = true }
 tracing-subscriber = "0.3.17"
 
-jupiter = {  git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" }
-risc0-adapter = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" }
+jupiter = {  git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
+risc0-adapter = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
 
 demo-stf = { path = "../demo-stf", features = ["native"] }
-sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", features = ["mocks"] }
-sov-sequencer = {  git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" }
-sov-db = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly"}
+sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", features = ["mocks"] }
+sov-sequencer = {  git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
+sov-db = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32"}
 
-sov-stf-runner = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" }
+sov-stf-runner = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
 
 # sov-sequencer = { path = "../../full-node/sov-sequencer"}
 # sov-ethereum = { path = "../../full-node/sov-ethereum", optional = true }
 # sov-modules-stf-template = { path = "../../module-system/sov-modules-stf-template" }
 
-sov-bank = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", default-features = false }
-sov-election = {  git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", default-features = false }
-sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", features = ["native"] }
-const-rollup-config = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" }
-sov-value-setter = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", default-features = false }
-sov-state = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", features = ["native"] }
+sov-bank = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false }
+sov-election = {  git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false }
+sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", features = ["native"] }
+const-rollup-config = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
+sov-value-setter = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false }
+sov-state = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", features = ["native"] }
 
 
 [dev-dependencies]
@@ -56,7 +56,7 @@ tendermint = "0.32"
 tempfile = { workspace = true }
 proptest = { workspace = true }
 clap = { workspace = true }
-sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" , features = ["fuzzing"] }
+sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" , features = ["fuzzing"] }
 prometheus = "0.11.0"
 prettytable-rs = "^0.10"
 criterion = "0.5.1"

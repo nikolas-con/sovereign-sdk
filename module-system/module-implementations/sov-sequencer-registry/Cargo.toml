@@ -13,17 +13,17 @@ readme = "README.md"
 resolver = "2"
 
 [dev-dependencies]
-sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", version = "0.1" }
-sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" , version = "0.1", features = ["mocks"] }
+sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", version = "0.1" }
+sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" , version = "0.1", features = ["mocks"] }
 tempfile = { workspace = true }
 
 [dependencies]
 anyhow = { workspace = true }
 clap = { workspace = true, optional = true }
-sov-bank = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", version = "0.1", default-features = false }
-sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", version = "0.1", default-features = false, features = ["macros"] }
-sov-state = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", version = "0.1", default-features = false }
-sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" , version = "0.1" }
+sov-bank = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", version = "0.1", default-features = false }
+sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", version = "0.1", default-features = false, features = ["macros"] }
+sov-state = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", version = "0.1", default-features = false }
+sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" , version = "0.1" }
 schemars = { workspace = true, optional = true }
 serde = { workspace = true, optional = true }
 serde_json = { workspace = true, optional = true }

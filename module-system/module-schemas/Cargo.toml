@@ -12,14 +12,14 @@ readme = "README.md"
 resolver = "2"
 
 [build-dependencies]
-sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" }
-sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", features = ["mocks"] }
+sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
+sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", features = ["mocks"] }
 
 # Modules
-sov-accounts = { path = "../module-implementations/sov-accounts" }
-sov-bank = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" }
+sov-accounts = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
+sov-bank = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
 sov-prover-incentives = { path = "../module-implementations/sov-prover-incentives" }
-sov-sequencer-registry = { path = "../module-implementations/sov-sequencer-registry" }
+sov-sequencer-registry = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
 sov-evm = { path = "../module-implementations/sov-evm", features = ["experimental"] }
 sov-election = { path = "../module-implementations/examples/sov-election" }
 sov-value-setter = { path = "../module-implementations/examples/sov-value-setter" }

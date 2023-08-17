@@ -21,12 +21,12 @@ thiserror = { workspace = true }
 clap = { workspace = true, optional = true }
 jsonrpsee = { workspace = true, features = ["macros", "client-core", "server"], optional = true }
 
-sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", version = "0.1", default-features = false, features = ["macros"] }
-sov-state = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", version = "0.1", default-features = false }
+sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", version = "0.1", default-features = false, features = ["macros"] }
+sov-state = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", version = "0.1", default-features = false }
 
 
 [dev-dependencies]
-sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", version = "0.1" }
+sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", version = "0.1" }
 tempfile = { workspace = true }
 
 [features]

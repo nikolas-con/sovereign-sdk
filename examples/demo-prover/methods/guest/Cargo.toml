@@ -10,10 +10,10 @@ resolver = "2"
 anyhow = "1.0.68"
 risc0-zkvm = { version = "0.16", default-features = false, features = ["std"] }
 borsh = { version = "0.10.3", features = ["bytes"] }
-jupiter = {  git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", default-features = false }
+jupiter = {  git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false }
 demo-stf = { path = "../../../demo-stf", default-features = false }
-sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" }
-risc0-adapter = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", default-features = false }
+sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
+risc0-adapter = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false }
 const-rollup-config = { path = "../../../const-rollup-config" }
 
 # TODO: Just for test

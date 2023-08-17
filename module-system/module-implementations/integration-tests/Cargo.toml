@@ -16,12 +16,12 @@ anyhow = { workspace = true }
 borsh = { workspace = true, features = ["rc"] }
 tempfile = { workspace = true }
 
-sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" }
-sov-state = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" }
-sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" }
+sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
+sov-state = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
+sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
 sov-schema-db = { path = "../../../full-node/db/sov-schema-db" }
 sov-data-generators = { path = "../../utils/sov-data-generators" }
-sov-modules-stf-template = { path = "../../sov-modules-stf-template" }
+sov-modules-stf-template = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
 sov-modules-macros = { path = "../../sov-modules-macros" }
 
 sov-chain-state = { path = "../sov-chain-state" }

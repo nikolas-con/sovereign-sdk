@@ -19,7 +19,7 @@ risc0-zkp = { version = "0.16", optional = true }
 risc0-circuit-rv32im = { version = "0.16", optional = true }
 serde = { workspace = true }
 
-sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" }
+sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
 
 
 [features]

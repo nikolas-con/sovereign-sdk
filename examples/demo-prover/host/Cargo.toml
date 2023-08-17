@@ -18,13 +18,13 @@ tokio = { workspace = true }
 tracing = "0.1.37"
 tracing-subscriber = "0.3.16"
 
-jupiter = {  git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", features = ["native"] }
+jupiter = {  git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", features = ["native"] }
 demo-stf = { path = "../../demo-stf" }
-sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" }
-risc0-adapter = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" }
+sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
+risc0-adapter = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
 const-rollup-config = { path = "../../const-rollup-config" }
-sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", features = ["native"] }
-sov-state = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", features = ["native"] }
+sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", features = ["native"] }
+sov-state = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", features = ["native"] }
 sov-stf-runner = { path = "../../../full-node/sov-stf-runner" }
 
 methods = { path = "../methods" }

@@ -17,7 +17,7 @@ resolver = "2"
 # Maintained by sovereign labs
 jmt = { workspace = true }
 sov-schema-db = { path = "../sov-schema-db", version = "0.1" }
-sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" , version = "0.1" }
+sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" , version = "0.1" }
 
 # External
 anyhow = { workspace = true }

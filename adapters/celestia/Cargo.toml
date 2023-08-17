@@ -28,7 +28,7 @@ tokio = { workspace = true, optional = true }
 thiserror = { workspace = true }
 tracing = { workspace = true }
 
-sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" }
+sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
 nmt-rs = { git = "https://github.com/Sovereign-Labs/nmt-rs.git", rev = "dd37588444fca72825d11fe4a46838f66525c49f", features = ["serde", "borsh"] }
 
 [dev-dependencies]
