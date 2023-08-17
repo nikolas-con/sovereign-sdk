@@ -21,5 +21,5 @@ jmt = { workspace = true }
 hex = { workspace = true }
 
 sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", version = "0.1" }
-sov-state = { path = "../sov-state", version = "0.1", default-features = false }
-sov-modules-api = { path = "../sov-modules-api", version = "0.1", default-features = false }
+sov-state = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", version = "0.1", default-features = false }
+sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", version = "0.1", default-features = false }

@@ -35,7 +35,7 @@ sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk"
 sov-sequencer = {  git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" }
 sov-db = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly"}
 
-sov-stf-runner = { path = "../../full-node/sov-stf-runner" }
+sov-stf-runner = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" }
 
 # sov-sequencer = { path = "../../full-node/sov-sequencer"}
 # sov-ethereum = { path = "../../full-node/sov-ethereum", optional = true }

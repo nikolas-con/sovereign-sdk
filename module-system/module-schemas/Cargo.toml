@@ -12,12 +12,12 @@ readme = "README.md"
 resolver = "2"
 
 [build-dependencies]
-sov-modules-api = { path = "../sov-modules-api" }
+sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" }
 sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", features = ["mocks"] }
 
 # Modules
 sov-accounts = { path = "../module-implementations/sov-accounts" }
-sov-bank = { path = "../module-implementations/sov-bank" }
+sov-bank = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" }
 sov-prover-incentives = { path = "../module-implementations/sov-prover-incentives" }
 sov-sequencer-registry = { path = "../module-implementations/sov-sequencer-registry" }
 sov-evm = { path = "../module-implementations/sov-evm", features = ["experimental"] }

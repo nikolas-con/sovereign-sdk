@@ -22,12 +22,12 @@ schemars = { workspace = true, optional = true }
 serde = { workspace = true, optional = true }
 serde_json = { workspace = true, optional = true }
 
-sov-modules-api = { path = "../../../sov-modules-api", default-features = false, features = ["macros"] }
-sov-state = { path = "../../../sov-state", default-features = false }
+sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", default-features = false, features = ["macros"] }
+sov-state = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", default-features = false }
 sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly"  }
 
 [dev-dependencies]
-sov-modules-api = { path = "../../../sov-modules-api" }
+sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" }
 tempfile = { workspace = true }
 
 [features]

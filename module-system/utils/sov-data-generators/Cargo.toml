@@ -13,12 +13,12 @@ resolver = "2"
 
 
 [dependencies]
-sov-modules-api = { path = "../../sov-modules-api", default-features = false }
+sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", default-features = false }
 sov-modules-stf-template = { path = "../../sov-modules-stf-template" }
 sov-value-setter = { path = "../../module-implementations/examples/sov-value-setter", default-features = false }
 sov-election = { path = "../../module-implementations/examples/sov-election", default-features = false }
-sov-bank = { path = "../../module-implementations/sov-bank", default-features = false }
-sov-state = { path = "../../sov-state", default-features = false }
+sov-bank = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", default-features = false }
+sov-state = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", default-features = false }
 sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" , features = ["mocks"] }
 
 borsh = { workspace = true }

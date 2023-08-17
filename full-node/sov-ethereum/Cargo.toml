@@ -15,7 +15,7 @@ jsonrpsee = { workspace = true, features = ["http-client", "server"] }
 
 sov-evm = { path = "../../module-system/module-implementations/sov-evm", default-features = false }
 demo-stf = { path = "../../examples/demo-stf", features = ["native"] }
-sov-modules-api = { path = "../../module-system/sov-modules-api", default-features = false }
+sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", default-features = false }
 const-rollup-config = { path = "../../examples/const-rollup-config" }
 jupiter = {  git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", features = ["native"] }
 

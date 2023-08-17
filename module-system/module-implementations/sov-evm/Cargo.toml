@@ -14,8 +14,8 @@ resolver = "2"
 
 [dependencies]
 
-sov-modules-api = { path = "../../sov-modules-api", version = "0.1", default-features = false, features = ["macros"] }
-sov-state = { path = "../../sov-state", version = "0.1", default-features = false }
+sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", version = "0.1", default-features = false, features = ["macros"] }
+sov-state = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", version = "0.1", default-features = false }
 
 anyhow = { workspace = true }
 thiserror = { workspace = true }
@@ -54,7 +54,7 @@ tempfile = { workspace = true }
 bytes = { workspace = true }
 secp256k1 = { workspace = true }
 
-sov-modules-api = { path = "../../sov-modules-api", version = "0.1", features = ["macros"] }
+sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", version = "0.1", features = ["macros"] }
 
 [features]
 default = ["native"]
