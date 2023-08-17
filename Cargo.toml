@@ -11,7 +11,6 @@ members = [
     "module-system/utils/sov-data-generators",
     "module-system/module-implementations/sov-bank",
     "module-system/module-implementations/sov-bank-a",
-    "module-system/module-implementations/module-template",
     "module-system/module-implementations/examples/sov-value-setter",
     "module-system/module-implementations/examples/sov-election",
 ]

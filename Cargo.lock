@@ -1922,23 +1922,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c9be0862c1b3f26a88803c4a49de6889c10e608b3ee9344e6ef5b45fb37ad3d1"
 
 [[package]]
-name = "module-template"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "borsh",
- "schemars",
- "serde",
- "serde_json",
- "sov-bank 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-modules-api",
- "sov-rollup-interface",
- "sov-state",
- "tempfile",
- "thiserror",
-]
-
-[[package]]
 name = "multimap"
 version = "0.8.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
