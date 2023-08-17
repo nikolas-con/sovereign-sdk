@@ -13,7 +13,6 @@ members = [
     "module-system/module-implementations/sov-bank-a",
     "module-system/module-implementations/sov-chain-state", 
     "module-system/module-implementations/sov-blob-storage",
-    "module-system/module-implementations/sov-evm",
     "module-system/module-implementations/sov-prover-incentives",
     "module-system/module-implementations/sov-sequencer-registry",
     "module-system/module-implementations/module-template",
