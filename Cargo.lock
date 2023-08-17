@@ -720,7 +720,7 @@ dependencies = [
  "serde",
  "serde_json",
  "sov-accounts",
- "sov-bank 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-bank",
  "sov-bank-a",
  "sov-blob-storage",
  "sov-data-generators",
@@ -3367,25 +3367,6 @@ dependencies = [
 [[package]]
 name = "sov-bank"
 version = "0.1.0"
-dependencies = [
- "anyhow",
- "borsh",
- "clap",
- "hex",
- "jsonrpsee 0.18.2",
- "schemars",
- "serde",
- "serde_json",
- "sov-modules-api",
- "sov-rollup-interface",
- "sov-state",
- "tempfile",
- "thiserror",
-]
-
-[[package]]
-name = "sov-bank"
-version = "0.1.0"
 source = "git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32#6371c3279e86826eac33f771d29424828d1dd1ac"
 dependencies = [
  "anyhow",
@@ -3448,7 +3429,7 @@ version = "0.1.0"
 source = "git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32#6371c3279e86826eac33f771d29424828d1dd1ac"
 dependencies = [
  "borsh",
- "sov-bank 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-bank",
  "sov-election",
  "sov-modules-api",
  "sov-modules-stf-template",
@@ -3498,7 +3479,7 @@ dependencies = [
  "serde",
  "serde_json",
  "sha2 0.10.7",
- "sov-bank 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-bank",
  "sov-db",
  "sov-election",
  "sov-modules-api",
@@ -3585,7 +3566,7 @@ dependencies = [
  "schemars",
  "serde",
  "serde_json",
- "sov-bank 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-bank",
  "sov-modules-api",
  "sov-state",
  "syn 1.0.109",
@@ -3681,7 +3662,7 @@ dependencies = [
  "schemars",
  "serde",
  "serde_json",
- "sov-bank 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-bank",
  "sov-modules-api",
  "sov-rollup-interface",
  "sov-state",

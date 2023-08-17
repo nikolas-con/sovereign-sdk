@@ -8,7 +8,6 @@ members = [
     
     "module-system/sov-modules-macros",
     "module-system/utils/sov-first-read-last-write-cache",
-    "module-system/module-implementations/sov-bank",
     "module-system/module-implementations/sov-bank-a",
 ]
 exclude = []
