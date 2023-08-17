@@ -4,10 +4,6 @@ members = [
     "examples/const-rollup-config",
     "examples/demo-stf",
     "examples/demo-rollup",
-
-    
-    "module-system/sov-modules-macros",
-    "module-system/utils/sov-first-read-last-write-cache",
     "module-system/module-implementations/sov-bank-a",
 ]
 exclude = []
