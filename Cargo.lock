@@ -6625,21 +6625,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "sov-module-schemas"
-version = "0.1.0"
-dependencies = [
- "sov-accounts 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-bank 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-election 0.1.0",
- "sov-evm",
- "sov-modules-api",
- "sov-prover-incentives",
- "sov-rollup-interface",
- "sov-sequencer-registry 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-value-setter 0.1.0",
-]
-
-[[package]]
 name = "sov-modules-api"
 version = "0.1.0"
 source = "git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32#6371c3279e86826eac33f771d29424828d1dd1ac"
