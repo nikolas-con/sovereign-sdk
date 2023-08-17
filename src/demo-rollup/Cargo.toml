@@ -2,10 +2,6 @@
 name = "sov-demo-rollup"
 version = { workspace = true }
 edition = { workspace = true }
-authors = { workspace = true }
-license = { workspace = true }
-homepage = "sovereign.xyz"
-publish = false
 resolver = "2"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -21,22 +17,17 @@ tracing = { workspace = true }
 hex = { workspace = true }
 bytes = { workspace = true }
 jmt = { workspace = true }
-futures = "0.3"
-
-# Crates which only this package depends on 
 tokio = { workspace = true }
 tracing-subscriber = "0.3.17"
+futures = "0.3"
 
 jupiter = {  git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
 risc0-adapter = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
-
 demo-stf = { path = "../demo-stf", features = ["native"] }
 sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", features = ["mocks"] }
 sov-sequencer = {  git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
 sov-db = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32"}
-
 sov-stf-runner = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
-
 sov-bank = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false }
 sov-election = {  git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false }
 sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", features = ["native"] }
@@ -59,11 +50,3 @@ criterion = "0.5.1"
 
 [features]
 experimental = []
-
-[[bench]]
-name = "rollup_bench"
-harness = false
-
-[[bench]]
-name = "rollup_coarse_measure"
-harness = false

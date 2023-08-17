@@ -11,24 +11,13 @@ exclude = []
 [workspace.package]
 version = "0.1.0"
 edition = "2021"
-license = "MIT OR Apache-2.0"
-authors = ["Sovereign Labs <info@sovereign.xyz>"]
-homepage = "https://www.sovereign.xyz"
-publish = false
-repository = "https://github.com/sovereign-labs/sovereign-sdk"
 rust-version = "1.66"
 
 [workspace.dependencies]
-# Dependencies maintained by sovereign
-# TODO: replace by release number once available on crates.io: tracking issue https://github.com/Sovereign-Labs/sovereign-sdk/issues/632
 jmt = { git = "https://github.com/penumbra-zone/jmt", commit = "46b4b00" }
-
-# External dependencies
 async-trait = "0.1.71"
 anyhow = "1.0.68"
 borsh = { version = "0.10.3", features = ["rc", "bytes"] }
-# TODO: Consider replacing this serialization format
-#     https://github.com/Sovereign-Labs/sovereign-sdk/issues/283
 bytes = "1.2.1"
 hex = "0.4.3"
 prometheus = { version = "0.13.3", default-features = false }
