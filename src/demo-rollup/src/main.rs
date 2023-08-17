@@ -4,7 +4,7 @@ use std::sync::Arc;
 
 use anyhow::Context;
 use borsh::{BorshDeserialize, BorshSerialize};
-use const_rollup_config::{ROLLUP_NAMESPACE_RAW, SEQUENCER_DA_ADDRESS};
+use rollup_config::{ROLLUP_NAMESPACE_RAW, SEQUENCER_DA_ADDRESS};
 use demo_stf::app::{App, DefaultContext, DefaultPrivateKey};
 use demo_stf::genesis_config::create_demo_genesis_config;
 use demo_stf::runtime::{get_rpc_methods, GenesisConfig};

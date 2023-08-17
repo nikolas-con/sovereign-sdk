@@ -14,7 +14,7 @@ celestia_rpc_timeout_seconds = 60
 
 [runner.storage]
 # The path to the rollup's data directory. Paths that do not begin with `/` are interpreted as relative paths.
-path = "demo_data"
+path = "../../data"
 
 [rpc_config]
 # the host and port to bind the rpc server for

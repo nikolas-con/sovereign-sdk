@@ -6,7 +6,7 @@ use std::{fs, vec};
 use anyhow::Context;
 use borsh::BorshSerialize;
 use clap::Parser;
-use const_rollup_config::ROLLUP_NAMESPACE_RAW;
+use rollup_config::ROLLUP_NAMESPACE_RAW;
 use demo_stf::runtime::{borsh_encode_cli_tx, parse_call_message_json, CliTransactionParser};
 use jsonrpsee::core::client::ClientT;
 use jsonrpsee::http_client::HttpClientBuilder;

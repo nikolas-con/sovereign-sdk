@@ -1,4 +1,4 @@
 [package]
-name = "const-rollup-config"
+name = "rollup-config"
 version = { workspace = true }
 edition = { workspace = true }

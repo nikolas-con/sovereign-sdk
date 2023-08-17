@@ -512,15 +512,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "28c122c3980598d243d63d9a704629a2d748d101f278052ff068be5a4423ab6f"
 
 [[package]]
-name = "const-rollup-config"
-version = "0.1.0"
-
-[[package]]
-name = "const-rollup-config"
-version = "0.1.0"
-source = "git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32#6371c3279e86826eac33f771d29424828d1dd1ac"
-
-[[package]]
 name = "convert_case"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -723,11 +714,11 @@ dependencies = [
  "anyhow",
  "borsh",
  "clap",
- "const-rollup-config 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "demo-module",
  "hex",
  "jsonrpsee 0.18.2",
  "rand 0.8.5",
+ "rollup-config",
  "serde",
  "serde_json",
  "sov-accounts",
@@ -2931,6 +2922,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "rollup-config"
+version = "0.1.0"
+
+[[package]]
 name = "rrs-lib"
 version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3454,7 +3449,6 @@ dependencies = [
  "borsh",
  "bytes",
  "clap",
- "const-rollup-config 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "criterion",
  "demo-stf",
  "futures",
@@ -3467,6 +3461,7 @@ dependencies = [
  "proptest",
  "reqwest",
  "risc0-adapter",
+ "rollup-config",
  "serde",
  "serde_json",
  "sha2 0.10.7",

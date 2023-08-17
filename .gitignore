@@ -6,5 +6,5 @@ target/
 
 .DS_Store
 
-demo_data/
+data/
 /.vscode/*

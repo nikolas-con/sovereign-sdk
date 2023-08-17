@@ -22,7 +22,7 @@ tracing = { workspace = true }
 
 
 demo-module = { path = "../demo-module", default-features = false }
-const-rollup-config = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
+rollup-config = { path = "../rollup-config" }
 
 sov-modules-stf-template = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" } # no features available
 sov-sequencer-registry = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false }
