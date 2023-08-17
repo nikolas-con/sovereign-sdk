@@ -3675,23 +3675,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "sov-prover-incentives"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "bincode",
- "borsh",
- "schemars",
- "serde",
- "serde_json",
- "sov-bank 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-modules-api",
- "sov-rollup-interface",
- "sov-state",
- "tempfile",
-]
-
-[[package]]
 name = "sov-rollup-interface"
 version = "0.1.0"
 source = "git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32#6371c3279e86826eac33f771d29424828d1dd1ac"
