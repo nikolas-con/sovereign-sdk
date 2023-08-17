@@ -1,10 +1,10 @@
 [workspace]
 resolver = "2"
 members = [
-    "examples/const-rollup-config",
-    "examples/demo-stf",
-    "examples/demo-rollup",
-    "module-system/module-implementations/sov-bank-a",
+    "src/const-rollup-config",
+    "src/demo-stf",
+    "src/demo-rollup",
+    "src/sov-bank-a",
 ]
 exclude = []
 

@@ -27,7 +27,7 @@ hex = { workspace = true }
 tracing = { workspace = true }
 
 
-sov-bank-a = { path = "../../module-system/module-implementations/sov-bank-a", default-features = false }
+sov-bank-a = { path = "../sov-bank-a", default-features = false }
 
 sov-modules-stf-template = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" } # no features available
 
