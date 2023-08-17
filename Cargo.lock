@@ -2951,24 +2951,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "integration-tests"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "borsh",
- "sov-chain-state",
- "sov-data-generators 0.1.0",
- "sov-modules-api 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-modules-macros 0.1.0",
- "sov-modules-stf-template 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-rollup-interface 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-schema-db 0.1.0",
- "sov-state 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-value-setter 0.1.0",
- "tempfile",
-]
-
-[[package]]
 name = "inventory"
 version = "0.3.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -6523,7 +6505,7 @@ dependencies = [
  "rocksdb",
  "serde",
  "sov-rollup-interface 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-schema-db 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-schema-db",
 ]
 
 [[package]]
@@ -6835,20 +6817,6 @@ dependencies = [
  "proptest-derive",
  "serde",
  "sha2 0.10.7",
-]
-
-[[package]]
-name = "sov-schema-db"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "byteorder",
- "once_cell",
- "prometheus 0.13.3",
- "rocksdb",
- "tempfile",
- "thiserror",
- "tracing",
 ]
 
 [[package]]
