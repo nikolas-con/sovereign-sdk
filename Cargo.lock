@@ -1395,17 +1395,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c2e66c9d817f1720209181c316d28635c050fa304f9c79e47a520882661b7308"
 
 [[package]]
-name = "demo-simple-stf"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "hex",
- "serde",
- "sha2 0.10.7",
- "sov-rollup-interface 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
-]
-
-[[package]]
 name = "demo-stf"
 version = "0.1.0"
 dependencies = [

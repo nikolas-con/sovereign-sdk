@@ -4,7 +4,6 @@ members = [
     "rollup-interface",
     "examples/const-rollup-config",
     "examples/demo-stf",
-    "examples/demo-simple-stf",
     "examples/demo-rollup",
     "full-node/db/sov-db",
     "full-node/sov-sequencer",
