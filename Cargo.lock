@@ -1395,21 +1395,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c2e66c9d817f1720209181c316d28635c050fa304f9c79e47a520882661b7308"
 
 [[package]]
-name = "demo-nft-module"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "borsh",
- "jsonrpsee 0.18.2",
- "serde",
- "sov-data-generators 0.1.0",
- "sov-modules-api 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-rollup-interface 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-state 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "tempfile",
-]
-
-[[package]]
 name = "demo-simple-stf"
 version = "0.1.0"
 dependencies = [
