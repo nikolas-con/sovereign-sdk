@@ -1414,7 +1414,7 @@ dependencies = [
  "sov-data-generators 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-election 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-modules-api 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-modules-stf-template 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-modules-stf-template",
  "sov-rollup-interface 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-sequencer",
  "sov-sequencer-registry 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
@@ -6442,24 +6442,11 @@ dependencies = [
  "sov-data-generators 0.1.0",
  "sov-modules-api 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-modules-macros 0.1.0",
- "sov-modules-stf-template 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-modules-stf-template",
  "sov-rollup-interface 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-state 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-value-setter 0.1.0",
  "tempfile",
-]
-
-[[package]]
-name = "sov-cli"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "borsh",
- "demo-stf",
- "directories",
- "serde",
- "serde_json",
- "sov-modules-api 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
 ]
 
 [[package]]
@@ -6471,7 +6458,7 @@ dependencies = [
  "sov-bank 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-election 0.1.0",
  "sov-modules-api 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-modules-stf-template 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-modules-stf-template",
  "sov-rollup-interface 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-state 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-value-setter 0.1.0",
@@ -6486,7 +6473,7 @@ dependencies = [
  "sov-bank 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-election 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-modules-api 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-modules-stf-template 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-modules-stf-template",
  "sov-rollup-interface 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-state 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-value-setter 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
@@ -6733,22 +6720,6 @@ dependencies = [
  "quote 1.0.33",
  "schemars",
  "syn 1.0.109",
-]
-
-[[package]]
-name = "sov-modules-stf-template"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "borsh",
- "hex",
- "jmt",
- "serde",
- "sov-modules-api 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-rollup-interface 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-state 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "thiserror",
- "tracing",
 ]
 
 [[package]]
