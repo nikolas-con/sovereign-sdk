@@ -1407,7 +1407,7 @@ dependencies = [
  "rand 0.8.5",
  "serde",
  "serde_json",
- "sov-accounts 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-accounts",
  "sov-bank 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-bank-a",
  "sov-blob-storage 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
@@ -6292,23 +6292,6 @@ dependencies = [
  "phf",
  "thiserror",
  "unicode-xid 0.2.4",
-]
-
-[[package]]
-name = "sov-accounts"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "borsh",
- "clap",
- "jsonrpsee 0.18.2",
- "schemars",
- "serde",
- "serde_json",
- "sov-modules-api",
- "sov-state",
- "tempfile",
- "thiserror",
 ]
 
 [[package]]
