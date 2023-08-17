@@ -1418,7 +1418,7 @@ dependencies = [
  "sov-rollup-interface 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-sequencer",
  "sov-sequencer-registry 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-state 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-state",
  "sov-stf-runner",
  "sov-value-setter 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "tempfile",
@@ -3548,7 +3548,7 @@ dependencies = [
  "sov-bank 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-modules-api 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-rollup-interface 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-state 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-state",
  "tempfile",
  "thiserror",
 ]
@@ -6306,7 +6306,7 @@ dependencies = [
  "serde",
  "serde_json",
  "sov-modules-api 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-state 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-state",
  "tempfile",
  "thiserror",
 ]
@@ -6324,7 +6324,7 @@ dependencies = [
  "serde",
  "serde_json",
  "sov-modules-api 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-state 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-state",
  "thiserror",
 ]
 
@@ -6342,7 +6342,7 @@ dependencies = [
  "serde_json",
  "sov-modules-api 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-rollup-interface 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-state 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-state",
  "tempfile",
  "thiserror",
 ]
@@ -6362,7 +6362,7 @@ dependencies = [
  "serde_json",
  "sov-modules-api 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-rollup-interface 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-state 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-state",
  "thiserror",
 ]
 
@@ -6380,7 +6380,7 @@ dependencies = [
  "serde_json",
  "sov-modules-api 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-rollup-interface 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-state 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-state",
  "tempfile",
  "thiserror",
 ]
@@ -6403,7 +6403,7 @@ dependencies = [
  "sov-modules-macros 0.1.0",
  "sov-rollup-interface 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-sequencer-registry 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-state 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-state",
  "tempfile",
  "tracing",
 ]
@@ -6425,7 +6425,7 @@ dependencies = [
  "sov-modules-macros 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-rollup-interface 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-sequencer-registry 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-state 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-state",
  "tracing",
 ]
 
@@ -6444,7 +6444,7 @@ dependencies = [
  "sov-modules-macros 0.1.0",
  "sov-modules-stf-template",
  "sov-rollup-interface 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-state 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-state",
  "sov-value-setter 0.1.0",
  "tempfile",
 ]
@@ -6460,7 +6460,7 @@ dependencies = [
  "sov-modules-api 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-modules-stf-template",
  "sov-rollup-interface 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-state 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-state",
  "sov-value-setter 0.1.0",
 ]
 
@@ -6475,7 +6475,7 @@ dependencies = [
  "sov-modules-api 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-modules-stf-template",
  "sov-rollup-interface 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-state 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-state",
  "sov-value-setter 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
 ]
 
@@ -6526,7 +6526,7 @@ dependencies = [
  "sov-modules-api 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-rollup-interface 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-sequencer",
- "sov-state 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-state",
  "sov-stf-runner",
  "sov-value-setter 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "tempfile",
@@ -6550,7 +6550,7 @@ dependencies = [
  "serde_json",
  "sov-modules-api 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-rollup-interface 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-state 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-state",
  "tempfile",
 ]
 
@@ -6569,7 +6569,7 @@ dependencies = [
  "serde_json",
  "sov-modules-api 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-rollup-interface 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-state 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-state",
 ]
 
 [[package]]
@@ -6601,7 +6601,7 @@ dependencies = [
  "serde",
  "serde_json",
  "sov-modules-api 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-state 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-state",
  "tempfile",
  "thiserror",
  "tokio",
@@ -6659,7 +6659,7 @@ dependencies = [
  "sha2 0.10.7",
  "sov-modules-macros 0.1.0",
  "sov-rollup-interface 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-state 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-state",
  "thiserror",
 ]
 
@@ -6683,7 +6683,7 @@ dependencies = [
  "sha2 0.10.7",
  "sov-modules-macros 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-rollup-interface 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-state 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-state",
  "thiserror",
 ]
 
@@ -6702,7 +6702,7 @@ dependencies = [
  "serde_json",
  "sov-bank 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-modules-api 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-state 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-state",
  "syn 1.0.109",
  "tempfile",
  "trybuild",
@@ -6734,7 +6734,7 @@ dependencies = [
  "serde",
  "sov-modules-api 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-rollup-interface 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-state 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-state",
  "thiserror",
  "tracing",
 ]
@@ -6752,7 +6752,7 @@ dependencies = [
  "sov-bank 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-modules-api 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-rollup-interface 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-state 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-state",
  "tempfile",
 ]
 
@@ -6832,7 +6832,7 @@ dependencies = [
  "sov-bank 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-modules-api 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-rollup-interface 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-state 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-state",
  "tempfile",
 ]
 
@@ -6851,24 +6851,7 @@ dependencies = [
  "sov-bank 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-modules-api 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-rollup-interface 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-state 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
-]
-
-[[package]]
-name = "sov-state"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "borsh",
- "hex",
- "jmt",
- "serde",
- "sha2 0.10.7",
- "sov-db",
- "sov-first-read-last-write-cache 0.1.0",
- "sov-rollup-interface 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "tempfile",
- "thiserror",
+ "sov-state",
 ]
 
 [[package]]
@@ -6904,7 +6887,7 @@ dependencies = [
  "sov-db",
  "sov-modules-api 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-rollup-interface 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-state 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-state",
  "tokio",
  "toml 0.7.6",
  "tracing",
@@ -6924,7 +6907,7 @@ dependencies = [
  "serde_json",
  "sov-modules-api 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-rollup-interface 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-state 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-state",
  "tempfile",
  "thiserror",
 ]
@@ -6943,7 +6926,7 @@ dependencies = [
  "serde_json",
  "sov-modules-api 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
  "sov-rollup-interface 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
- "sov-state 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-state",
  "thiserror",
 ]
 
