@@ -56,7 +56,3 @@ schemars = { version = "0.8.12", features = ["derive"] }
 tempfile = "3.5"
 tokio = { version = "1", features = ["full"] }
 
-[patch.crates-io]
-# See reth: https://github.com/paradigmxyz/reth/blob/main/Cargo.toml#L79
-revm = { git = "https://github.com/bluealloy/revm/", branch = "release/v25" }
-revm-primitives = { git = "https://github.com/bluealloy/revm/", branch = "release/v25" }
