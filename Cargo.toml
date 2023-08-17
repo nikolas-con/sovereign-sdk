@@ -1,7 +1,6 @@
 [workspace]
 resolver = "2"
 members = [
-    "rollup-interface",
     "examples/const-rollup-config",
     "examples/demo-stf",
     "examples/demo-rollup",
