@@ -37,10 +37,6 @@ sov-db = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c
 
 sov-stf-runner = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
 
-# sov-sequencer = { path = "../../full-node/sov-sequencer"}
-# sov-ethereum = { path = "../../full-node/sov-ethereum", optional = true }
-# sov-modules-stf-template = { path = "../../module-system/sov-modules-stf-template" }
-
 sov-bank = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false }
 sov-election = {  git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false }
 sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", features = ["native"] }
