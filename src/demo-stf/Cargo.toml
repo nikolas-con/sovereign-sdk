@@ -12,8 +12,6 @@ publish = false
 name = "sov-cli"
 path = "src/sov-cli/main.rs"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
 anyhow = { workspace = true }
 borsh = { workspace = true }
@@ -28,24 +26,20 @@ tracing = { workspace = true }
 
 
 demo-module = { path = "../demo-module", default-features = false }
+const-rollup-config = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
 
 sov-modules-stf-template = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" } # no features available
-
 sov-sequencer-registry = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false }
 sov-accounts = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false }
 sov-bank = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false }
 sov-value-setter = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false }
 sov-blob-storage = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" , default-features = false }
-const-rollup-config = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
 sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32"  }
 sov-election = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" , default-features = false }
 sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false, features = ["macros"] }
 sov-sequencer = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", optional = true }
 sov-state = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false }
 sov-stf-runner = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" , optional = true }
-
-# Only enable the evm on "experimental" feature
-# sov-evm = { path = "../../module-system/module-implementations/sov-evm", default-features = false, optional = true }
 
 [dev-dependencies]
 sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" , features = ["mocks"] }
