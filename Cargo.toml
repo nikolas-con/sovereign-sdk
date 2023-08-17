@@ -4,7 +4,7 @@ members = [
     "src/const-rollup-config",
     "src/demo-stf",
     "src/demo-rollup",
-    "src/sov-bank-a",
+    "src/demo-module",
 ]
 exclude = []
 

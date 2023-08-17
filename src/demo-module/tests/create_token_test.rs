@@ -1,4 +1,4 @@
-use sov_bank_a::{get_token_address, BankA, CallMessage};
+use demo_module::{get_token_address, BankA, CallMessage};
 use sov_modules_api::utils::generate_address;
 use sov_modules_api::{Context, Module};
 use sov_state::{ProverStorage, WorkingSet};

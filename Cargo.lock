@@ -698,6 +698,25 @@ dependencies = [
 ]
 
 [[package]]
+name = "demo-module"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "borsh",
+ "clap",
+ "hex",
+ "jsonrpsee 0.18.2",
+ "schemars",
+ "serde",
+ "serde_json",
+ "sov-modules-api",
+ "sov-rollup-interface",
+ "sov-state",
+ "tempfile",
+ "thiserror",
+]
+
+[[package]]
 name = "demo-stf"
 version = "0.1.0"
 dependencies = [
@@ -705,6 +724,7 @@ dependencies = [
  "borsh",
  "clap",
  "const-rollup-config 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "demo-module",
  "hex",
  "jsonrpsee 0.18.2",
  "rand 0.8.5",
@@ -712,7 +732,6 @@ dependencies = [
  "serde_json",
  "sov-accounts",
  "sov-bank",
- "sov-bank-a",
  "sov-blob-storage",
  "sov-data-generators",
  "sov-election",
@@ -3371,25 +3390,6 @@ dependencies = [
  "sov-modules-api",
  "sov-rollup-interface",
  "sov-state",
- "thiserror",
-]
-
-[[package]]
-name = "sov-bank-a"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "borsh",
- "clap",
- "hex",
- "jsonrpsee 0.18.2",
- "schemars",
- "serde",
- "serde_json",
- "sov-modules-api",
- "sov-rollup-interface",
- "sov-state",
- "tempfile",
  "thiserror",
 ]
 

@@ -3,7 +3,7 @@ use sov_accounts::{AccountsRpcImpl, AccountsRpcServer};
 #[cfg(feature = "native")]
 use sov_bank::{BankRpcImpl, BankRpcServer};
 #[cfg(feature = "native")]
-use sov_bank_a::{BankARpcImpl, BankARpcServer};
+use demo_module::{BankARpcImpl, BankARpcServer};
 #[cfg(feature = "native")]
 use sov_blob_storage::{BlobStorageRpcImpl, BlobStorageRpcServer};
 #[cfg(feature = "native")]
@@ -70,7 +70,7 @@ use sov_value_setter::{ValueSetterRpcImpl, ValueSetterRpcServer};
 )]
 pub struct Runtime<C: Context> {
     pub bank: sov_bank::Bank<C>,
-    pub bank_a: sov_bank_a::BankA<C>,
+    pub bank_a: demo_module::BankA<C>,
     pub sequencer_registry: sov_sequencer_registry::SequencerRegistry<C>,
     #[cfg_attr(feature = "native", cli_skip)]
     pub blob_storage: sov_blob_storage::BlobStorage<C>,

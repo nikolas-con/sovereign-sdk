@@ -1,5 +1,5 @@
 use helpers::{generate_address, C};
-use sov_bank_a::{
+use demo_module::{
     get_genesis_token_address, get_token_address, BankA, BankConfig, CallMessage, Coins,
     TotalSupplyResponse,
 };

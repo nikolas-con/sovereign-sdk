@@ -1,5 +1,5 @@
 use helpers::C;
-use sov_bank_a::{get_token_address, BankA, BankConfig, CallMessage, Coins, TotalSupplyResponse};
+use demo_module::{get_token_address, BankA, BankConfig, CallMessage, Coins, TotalSupplyResponse};
 use sov_modules_api::utils::generate_address;
 use sov_modules_api::{Address, Context, Error, Module};
 use sov_state::{DefaultStorageSpec, ProverStorage, WorkingSet};

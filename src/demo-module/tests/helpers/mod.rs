@@ -1,4 +1,4 @@
-use sov_bank_a::{BankConfig, TokenConfig};
+use demo_module::{BankConfig, TokenConfig};
 use sov_modules_api::default_context::DefaultContext;
 use sov_modules_api::utils::generate_address as gen_address_generic;
 use sov_modules_api::Address;

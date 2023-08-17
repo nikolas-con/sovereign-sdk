@@ -27,7 +27,7 @@ hex = { workspace = true }
 tracing = { workspace = true }
 
 
-sov-bank-a = { path = "../sov-bank-a", default-features = false }
+demo-module = { path = "../demo-module", default-features = false }
 
 sov-modules-stf-template = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" } # no features available
 
@@ -59,7 +59,7 @@ experimental = []
 
 native = [
     "sov-bank/native",
-    "sov-bank-a/native",
+    "demo-module/native",
     "sov-accounts/native",
     "sov-election/native",
     "sov-sequencer-registry/native",
