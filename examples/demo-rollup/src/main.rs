@@ -16,16 +16,17 @@ use jupiter::verifier::address::CelestiaAddress;
 use jupiter::verifier::{ChainValidityCondition, RollupParams};
 use risc0_adapter::host::Risc0Verifier;
 use sov_db::ledger_db::LedgerDB;
-#[cfg(feature = "experimental")]
-use sov_ethereum::get_ethereum_rpc;
-use sov_modules_stf_template::{SequencerOutcome, TxEffect};
+use demo_stf::{SequencerOutcome, TxEffect};
 use sov_rollup_interface::da::DaSpec;
 use sov_rollup_interface::services::da::DaService;
 use sov_rollup_interface::zk::ValidityConditionChecker;
 use sov_sequencer::get_sequencer_rpc;
-use sov_state::storage::Storage;
+
 use sov_stf_runner::{from_toml_path, get_ledger_rpc, RollupConfig, StateTransitionRunner};
 use tracing::{debug, Level};
+
+
+// use sov_state::storage::Storage;
 
 #[cfg(test)]
 mod test_rpc;
@@ -142,7 +143,8 @@ async fn main() -> Result<(), anyhow::Error> {
         register_ethereum(rollup_config.da.clone(), &mut methods)?;
     }
 
-    let storage = app.get_storage();
+    // let storage = app.get_storage();
+    // storage.isEmty()
     let genesis_config = get_genesis_config();
 
     let mut runner = StateTransitionRunner::new(
@@ -150,7 +152,7 @@ async fn main() -> Result<(), anyhow::Error> {
         da_service,
         ledger_db,
         app.stf,
-        storage.is_empty(),
+        false,
         genesis_config,
     )?;
 
@@ -171,7 +173,8 @@ fn register_sequencer<DA>(
 ) -> Result<(), anyhow::Error>
 where
     DA: DaService<Error = anyhow::Error> + Send + Sync + 'static,
-{
+{   
+    
     let batch_builder = demo_runner.batch_builder.take().unwrap();
     let sequencer_rpc = get_sequencer_rpc(batch_builder, Arc::new(da_service));
     methods
@@ -189,22 +192,3 @@ fn register_ledger(
         .context("Failed to merge ledger RPC modules")
 }
 
-#[cfg(feature = "experimental")]
-fn register_ethereum(
-    da_config: DaServiceConfig,
-    methods: &mut jsonrpsee::RpcModule<()>,
-) -> Result<(), anyhow::Error> {
-    use std::fs;
-
-    let data = fs::read_to_string(TX_SIGNER_PRIV_KEY_PATH).context("Unable to read file")?;
-
-    let hex_key: HexKey =
-        serde_json::from_str(&data).context("JSON does not have correct format.")?;
-
-    let tx_signer_private_key = DefaultPrivateKey::from_hex(&hex_key.hex_priv_key).unwrap();
-
-    let ethereum_rpc = get_ethereum_rpc(da_config, tx_signer_private_key);
-    methods
-        .merge(ethereum_rpc)
-        .context("Failed to merge Ethereum RPC modules")
-}

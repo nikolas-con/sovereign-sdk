@@ -16,7 +16,7 @@ anyhow = { workspace = true }
 sov-bank = { path = "../sov-bank", default-features = false }
 sov-modules-api = { path = "../../sov-modules-api", default-features = false, features = ["macros"] }
 sov-state = { path = "../../sov-state", default-features = false }
-sov-rollup-interface = { path = "../../../rollup-interface" }
+sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly"  }
 schemars = { workspace = true, optional = true }
 serde = { workspace = true, optional = true }
 serde_json = { workspace = true, optional = true }

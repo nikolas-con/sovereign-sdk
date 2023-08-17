@@ -22,7 +22,7 @@ serde_json = { workspace = true, optional = true }
 
 sov-modules-api = { path = "../../sov-modules-api", version = "0.1", default-features = false, features = ["macros"] }
 sov-state = { path = "../../sov-state", version = "0.1", default-features = false }
-sov-rollup-interface = { path = "../../../rollup-interface", version = "0.1" }
+sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" , version = "0.1" }
 thiserror = { workspace = true }
 hex = { workspace = true }
 

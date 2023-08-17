@@ -3,12 +3,12 @@ use sov_accounts::{AccountsRpcImpl, AccountsRpcServer};
 #[cfg(feature = "native")]
 use sov_bank::{BankRpcImpl, BankRpcServer};
 #[cfg(feature = "native")]
+use sov_bank_a::{BankARpcImpl, BankARpcServer};
+#[cfg(feature = "native")]
 use sov_blob_storage::{BlobStorageRpcImpl, BlobStorageRpcServer};
 #[cfg(feature = "native")]
 use sov_election::{ElectionRpcImpl, ElectionRpcServer};
 #[cfg(feature = "native")]
-#[cfg(feature = "experimental")]
-use sov_evm::query::{EvmRpcImpl, EvmRpcServer};
 use sov_modules_api::capabilities::{BlobRefOrOwned, BlobSelector};
 #[cfg(feature = "native")]
 pub use sov_modules_api::default_context::DefaultContext;
@@ -70,6 +70,7 @@ use sov_value_setter::{ValueSetterRpcImpl, ValueSetterRpcServer};
 )]
 pub struct Runtime<C: Context> {
     pub bank: sov_bank::Bank<C>,
+    pub bank_a: sov_bank_a::BankA<C>,
     pub sequencer_registry: sov_sequencer_registry::SequencerRegistry<C>,
     #[cfg_attr(feature = "native", cli_skip)]
     pub blob_storage: sov_blob_storage::BlobStorage<C>,
@@ -94,8 +95,6 @@ pub struct Runtime<C: Context> {
     pub election: sov_election::Election<C>,
     pub value_setter: sov_value_setter::ValueSetter<C>,
     pub accounts: sov_accounts::Accounts<C>,
-    #[cfg_attr(feature = "native", cli_skip)]
-    pub evm: sov_evm::Evm<C>,
 }
 
 impl<C: Context, Cond: ValidityCondition> SlotHooks<Cond> for Runtime<C> {

@@ -8,3 +8,4 @@ pub mod runtime;
 pub mod tests;
 
 pub use sov_state::ArrayWitness;
+pub use sov_modules_stf_template::{SequencerOutcome, TxEffect};

@@ -27,22 +27,27 @@ futures = "0.3"
 tokio = { workspace = true }
 tracing-subscriber = "0.3.17"
 
-jupiter = { path = "../../adapters/celestia" }
-demo-stf = { path = "../demo-stf", features = ["native"] }
-sov-rollup-interface = { path = "../../rollup-interface" }
-sov-db = { path = "../../full-node/db/sov-db" }
-sov-ethereum = { path = "../../full-node/sov-ethereum", optional = true }
-sov-sequencer = { path = "../../full-node/sov-sequencer" }
-sov-stf-runner = { path = "../../full-node/sov-stf-runner" }
-risc0-adapter = { path = "../../adapters/risc0" }
-sov-modules-stf-template = { path = "../../module-system/sov-modules-stf-template" }
+jupiter = {  git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" }
+risc0-adapter = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" }
 
-sov-bank = { path = "../../module-system/module-implementations/sov-bank", default-features = false }
-sov-election = { path = "../../module-system/module-implementations/examples/sov-election", default-features = false }
-sov-value-setter = { path = "../../module-system/module-implementations/examples/sov-value-setter", default-features = false }
-sov-modules-api = { path = "../../module-system/sov-modules-api", features = ["native"] }
-sov-state = { path = "../../module-system/sov-state", features = ["native"] }
-const-rollup-config = { path = "../const-rollup-config" }
+demo-stf = { path = "../demo-stf", features = ["native"] }
+sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", features = ["mocks"] }
+sov-sequencer = {  git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" }
+sov-db = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly"}
+
+sov-stf-runner = { path = "../../full-node/sov-stf-runner" }
+
+# sov-sequencer = { path = "../../full-node/sov-sequencer"}
+# sov-ethereum = { path = "../../full-node/sov-ethereum", optional = true }
+# sov-modules-stf-template = { path = "../../module-system/sov-modules-stf-template" }
+
+sov-bank = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", default-features = false }
+sov-election = {  git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", default-features = false }
+sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", features = ["native"] }
+const-rollup-config = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" }
+sov-value-setter = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", default-features = false }
+sov-state = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", features = ["native"] }
+
 
 [dev-dependencies]
 sha2 = { workspace = true }
@@ -51,13 +56,13 @@ tendermint = "0.32"
 tempfile = { workspace = true }
 proptest = { workspace = true }
 clap = { workspace = true }
-sov-rollup-interface = { path = "../../rollup-interface", features = ["fuzzing"] }
+sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" , features = ["fuzzing"] }
 prometheus = "0.11.0"
 prettytable-rs = "^0.10"
 criterion = "0.5.1"
 
 [features]
-experimental = ["sov-ethereum/experimental"]
+experimental = []
 
 [[bench]]
 name = "rollup_bench"

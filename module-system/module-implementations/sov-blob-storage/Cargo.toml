@@ -20,7 +20,7 @@ bincode = { workspace = true }
 tracing = { workspace = true }
 hex = { workspace = true }
 
-sov-rollup-interface = { path = "../../../rollup-interface", version = "0.1" }
+sov-rollup-interface = {git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", version = "0.1" }
 sov-modules-api = { path = "../../sov-modules-api", version = "0.1", default-features = false, features = ["macros"] }
 sov-modules-macros = { path = "../../sov-modules-macros", version = "0.1" }
 sov-state = { path = "../../sov-state", version = "0.1", default-features = false }
@@ -36,7 +36,7 @@ clap = { workspace = true, optional = true }
 
 [dev-dependencies]
 sov-modules-api = { path = "../../sov-modules-api", version = "0.1" }
-sov-rollup-interface = { path = "../../../rollup-interface", features = ["mocks"] }
+sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" , features = ["mocks"] }
 sov-bank = { path = "../sov-bank", version = "0.1" }
 tempfile = { workspace = true }
 

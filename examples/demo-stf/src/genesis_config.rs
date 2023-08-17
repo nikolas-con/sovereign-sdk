@@ -1,6 +1,4 @@
 use sov_election::ElectionConfig;
-#[cfg(feature = "experimental")]
-use sov_evm::{AccountData, EvmConfig, SpecId};
 pub use sov_modules_api::default_context::DefaultContext;
 use sov_modules_api::default_signature::private_key::DefaultPrivateKey;
 use sov_modules_api::utils::generate_address;
@@ -29,9 +27,19 @@ pub fn create_demo_genesis_config<C: Context>(
         authorized_minters: vec![sequencer_address.clone()],
         salt: 0,
     };
-
+    
     let bank_config = sov_bank::BankConfig {
         tokens: vec![token_config],
+    };
+
+    let token_a_config: sov_bank_a::TokenConfig<C> = sov_bank_a::TokenConfig {
+        token_name: DEMO_TOKEN_NAME.to_owned(),
+        address_and_balances: vec![(sequencer_address.clone(), initial_sequencer_balance)],
+        authorized_minters: vec![sequencer_address.clone()],
+        salt: 0,
+    };
+    let bank_a_config = sov_bank_a::BankConfig {
+        tokens: vec![token_a_config],
     };
 
     let token_address = sov_bank::get_genesis_token_address::<C>(
@@ -65,24 +73,12 @@ pub fn create_demo_genesis_config<C: Context>(
 
     GenesisConfig::new(
         bank_config,
+        bank_a_config,
         sequencer_registry_config,
         (),
         election_config,
         value_setter_config,
-        sov_accounts::AccountConfig { pub_keys: vec![] },
-        #[cfg(feature = "experimental")]
-        EvmConfig {
-            data: vec![AccountData {
-                address: genesis_evm_address,
-                balance: AccountData::balance(u64::MAX),
-                code_hash: AccountData::empty_code(),
-                code: vec![],
-                nonce: 0,
-            }],
-            chain_id: 1,
-            limit_contract_code_size: None,
-            spec: vec![(0, SpecId::LATEST)].into_iter().collect(),
-        },
+        sov_accounts::AccountConfig { pub_keys: vec![] }
     )
 }
 

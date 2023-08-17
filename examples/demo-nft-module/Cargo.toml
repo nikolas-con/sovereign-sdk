@@ -20,7 +20,7 @@ sov-state = { path = "../../module-system/sov-state", default-features = false }
 jsonrpsee = { workspace = true, features = ["macros", "client-core", "server"], optional = true }
 
 [dev-dependencies]
-sov-rollup-interface = { path = "../../rollup-interface" }
+sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly"  }
 sov-data-generators = { path = "../../module-system/utils/sov-data-generators" }
 tempfile = { workspace = true }
 

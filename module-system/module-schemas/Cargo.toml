@@ -13,7 +13,7 @@ resolver = "2"
 
 [build-dependencies]
 sov-modules-api = { path = "../sov-modules-api" }
-sov-rollup-interface = { path = "../../rollup-interface", features = ["mocks"] }
+sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", features = ["mocks"] }
 
 # Modules
 sov-accounts = { path = "../module-implementations/sov-accounts" }

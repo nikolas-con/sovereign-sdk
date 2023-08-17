@@ -12,7 +12,7 @@ readme = "README.md"
 resolver = "2"
 
 [dev-dependencies]
-sov-rollup-interface = { path = "../../../rollup-interface", version = "0.1", features = ["mocks"] }
+sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" , version = "0.1", features = ["mocks"] }
 sov-modules-api = { path = "../../sov-modules-api", version = "0.1", features = ["macros"] }
 tempfile = { workspace = true }
 
@@ -21,7 +21,7 @@ anyhow = { workspace = true }
 sov-bank = { path = "../sov-bank", version = "0.1", default-features = false }
 sov-modules-api = { path = "../../sov-modules-api", version = "0.1", default-features = false, features = ["macros"] }
 sov-state = { path = "../../sov-state", version = "0.1", default-features = false }
-sov-rollup-interface = { path = "../../../rollup-interface", version = "0.1" }
+sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly" , version = "0.1" }
 schemars = { workspace = true, optional = true }
 serde = { workspace = true }
 serde_json = { workspace = true, optional = true }

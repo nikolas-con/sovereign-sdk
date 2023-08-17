@@ -71,7 +71,7 @@ fn test_helper(test_queries: Vec<TestExpect>, slots: Vec<SlotCommit<MockBlock, u
         let tmpdir = tempfile::tempdir().unwrap();
         let mut ledger_db = LedgerDB::with_path(tmpdir.path()).unwrap();
 
-        populate_ledger(&mut ledger_db, slots);
+        // populate_ledger(&mut ledger_db, slots);
 
         let ledger_rpc_module = get_ledger_rpc::<u32, u32>(ledger_db.clone());
 

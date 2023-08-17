@@ -1,6 +1,6 @@
 [package]
-name = "sov-election"
-description = "A Sovereign SDK module for demonstrating election"
+name = "sov-bank-a"
+description = "A Sovereign SDK managing fungible tokens"
 authors = { workspace = true }
 edition = { workspace = true }
 homepage = { workspace = true }
@@ -10,27 +10,28 @@ rust-version = { workspace = true }
 version = { workspace = true }
 readme = "README.md"
 resolver = "2"
-publish = false
 
 [dependencies]
 anyhow = { workspace = true }
 borsh = { workspace = true, features = ["rc"] }
 clap = { workspace = true, optional = true, features = ["derive"] }
-hex = { workspace = true }
 jsonrpsee = { workspace = true, features = ["macros", "client-core", "server"], optional = true }
 schemars = { workspace = true, optional = true }
 serde = { workspace = true, optional = true }
 serde_json = { workspace = true, optional = true }
 
-sov-modules-api = { path = "../../../sov-modules-api", default-features = false, features = ["macros"] }
-sov-state = { path = "../../../sov-state", default-features = false }
-sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly"  }
+sov-modules-api = { path = "../../sov-modules-api", version = "0.1", default-features = false, features = ["macros"] }
+sov-state = { path = "../../sov-state", version = "0.1", default-features = false }
+sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", branch = "nightly", version = "0.1" }
+thiserror = { workspace = true }
+hex = { workspace = true }
 
 [dev-dependencies]
-sov-modules-api = { path = "../../../sov-modules-api" }
+sov-modules-api = { path = "../../sov-modules-api", version = "0.1" }
 tempfile = { workspace = true }
 
 [features]
 default = ["native"]
 serde = ["dep:serde", "dep:serde_json"]
-native = ["serde", "sov-modules-api/native", "dep:jsonrpsee", "dep:schemars", "dep:clap"]
+native = ["serde", "sov-state/native", "dep:jsonrpsee", "sov-modules-api/native", "dep:clap", "dep:schemars"]
+cli = ["native"]
