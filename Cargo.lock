@@ -732,7 +732,7 @@ dependencies = [
  "sov-sequencer-registry",
  "sov-state",
  "sov-stf-runner",
- "sov-value-setter 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-value-setter",
  "tempfile",
  "tokio",
  "toml 0.7.6",
@@ -3454,7 +3454,7 @@ dependencies = [
  "sov-modules-stf-template",
  "sov-rollup-interface",
  "sov-state",
- "sov-value-setter 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-value-setter",
 ]
 
 [[package]]
@@ -3506,7 +3506,7 @@ dependencies = [
  "sov-sequencer",
  "sov-state",
  "sov-stf-runner",
- "sov-value-setter 0.1.0 (git+https://github.com/Sovereign-Labs/sovereign-sdk?rev=6371c32)",
+ "sov-value-setter",
  "tempfile",
  "tendermint",
  "tokio",
@@ -3725,24 +3725,6 @@ dependencies = [
  "toml 0.7.6",
  "tracing",
  "tracing-subscriber",
-]
-
-[[package]]
-name = "sov-value-setter"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "borsh",
- "clap",
- "jsonrpsee 0.18.2",
- "schemars",
- "serde",
- "serde_json",
- "sov-modules-api",
- "sov-rollup-interface",
- "sov-state",
- "tempfile",
- "thiserror",
 ]
 
 [[package]]

@@ -10,7 +10,6 @@ members = [
     "module-system/utils/sov-first-read-last-write-cache",
     "module-system/module-implementations/sov-bank",
     "module-system/module-implementations/sov-bank-a",
-    "module-system/module-implementations/examples/sov-value-setter",
 ]
 exclude = []
 
