@@ -38,25 +38,13 @@ pub enum CallMessage<C: sov_modules_api::Context> {
         /// The amount of tokens to transfer.
         coins: Coins<C>,
     },
-
-    /// Burns a specified amount of tokens.
-    Burn {
-        /// The amount of tokens to burn.
-        coins: Coins<C>,
-    },
-
+    
     /// Mints a specified amount of tokens.
     Mint {
         /// The amount of tokens to mint.
         coins: Coins<C>,
         /// Address to mint tokens to
         minter_address: C::Address,
-    },
-
-    /// Freezes a token so that the supply is frozen
-    Freeze {
-        /// Address of the token to be frozen
-        token_address: C::Address,
     },
 }
 
@@ -108,35 +96,6 @@ impl<C: sov_modules_api::Context> BankA<C> {
         self.transfer_from(context.sender(), &to, coins, working_set)
     }
 
-    /// Burns the set of `coins`. If there is no token at the address specified in the
-    /// `Coins` structure, return an error.
-    /// Calls the [`Token::burn`] function and updates the total supply of tokens.
-    pub(crate) fn burn(
-        &self,
-        coins: Coins<C>,
-        context: &C,
-        working_set: &mut WorkingSet<C::Storage>,
-    ) -> Result<CallResponse> {
-        let context_logger = || {
-            format!(
-                "Failed burn coins({}) by sender {}",
-                coins,
-                context.sender()
-            )
-        };
-        let mut token = self
-            .tokens
-            .get_or_err(&coins.token_address, working_set)
-            .with_context(context_logger)?;
-        token
-            .burn(context.sender(), coins.amount, working_set)
-            .with_context(context_logger)?;
-        token.total_supply -= coins.amount;
-        self.tokens.set(&coins.token_address, &token, working_set);
-
-        Ok(CallResponse::default())
-    }
-
     /// Mints the `coins` set by the address `minter_address`. If the token address doesn't exist return an error.
     /// Calls the [`Token::mint`] function and update the `self.tokens` set to store the new minted address.
     pub(crate) fn mint(
@@ -166,33 +125,6 @@ impl<C: sov_modules_api::Context> BankA<C> {
         Ok(CallResponse::default())
     }
 
-    /// Tries to freeze the token address `token_address`.
-    /// Returns an error if the token address doesn't exist,
-    /// otherwise calls the [`Token::freeze`] function, and update the token set upon success.
-    pub(crate) fn freeze(
-        &self,
-        token_address: C::Address,
-        context: &C,
-        working_set: &mut WorkingSet<C::Storage>,
-    ) -> Result<CallResponse> {
-        let context_logger = || {
-            format!(
-                "Failed freeze token_address={} by sender {}",
-                token_address,
-                context.sender()
-            )
-        };
-        let mut token = self
-            .tokens
-            .get_or_err(&token_address, working_set)
-            .with_context(context_logger)?;
-        token
-            .freeze(context.sender())
-            .with_context(context_logger)?;
-        self.tokens.set(&token_address, &token, working_set);
-
-        Ok(CallResponse::default())
-    }
 }
 
 impl<C: sov_modules_api::Context> BankA<C> {

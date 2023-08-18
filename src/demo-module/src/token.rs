@@ -138,31 +138,7 @@ impl<C: sov_modules_api::Context> Token<C> {
 
         Ok(())
     }
-    /// Burns a specified `amount` of token from the adress `from`. First check that the address has enough token to burn,
-    /// if not returns an error. Otherwise, update the balances by substracting the amount burnt.
-    pub(crate) fn burn(
-        &mut self,
-        from: &C::Address,
-        amount: Amount,
-        working_set: &mut WorkingSet<C::Storage>,
-    ) -> Result<()> {
-        let new_balance = self.check_balance(from, amount, working_set)?;
-        self.balances.set(from, &new_balance, working_set);
 
-        Ok(())
-    }
-
-    /// Freezing a token requires emptying the authorized_minter vector
-    /// authorized_minter: Vec<Address> is used to determine if the token is frozen or not
-    /// If the vector is empty when the function is called, this means the token is already frozen
-    pub(crate) fn freeze(&mut self, sender: &C::Address) -> Result<()> {
-        if self.authorized_minters.is_empty() {
-            bail!("Token {} is already frozen", self.name)
-        }
-        self.is_authorized_minter(sender)?;
-        self.authorized_minters = vec![];
-        Ok(())
-    }
 
     /// Mints a given `amount` of token sent by `sender` to the specified `minter_address`.
     /// Checks that the `authorized_minters` set is not empty for the token and that the `sender`
