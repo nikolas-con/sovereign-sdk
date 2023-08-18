@@ -34,8 +34,8 @@ docker exec sov-celestia-local /celestia bridge auth admin --node.store /bridge 
 sed -i '' 's/^\(celestia_rpc_auth_token = \)"[^"]*"/\1"${AUTH_TOKEN}"/' rollup_config.toml
 
 ### cleanup
-docker stop sov-celestia-local # stop docker
-docker rm sov-celestia-local # rm docker
+docker stop sov-celestia-local # stop
+docker rm sov-celestia-local # remove
 rm -rf "../../data" # clean rollup
 
 ```
