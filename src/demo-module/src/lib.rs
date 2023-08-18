@@ -39,7 +39,6 @@ pub struct BankConfig<C: sov_modules_api::Context> {
 
 /// The sov-bank module manages user balances. It provides functionality for:
 /// - Token creation.
-/// - Token transfers.
 #[cfg_attr(feature = "native", derive(sov_modules_api::ModuleCallJsonSchema))]
 #[derive(ModuleInfo, Clone)]
 pub struct BankA<C: sov_modules_api::Context> {
@@ -88,16 +87,7 @@ impl<C: sov_modules_api::Context> sov_modules_api::Module for BankA<C> {
                 authorized_minters,
                 context,
                 working_set,
-            )?),
-
-            call::CallMessage::Transfer { to, coins } => {
-                Ok(self.transfer(to, coins, context, working_set)?)
-            }
-            
-            call::CallMessage::Mint {
-                coins,
-                minter_address,
-            } => Ok(self.mint(coins, minter_address, context, working_set)?)
+            )?)
         }
     }
 }

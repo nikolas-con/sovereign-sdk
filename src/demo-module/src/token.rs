@@ -5,7 +5,7 @@ use std::fmt::Formatter;
 #[cfg(feature = "native")]
 use std::num::ParseIntError;
 
-use anyhow::{bail, Context, Result};
+use anyhow::{bail, Result};
 use sov_state::{Prefix, WorkingSet};
 #[cfg(feature = "native")]
 use thiserror::Error;
@@ -113,94 +113,6 @@ pub(crate) struct Token<C: sov_modules_api::Context> {
 }
 
 impl<C: sov_modules_api::Context> Token<C> {
-    /// Transfer the amount `amount` of tokens from the address `from` to the address `to`.
-    /// First checks that there is enough token of that type stored in `from`. If so, update
-    /// the balances of the `from` and `to` accounts.
-    pub(crate) fn transfer(
-        &self,
-        from: &C::Address,
-        to: &C::Address,
-        amount: Amount,
-        working_set: &mut WorkingSet<C::Storage>,
-    ) -> Result<()> {
-        if from == to {
-            return Ok(());
-        }
-        let from_balance = self
-            .check_balance(from, amount, working_set)
-            .with_context(|| format!("Incorrect balance on={} for token={}", from, self.name))?;
-
-        // We can't overflow here because the sum must be smaller or eq to `total_supply` which is u64.
-        let to_balance = self.balances.get(to, working_set).unwrap_or_default() + amount;
-
-        self.balances.set(from, &from_balance, working_set);
-        self.balances.set(to, &to_balance, working_set);
-
-        Ok(())
-    }
-
-
-    /// Mints a given `amount` of token sent by `sender` to the specified `minter_address`.
-    /// Checks that the `authorized_minters` set is not empty for the token and that the `sender`
-    /// is an `authorized_minter`. If so, update the balances of token for the `minter_address` by
-    /// adding the minted tokens. Updates the `total_supply` of that token.
-    pub(crate) fn mint(
-        &mut self,
-        sender: &C::Address,
-        minter_address: &C::Address,
-        amount: Amount,
-        working_set: &mut WorkingSet<C::Storage>,
-    ) -> Result<()> {
-        if self.authorized_minters.is_empty() {
-            bail!("Attempt to mint frozen token {}", self.name)
-        }
-        self.is_authorized_minter(sender)?;
-        let to_balance: Amount = self
-            .balances
-            .get(minter_address, working_set)
-            .unwrap_or_default()
-            .checked_add(amount)
-            .ok_or(anyhow::Error::msg(
-                "Account balance overflow in the mint method of bank module",
-            ))?;
-
-        self.balances.set(minter_address, &to_balance, working_set);
-        self.total_supply = self
-            .total_supply
-            .checked_add(amount)
-            .ok_or(anyhow::Error::msg(
-                "Total Supply overflow in the mint method of bank module",
-            ))?;
-        Ok(())
-    }
-
-    fn is_authorized_minter(&self, sender: &C::Address) -> Result<()> {
-        if !self.authorized_minters.contains(sender) {
-            bail!(
-                "Sender {} is not an authorized minter of token {}",
-                sender,
-                self.name
-            )
-        }
-        Ok(())
-    }
-
-    // Check that amount can be deducted from address
-    // Returns new balance after subtraction.
-    fn check_balance(
-        &self,
-        from: &C::Address,
-        amount: Amount,
-        working_set: &mut WorkingSet<C::Storage>,
-    ) -> Result<Amount> {
-        let balance = self.balances.get_or_err(from, working_set)?;
-        let new_balance = match balance.checked_sub(amount) {
-            Some(from_balance) => from_balance,
-            None => bail!("Insufficient funds for {}", from),
-        };
-        Ok(new_balance)
-    }
-
     /// Creates a token from a given set of parameters.
     /// The `token_name`, `sender` address (as a `u8` slice), and the `salt` (`u64` number) are used as an input
     /// to an hash function that computes the token address. Then the initial accounts and balances are populated
