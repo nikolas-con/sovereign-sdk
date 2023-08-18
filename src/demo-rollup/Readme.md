@@ -1,12 +1,14 @@
 
 
 ### Create Batch
+
 ```sh
 cargo run --bin sov-cli generate-transaction-from-json ../test-data/keys/token_deployer_private_key.json Bank ../test-data/requests/create_token.json 0
 cargo run --bin sov-cli make-batch ../test-data/requests/create_token.dat > ../test-data/requests/test_blob.dat
 ```
 
 ### Submit Transaction
+
 ```sh
 cargo run --bin sov-cli util print-namespace ### get namespace
 docker exec sov-celestia-local celestia-appd tx blob PayForBlobs ${NAMESPACE} $(cat ../test-data/requests/test_blob.dat) --from validator --chain-id=test --fees=300utia -y
@@ -14,8 +16,7 @@ docker exec sov-celestia-local celestia-appd tx blob PayForBlobs ${NAMESPACE} $(
 
 
 
-
-### Setup Celestia
+### Setup
 
 ```sh
 
@@ -35,12 +36,10 @@ sed -i '' 's/^\(celestia_rpc_auth_token = \)"[^"]*"/\1"${AUTH_TOKEN}"/' rollup_c
 sed -i '' 's#^\(celestia_rpc_address = \)"[^"]*"#\1"http://127.0.0.1:26658"#' rollup_config.toml
 sed -i '' 's#^\(start_height = \)[0-9]*#\11#' rollup_config.toml
 
-```
-
-### Cleanup
-
-```sh
+### cleanup
 docker stop sov-celestia-local # stop docker
 docker rm sov-celestia-local # rm docker
 rm -rf "../../data" # clean rollup
+
 ```
+
