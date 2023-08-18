@@ -49,6 +49,8 @@ pub struct BankA<C: sov_modules_api::Context> {
     /// A mapping of addresses to tokens in the sov-bank.
     #[state]
     pub(crate) tokens: sov_state::StateMap<C::Address, Token<C>>,
+    #[state]
+    pub(crate) name: sov_state::StateValue<String>,
 }
 
 impl<C: sov_modules_api::Context> sov_modules_api::Module for BankA<C> {
@@ -87,7 +89,8 @@ impl<C: sov_modules_api::Context> sov_modules_api::Module for BankA<C> {
                 authorized_minters,
                 context,
                 working_set,
-            )?)
+            )?),
+            call::CallMessage::UpdateName { name } => Ok(self.update_name(name, context, working_set)?)
         }
     }
 }

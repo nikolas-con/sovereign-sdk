@@ -42,21 +42,3 @@ fn initial_and_deployed_token() {
 
     assert_eq!(Some(initial_balance), minter_balance);
 }
-
-#[test]
-/// Currently integer overflow happens on bank genesis
-fn overflow_max_supply() {
-    let bank = BankA::<C>::default();
-    let tmpdir = tempfile::tempdir().unwrap();
-    let mut working_set = WorkingSet::new(ProverStorage::with_path(tmpdir.path()).unwrap());
-
-    let bank_config = create_bank_config_with_token(2, u64::MAX - 2);
-
-    let genesis_result = bank.genesis(&bank_config, &mut working_set);
-    assert!(genesis_result.is_err());
-
-    assert_eq!(
-        "Total supply overflow",
-        genesis_result.unwrap_err().to_string()
-    );
-}

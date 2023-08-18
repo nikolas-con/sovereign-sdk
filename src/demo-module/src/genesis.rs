@@ -27,13 +27,14 @@ impl<C: sov_modules_api::Context> BankA<C> {
                 parent_prefix,
                 working_set,
             )?;
-
             if self.tokens.get(&token_address, working_set).is_some() {
                 bail!("Token address {} already exists", token_address);
             }
 
             self.tokens.set(&token_address, &token, working_set);
         }
+        self.name.set(&"test_str".to_owned(), working_set);
+
         Ok(())
     }
 }

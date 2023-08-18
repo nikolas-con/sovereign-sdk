@@ -152,7 +152,7 @@ async fn main() -> Result<(), anyhow::Error> {
         da_service,
         ledger_db,
         app.stf,
-        false,
+        true,
         genesis_config,
     )?;
 
