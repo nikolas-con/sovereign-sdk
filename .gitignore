@@ -8,3 +8,4 @@ target/
 
 data/
 /.vscode/*
+/src/demo-rollup/demo_data
