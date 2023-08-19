@@ -60,7 +60,6 @@ use sov_value_setter::{ValueSetterRpcImpl, ValueSetterRpcServer};
 /// Similar mechanism works for queries with the difference that queries are submitted by users directly to the rollup node
 /// instead of going through the DA layer.
 
-#[cfg(not(feature = "experimental"))]
 #[cfg_attr(feature = "native", derive(CliWallet), expose_rpc(DefaultContext))]
 #[derive(Genesis, DispatchCall, MessageCodec, DefaultRuntime)]
 #[serialization(borsh::BorshDeserialize, borsh::BorshSerialize)]
@@ -71,24 +70,6 @@ use sov_value_setter::{ValueSetterRpcImpl, ValueSetterRpcServer};
 pub struct Runtime<C: Context> {
     pub bank: sov_bank::Bank<C>,
     pub bank_a: demo_module::BankA<C>,
-    pub sequencer_registry: sov_sequencer_registry::SequencerRegistry<C>,
-    #[cfg_attr(feature = "native", cli_skip)]
-    pub blob_storage: sov_blob_storage::BlobStorage<C>,
-    pub election: sov_election::Election<C>,
-    pub value_setter: sov_value_setter::ValueSetter<C>,
-    pub accounts: sov_accounts::Accounts<C>,
-}
-
-#[cfg(feature = "experimental")]
-#[cfg_attr(feature = "native", derive(CliWallet), expose_rpc(DefaultContext))]
-#[derive(Genesis, DispatchCall, MessageCodec, DefaultRuntime)]
-#[serialization(borsh::BorshDeserialize, borsh::BorshSerialize)]
-#[cfg_attr(
-    feature = "native",
-    serialization(serde::Serialize, serde::Deserialize)
-)]
-pub struct Runtime<C: Context> {
-    pub bank: sov_bank::Bank<C>,
     pub sequencer_registry: sov_sequencer_registry::SequencerRegistry<C>,
     #[cfg_attr(feature = "native", cli_skip)]
     pub blob_storage: sov_blob_storage::BlobStorage<C>,

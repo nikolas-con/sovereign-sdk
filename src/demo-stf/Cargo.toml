@@ -45,7 +45,6 @@ rand = "0.8"
 
 [features]
 default = ["native"]
-experimental = []
 
 native = [
     "sov-bank/native",

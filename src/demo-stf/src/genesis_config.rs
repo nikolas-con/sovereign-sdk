@@ -65,12 +65,6 @@ pub fn create_demo_genesis_config<C: Context>(
         admin: election_admin_private_key.pub_key().to_address(),
     };
 
-    #[cfg(feature = "experimental")]
-    let genesis_evm_address = hex::decode("f39Fd6e51aad88F6F4ce6aB8827279cffFb92266")
-        .unwrap()
-        .try_into()
-        .expect("EVM module initialized with invalid address");
-
     GenesisConfig::new(
         bank_config,
         bank_a_config,

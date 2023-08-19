@@ -9,8 +9,6 @@ use demo_stf::app::{App, DefaultContext, DefaultPrivateKey};
 use demo_stf::genesis_config::create_demo_genesis_config;
 use demo_stf::runtime::{get_rpc_methods, GenesisConfig};
 use jupiter::da_service::CelestiaService;
-#[cfg(feature = "experimental")]
-use jupiter::da_service::DaServiceConfig;
 use jupiter::types::NamespaceId;
 use jupiter::verifier::address::CelestiaAddress;
 use jupiter::verifier::{ChainValidityCondition, RollupParams};
@@ -30,9 +28,6 @@ use tracing::{debug, Level};
 
 #[cfg(test)]
 mod test_rpc;
-
-#[cfg(feature = "experimental")]
-const TX_SIGNER_PRIV_KEY_PATH: &str = "../test-data/keys/tx_signer_private_key.json";
 
 // The rollup stores its data in the namespace b"sov-test" on Celestia
 // You can change this constant to point your rollup at a different namespace
@@ -139,8 +134,6 @@ async fn main() -> Result<(), anyhow::Error> {
     {
         register_ledger(ledger_db.clone(), &mut methods)?;
         register_sequencer(da_service.clone(), &mut app, &mut methods)?;
-        #[cfg(feature = "experimental")]
-        register_ethereum(rollup_config.da.clone(), &mut methods)?;
     }
 
     // let storage = app.get_storage();
