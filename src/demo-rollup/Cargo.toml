@@ -1,5 +1,5 @@
 [package]
-name = "sov-demo-rollup"
+name = "demo-rollup"
 version = { workspace = true }
 edition = { workspace = true }
 resolver = "2"

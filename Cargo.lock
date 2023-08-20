@@ -708,6 +708,47 @@ dependencies = [
 ]
 
 [[package]]
+name = "demo-rollup"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "async-trait",
+ "borsh",
+ "bytes",
+ "clap",
+ "criterion",
+ "demo-stf",
+ "futures",
+ "hex",
+ "jmt",
+ "jsonrpsee 0.18.2",
+ "jupiter",
+ "prettytable-rs",
+ "prometheus 0.11.0",
+ "proptest",
+ "reqwest",
+ "risc0-adapter",
+ "rollup-config",
+ "serde",
+ "serde_json",
+ "sha2 0.10.7",
+ "sov-bank",
+ "sov-db",
+ "sov-election",
+ "sov-modules-api",
+ "sov-rollup-interface",
+ "sov-sequencer",
+ "sov-state",
+ "sov-stf-runner",
+ "sov-value-setter",
+ "tempfile",
+ "tendermint",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
 name = "demo-stf"
 version = "0.1.0"
 dependencies = [
@@ -3438,47 +3479,6 @@ dependencies = [
  "serde",
  "sov-rollup-interface",
  "sov-schema-db",
-]
-
-[[package]]
-name = "sov-demo-rollup"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "async-trait",
- "borsh",
- "bytes",
- "clap",
- "criterion",
- "demo-stf",
- "futures",
- "hex",
- "jmt",
- "jsonrpsee 0.18.2",
- "jupiter",
- "prettytable-rs",
- "prometheus 0.11.0",
- "proptest",
- "reqwest",
- "risc0-adapter",
- "rollup-config",
- "serde",
- "serde_json",
- "sha2 0.10.7",
- "sov-bank",
- "sov-db",
- "sov-election",
- "sov-modules-api",
- "sov-rollup-interface",
- "sov-sequencer",
- "sov-state",
- "sov-stf-runner",
- "sov-value-setter",
- "tempfile",
- "tendermint",
- "tokio",
- "tracing",
- "tracing-subscriber",
 ]
 
 [[package]]
