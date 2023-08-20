@@ -728,7 +728,6 @@ dependencies = [
  "proptest",
  "reqwest",
  "risc0-adapter",
- "rollup-config",
  "serde",
  "serde_json",
  "sha2 0.10.7",
@@ -759,7 +758,6 @@ dependencies = [
  "hex",
  "jsonrpsee 0.18.2",
  "rand 0.8.5",
- "rollup-config",
  "serde",
  "serde_json",
  "sov-accounts",
@@ -2961,10 +2959,6 @@ dependencies = [
  "libc",
  "librocksdb-sys",
 ]
-
-[[package]]
-name = "rollup-config"
-version = "0.1.0"
 
 [[package]]
 name = "rrs-lib"

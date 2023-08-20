@@ -2,6 +2,10 @@
 # any Celestia blocks before this height
 start_height = 1
 
+da_rollup_namespace = [115, 111, 118, 45, 116, 101, 115, 116]
+da_sequencer_address = "celestia1w7wcupk5gswj25c0khnkey5fwmlndx6t5aarmk"
+
+
 [da]
 # The JWT used to authenticate with the celestia light client. Instructions for generating this token can be found in the README
 celestia_rpc_auth_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBbGxvdyI6WyJwdWJsaWMiLCJyZWFkIiwid3JpdGUiLCJhZG1pbiJdfQ.Nbb0u7pKfX1Kl5Hvgt3g4-SOdS3h2nPLjMhYs1CrRHA"

@@ -1,7 +1,6 @@
 [workspace]
 resolver = "2"
 members = [
-    "src/rollup-config",
     "src/demo-stf",
     "src/demo-rollup",
     "src/demo-module",

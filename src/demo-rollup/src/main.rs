@@ -4,7 +4,6 @@ use std::sync::Arc;
 
 use anyhow::Context;
 use borsh::{BorshDeserialize, BorshSerialize};
-use rollup_config::{ROLLUP_NAMESPACE_RAW, SEQUENCER_DA_ADDRESS};
 use demo_stf::app::{App, DefaultContext, DefaultPrivateKey};
 use demo_stf::genesis_config::create_demo_genesis_config;
 use demo_stf::runtime::{get_rpc_methods, GenesisConfig};
@@ -15,6 +14,7 @@ use jupiter::verifier::{ChainValidityCondition, RollupParams};
 use risc0_adapter::host::Risc0Verifier;
 use sov_db::ledger_db::LedgerDB;
 use demo_stf::{SequencerOutcome, TxEffect};
+use demo_stf::app::RollupDaConfig;
 use sov_rollup_interface::da::DaSpec;
 use sov_rollup_interface::services::da::DaService;
 use sov_rollup_interface::zk::ValidityConditionChecker;
@@ -22,12 +22,6 @@ use sov_sequencer::get_sequencer_rpc;
 
 use sov_stf_runner::{from_toml_path, get_ledger_rpc, RollupConfig, StateTransitionRunner};
 use tracing::{debug, Level};
-
-
-
-// The rollup stores its data in the namespace b"sov-test" on Celestia
-// You can change this constant to point your rollup at a different namespace
-const ROLLUP_NAMESPACE: NamespaceId = NamespaceId(ROLLUP_NAMESPACE_RAW);
 
 /// Initializes a [`LedgerDB`] using the provided `path`.
 pub fn initialize_ledger(path: impl AsRef<std::path::Path>) -> LedgerDB {
@@ -51,7 +45,7 @@ struct HexKey {
 /// ```rust,no_run
 /// const SEQUENCER_DA_ADDRESS: [u8;47] = *b"celestia1qp09ysygcx6npted5yc0au6k9lner05yvs9208"
 /// ```
-pub fn get_genesis_config() -> GenesisConfig<DefaultContext> {
+pub fn get_genesis_config(sequencer_address: &str) -> GenesisConfig<DefaultContext> {
     let hex_key: HexKey = serde_json::from_slice(include_bytes!(
         "../../../test-data/keys/token_deployer_private_key.json"
     ))
@@ -62,7 +56,7 @@ pub fn get_genesis_config() -> GenesisConfig<DefaultContext> {
         hex_key.address,
         "Inconsistent key data",
     );
-    let sequencer_da_address = CelestiaAddress::from_str(SEQUENCER_DA_ADDRESS).unwrap();
+    let sequencer_da_address = CelestiaAddress::from_str(sequencer_address).unwrap();
     create_demo_genesis_config(
         100000000,
         sequencer_private_key.default_address(),
@@ -101,6 +95,9 @@ async fn main() -> Result<(), anyhow::Error> {
     debug!("Starting demo rollup with config {}", rollup_config_path);
     let rollup_config: RollupConfig =
         from_toml_path(&rollup_config_path).context("Failed to read rollup configuration")?;
+    
+    let rollup_da_config: RollupDaConfig =
+        from_toml_path(&rollup_config_path).context("Failed to read rollup configuration")?;
 
     // Initializing logging
     let subscriber = tracing_subscriber::fmt()
@@ -112,10 +109,11 @@ async fn main() -> Result<(), anyhow::Error> {
 
     let ledger_db = initialize_ledger(&rollup_config.runner.storage.path);
 
+    let rollup_namespace = NamespaceId(rollup_da_config.da_rollup_namespace);
     let da_service = CelestiaService::new(
         rollup_config.da.clone(),
         RollupParams {
-            namespace: ROLLUP_NAMESPACE,
+            namespace: rollup_namespace,
         },
     )
     .await;
@@ -134,7 +132,7 @@ async fn main() -> Result<(), anyhow::Error> {
 
     // let storage = app.get_storage();
     // storage.isEmty()
-    let genesis_config = get_genesis_config();
+    let genesis_config = get_genesis_config(&rollup_da_config.da_sequencer_address);
 
     let mut runner = StateTransitionRunner::new(
         rollup_config,

@@ -56,3 +56,10 @@ pub fn create_zk_app_template<Vm: Zkvm, Cond: ValidityCondition, B: BlobReaderTr
     let storage = ZkStorage::with_config(runtime_config).expect("Failed to open zk storage");
     AppTemplate::new(storage, Runtime::default())
 }
+
+/// Rollup Configuration
+#[derive(Debug, Clone, PartialEq, serde::Deserialize)]
+pub struct RollupDaConfig {
+    pub da_rollup_namespace: [u8; 8],
+    pub da_sequencer_address: String,
+}

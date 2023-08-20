@@ -21,7 +21,6 @@ tokio = { workspace = true }
 tracing-subscriber = "0.3.17"
 futures = "0.3"
 
-rollup-config = { path = "../rollup-config" }
 jupiter = {  git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
 risc0-adapter = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
 demo-stf = { path = "../demo-stf", features = ["native"] }
