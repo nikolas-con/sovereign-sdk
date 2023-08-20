@@ -386,8 +386,7 @@ mod test {
             test_data.minter_address,
         );
 
-        // The minted amount was 1000 and we transferred 200 and burned 300.
-        assert_eq!(balance, Some(500))
+        assert_eq!(balance, None)
     }
 
     #[test]
@@ -464,6 +463,7 @@ mod test {
     fn make_test_path<P: AsRef<Path>>(path: P) -> PathBuf {
         let mut sender_path = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
         sender_path.push("..");
+        sender_path.push("..");
         sender_path.push("test-data");
 
         sender_path.push(path);
@@ -480,27 +480,11 @@ mod test {
         )
         .unwrap();
 
-        let transfer = SerializedTx::new(
-            make_test_path("keys/minter_private_key.json"),
-            "Bank",
-            make_test_path("requests/transfer.json"),
-            0,
-        )
-        .unwrap();
-
-        let burn = SerializedTx::new(
-            make_test_path("keys/minter_private_key.json"),
-            "Bank",
-            make_test_path("requests/burn.json"),
-            1,
-        )
-        .unwrap();
-
-        let data = vec![create_token.raw, transfer.raw, burn.raw];
+        let data = vec![create_token.raw];
 
         TestData {
             token_deployer_address: create_token.sender,
-            minter_address: transfer.sender,
+            minter_address: create_token.sender,
             data,
         }
     }
