@@ -24,10 +24,6 @@ use sov_stf_runner::{from_toml_path, get_ledger_rpc, RollupConfig, StateTransiti
 use tracing::{debug, Level};
 
 
-// use sov_state::storage::Storage;
-
-#[cfg(test)]
-mod test_rpc;
 
 // The rollup stores its data in the namespace b"sov-test" on Celestia
 // You can change this constant to point your rollup at a different namespace
