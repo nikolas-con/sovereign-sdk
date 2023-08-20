@@ -21,7 +21,7 @@ hex = { workspace = true }
 tracing = { workspace = true }
 
 
-demo-module = { path = "../demo-module", default-features = false }
+demo-module = { path = "../demo-module" }
 rollup-config = { path = "../rollup-config" }
 
 sov-modules-stf-template = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" } # no features available
@@ -48,7 +48,6 @@ default = ["native"]
 
 native = [
     "sov-bank/native",
-    "demo-module/native",
     "sov-accounts/native",
     "sov-election/native",
     "sov-sequencer-registry/native",

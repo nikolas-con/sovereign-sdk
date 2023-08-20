@@ -32,15 +32,7 @@ pub fn create_demo_genesis_config<C: Context>(
         tokens: vec![token_config],
     };
 
-    let token_a_config: demo_module::TokenConfig<C> = demo_module::TokenConfig {
-        token_name: DEMO_TOKEN_NAME.to_owned(),
-        address_and_balances: vec![(sequencer_address.clone(), initial_sequencer_balance)],
-        authorized_minters: vec![sequencer_address.clone()],
-        salt: 0,
-    };
-    let bank_a_config = demo_module::BankConfig {
-        tokens: vec![token_a_config],
-    };
+    let bank_a_config = demo_module::ModuleConfig {};
 
     let token_address = sov_bank::get_genesis_token_address::<C>(
         &bank_config.tokens[0].token_name,

@@ -1,14 +1,13 @@
-use demo_module::{ BankA, CallMessage, BankConfig};
+use demo_module::{ BankA, CallMessage, ModuleConfig};
 use sov_modules_api::utils::generate_address;
 use sov_modules_api::{Context, Module};
 use sov_state::{ProverStorage, WorkingSet};
 use sov_modules_api::default_context::DefaultContext;
-mod helpers;
 
 
 #[test]
-fn initial_name() {
-  let bank_config: BankConfig<DefaultContext> = BankConfig {tokens: vec![] };
+fn update_name() {
+  let bank_config: ModuleConfig = ModuleConfig {};
   let tmpdir = tempfile::tempdir().unwrap();
   let mut working_set = WorkingSet::new(ProverStorage::with_path(tmpdir.path()).unwrap());
   
