@@ -3,7 +3,7 @@ use jsonrpsee::core::RpcResult;
 use sov_modules_api::macros::rpc_gen;
 use sov_state::WorkingSet;
 
-use crate::BankA;
+use crate::DemoModule;
 
 #[derive(Debug, Eq, PartialEq, serde::Deserialize, serde::Serialize, Clone)]
 pub struct NameResponse {
@@ -11,8 +11,8 @@ pub struct NameResponse {
     pub name: Option<String>
 }
 
-#[rpc_gen(client, server, namespace = "bank_a")]
-impl<C: sov_modules_api::Context> BankA<C> {
+#[rpc_gen(client, server, namespace = "demo_module")]
+impl<C: sov_modules_api::Context> DemoModule<C> {
 
     #[rpc_method(name = "getName")]
     /// Rpc method that returns the supply of token of the token stored at the address `get_name`.
@@ -26,7 +26,7 @@ impl<C: sov_modules_api::Context> BankA<C> {
     }
 }
 
-impl<C: sov_modules_api::Context> BankA<C> {
+impl<C: sov_modules_api::Context> DemoModule<C> {
     pub fn get_name_of(
         &self,
         working_set: &mut WorkingSet<C::Storage>,

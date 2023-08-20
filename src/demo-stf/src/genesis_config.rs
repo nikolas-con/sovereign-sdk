@@ -32,7 +32,7 @@ pub fn create_demo_genesis_config<C: Context>(
         tokens: vec![token_config],
     };
 
-    let bank_a_config = demo_module::ModuleConfig {};
+    let demo_module_config = demo_module::ModuleConfig {};
 
     let token_address = sov_bank::get_genesis_token_address::<C>(
         &bank_config.tokens[0].token_name,
@@ -59,7 +59,7 @@ pub fn create_demo_genesis_config<C: Context>(
 
     GenesisConfig::new(
         bank_config,
-        bank_a_config,
+        demo_module_config,
         sequencer_registry_config,
         (),
         election_config,

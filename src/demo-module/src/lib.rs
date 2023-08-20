@@ -1,12 +1,11 @@
 mod call;
-mod genesis;
 mod query;
 
 /// Specifies the call methods using in that module.
 pub use call::CallMessage;
 
 /// Specifies the different queries used in that module.
-pub use query::{BankARpcImpl, BankARpcServer};
+pub use query::{DemoModuleRpcImpl, DemoModuleRpcServer};
 use sov_modules_api::{Error, ModuleInfo};
 use sov_state::WorkingSet;
 
@@ -17,7 +16,7 @@ pub struct ModuleConfig {}
 /// - Token creation.
 #[derive(sov_modules_api::ModuleCallJsonSchema)]
 #[derive(ModuleInfo, Clone)]
-pub struct BankA<C: sov_modules_api::Context> {
+pub struct DemoModule<C: sov_modules_api::Context> {
     /// The address of the sov-bank module.
     #[address]
     pub(crate) address: C::Address,
@@ -26,7 +25,7 @@ pub struct BankA<C: sov_modules_api::Context> {
     pub(crate) name: sov_state::StateValue<String>,
 }
 
-impl<C: sov_modules_api::Context> sov_modules_api::Module for BankA<C> {
+impl<C: sov_modules_api::Context> sov_modules_api::Module for DemoModule<C> {
     type Context = C;
 
     type Config = ModuleConfig;
@@ -35,10 +34,12 @@ impl<C: sov_modules_api::Context> sov_modules_api::Module for BankA<C> {
 
     fn genesis(
         &self,
-        config: &Self::Config,
+        _config: &Self::Config,
         working_set: &mut WorkingSet<C::Storage>,
     ) -> Result<(), Error> {
-        Ok(self.init_module(config, working_set)?)
+
+        self.name.set(&"test_str".to_owned(), working_set);
+        Ok(())
     }
 
     fn call(

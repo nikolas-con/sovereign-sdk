@@ -1,4 +1,4 @@
-use demo_module::{ BankA, CallMessage, ModuleConfig};
+use demo_module::{ DemoModule, CallMessage, ModuleConfig};
 use sov_modules_api::utils::generate_address;
 use sov_modules_api::{Context, Module};
 use sov_state::{ProverStorage, WorkingSet};
@@ -11,7 +11,7 @@ fn update_name() {
   let tmpdir = tempfile::tempdir().unwrap();
   let mut working_set = WorkingSet::new(ProverStorage::with_path(tmpdir.path()).unwrap());
   
-  let bank: BankA<DefaultContext> = BankA::default();
+  let bank: DemoModule<DefaultContext> = DemoModule::default();
   bank.genesis(&bank_config, &mut working_set).unwrap();
 
   let name_opt = bank.get_name_of(&mut working_set);

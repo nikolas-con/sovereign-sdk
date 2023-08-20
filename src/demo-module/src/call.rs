@@ -4,7 +4,7 @@ use sov_modules_api::macros::CliWalletArg;
 use sov_modules_api::CallResponse;
 use sov_state::WorkingSet;
 
-use crate::BankA;
+use crate::DemoModule;
 
 /// This enumeration represents the available call messages for interacting with the sov-bank module.
 #[cfg_attr(
@@ -25,7 +25,7 @@ pub enum CallMessage<C: sov_modules_api::Context> {
     }
 }
 
-impl<C: sov_modules_api::Context> BankA<C> {
+impl<C: sov_modules_api::Context> DemoModule<C> {
 
     #[allow(clippy::too_many_arguments)]
     pub(crate) fn update_name(
