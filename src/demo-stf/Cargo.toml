@@ -5,8 +5,8 @@ edition = { workspace = true }
 resolver = "2"
 
 [[bin]]
-name = "sov-cli"
-path = "src/sov-cli/main.rs"
+name = "demo-cli"
+path = "src/cli.rs"
 
 [dependencies]
 anyhow = { workspace = true }

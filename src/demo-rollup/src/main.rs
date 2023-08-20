@@ -34,7 +34,7 @@ pub fn initialize_ledger(path: impl AsRef<std::path::Path>) -> LedgerDB {
     LedgerDB::with_path(path).expect("Ledger DB failed to open")
 }
 
-// TODO: Remove this when sov-cli is in its own crate.
+// TODO: Remove this when demo-cli is in its own crate.
 #[derive(Debug, serde::Serialize, serde::Deserialize)]
 struct HexKey {
     hex_priv_key: String,
