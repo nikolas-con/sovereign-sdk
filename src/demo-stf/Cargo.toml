@@ -12,11 +12,11 @@ path = "src/cli.rs"
 anyhow = { workspace = true }
 borsh = { workspace = true }
 serde = { workspace = true }
-serde_json = { workspace = true, optional = true }
-clap = { workspace = true, optional = true }
-toml = { workspace = true, optional = true }
-jsonrpsee = { workspace = true, features = ["http-client", "server"], optional = true }
-tokio = { workspace = true, optional = true }
+serde_json = { workspace = true }
+clap = { workspace = true }
+toml = { workspace = true }
+jsonrpsee = { workspace = true, features = ["http-client", "server"] }
+tokio = { workspace = true }
 hex = { workspace = true }
 tracing = { workspace = true }
 
@@ -25,41 +25,19 @@ demo-module = { path = "../demo-module" }
 
 sov-modules-stf-template = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" } # no features available
 sov-sequencer-registry = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false }
-sov-accounts = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false }
+sov-accounts = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
 sov-bank = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false }
 sov-value-setter = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false }
-sov-blob-storage = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" , default-features = false }
+sov-blob-storage = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
 sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32"  }
 sov-election = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" , default-features = false }
 sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false, features = ["macros"] }
-sov-sequencer = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", optional = true }
+sov-sequencer = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
 sov-state = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false }
-sov-stf-runner = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" , optional = true }
+sov-stf-runner = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
 
 [dev-dependencies]
 sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" , features = ["mocks"] }
 sov-data-generators = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
 tempfile = { workspace = true }
 rand = "0.8"
-
-[features]
-default = ["native"]
-
-native = [
-    "sov-bank/native",
-    "sov-accounts/native",
-    "sov-election/native",
-    "sov-sequencer-registry/native",
-    "sov-blob-storage/native",
-    "sov-value-setter/native",
-    "sov-modules-api/native",
-    "sov-rollup-interface/mocks",
-    "sov-sequencer",
-    "sov-stf-runner",
-    "clap",
-    "serde_json",
-    "jsonrpsee",
-    "tokio",
-    "toml",
-]
-verifier = []

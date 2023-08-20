@@ -8,14 +8,14 @@ resolver = "2"
 [dependencies]
 anyhow = { workspace = true }
 borsh = { workspace = true, features = ["rc"] }
-clap = { workspace = true, optional = true, features = ["derive"] }
-jsonrpsee = { workspace = true, features = ["macros", "client-core", "server"], optional = true }
-schemars = { workspace = true, optional = true }
-serde = { workspace = true, optional = true }
-serde_json = { workspace = true, optional = true }
+clap = { workspace = true, features = ["derive"] }
+jsonrpsee = { workspace = true, features = ["macros", "client-core", "server"] }
+schemars = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
 
 sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", version = "0.1", default-features = false, features = ["macros"] }
-sov-state = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", version = "0.1", default-features = false }
+sov-state = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", version = "0.1" }
 sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", version = "0.1" }
 thiserror = { workspace = true }
 hex = { workspace = true }
@@ -23,9 +23,3 @@ hex = { workspace = true }
 [dev-dependencies]
 sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", version = "0.1" }
 tempfile = { workspace = true }
-
-[features]
-default = ["native"]
-serde = ["dep:serde", "dep:serde_json"]
-native = ["serde", "sov-state/native", "dep:jsonrpsee", "sov-modules-api/native", "dep:clap", "dep:schemars"]
-cli = ["native"]

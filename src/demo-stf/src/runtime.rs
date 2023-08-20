@@ -1,28 +1,18 @@
-#[cfg(feature = "native")]
 use sov_accounts::{AccountsRpcImpl, AccountsRpcServer};
-#[cfg(feature = "native")]
 use sov_bank::{BankRpcImpl, BankRpcServer};
-#[cfg(feature = "native")]
 use demo_module::{DemoModuleRpcImpl, DemoModuleRpcServer};
-#[cfg(feature = "native")]
 use sov_blob_storage::{BlobStorageRpcImpl, BlobStorageRpcServer};
-#[cfg(feature = "native")]
 use sov_election::{ElectionRpcImpl, ElectionRpcServer};
-#[cfg(feature = "native")]
 use sov_modules_api::capabilities::{BlobRefOrOwned, BlobSelector};
-#[cfg(feature = "native")]
 pub use sov_modules_api::default_context::DefaultContext;
 use sov_modules_api::hooks::SlotHooks;
 use sov_modules_api::macros::DefaultRuntime;
-#[cfg(feature = "native")]
 use sov_modules_api::macros::{expose_rpc, CliWallet};
 use sov_modules_api::{Context, DispatchCall, Genesis, MessageCodec, Spec};
 use sov_rollup_interface::da::BlobReaderTrait;
 use sov_rollup_interface::zk::ValidityCondition;
-#[cfg(feature = "native")]
 use sov_sequencer_registry::{SequencerRegistryRpcImpl, SequencerRegistryRpcServer};
 use sov_state::WorkingSet;
-#[cfg(feature = "native")]
 use sov_value_setter::{ValueSetterRpcImpl, ValueSetterRpcServer};
 
 /// The Rollup entrypoint.
@@ -60,18 +50,16 @@ use sov_value_setter::{ValueSetterRpcImpl, ValueSetterRpcServer};
 /// Similar mechanism works for queries with the difference that queries are submitted by users directly to the rollup node
 /// instead of going through the DA layer.
 
-#[cfg_attr(feature = "native", derive(CliWallet), expose_rpc(DefaultContext))]
+#[derive(CliWallet)]
+#[expose_rpc(DefaultContext)]
 #[derive(Genesis, DispatchCall, MessageCodec, DefaultRuntime)]
 #[serialization(borsh::BorshDeserialize, borsh::BorshSerialize)]
-#[cfg_attr(
-    feature = "native",
-    serialization(serde::Serialize, serde::Deserialize)
-)]
+#[serialization(serde::Serialize, serde::Deserialize)]
 pub struct Runtime<C: Context> {
     pub bank: sov_bank::Bank<C>,
     pub demo_module: demo_module::DemoModule<C>,
     pub sequencer_registry: sov_sequencer_registry::SequencerRegistry<C>,
-    #[cfg_attr(feature = "native", cli_skip)]
+    #[cli_skip]
     pub blob_storage: sov_blob_storage::BlobStorage<C>,
     pub election: sov_election::Election<C>,
     pub value_setter: sov_value_setter::ValueSetter<C>,

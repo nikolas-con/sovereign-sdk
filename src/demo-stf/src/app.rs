@@ -1,32 +1,24 @@
-#[cfg(feature = "native")]
 pub use sov_modules_api::default_context::DefaultContext;
 pub use sov_modules_api::default_context::ZkDefaultContext;
-#[cfg(feature = "native")]
 pub use sov_modules_api::default_signature::private_key::DefaultPrivateKey;
-#[cfg(feature = "native")]
 use sov_modules_api::Spec;
 use sov_modules_stf_template::AppTemplate;
 pub use sov_modules_stf_template::Batch;
 use sov_rollup_interface::da::BlobReaderTrait;
 use sov_rollup_interface::zk::{ValidityCondition, Zkvm};
-#[cfg(feature = "native")]
 use sov_state::ProverStorage;
 use sov_state::{Storage, ZkStorage};
-#[cfg(feature = "native")]
 use sov_stf_runner::FiFoStrictBatchBuilder;
-#[cfg(feature = "native")]
 use sov_stf_runner::StorageConfig;
 
 
 use crate::runtime::Runtime;
 
-#[cfg(feature = "native")]
 pub struct App<Vm: Zkvm, Cond: ValidityCondition, B: BlobReaderTrait> {
     pub stf: AppTemplate<DefaultContext, Cond, Vm, Runtime<DefaultContext>, B>,
     pub batch_builder: Option<FiFoStrictBatchBuilder<Runtime<DefaultContext>, DefaultContext>>,
 }
 
-#[cfg(feature = "native")]
 impl<Vm: Zkvm, Cond: ValidityCondition, B: BlobReaderTrait> App<Vm, Cond, B> {
     pub fn new(storage_config: StorageConfig) -> Self {
         let storage =
