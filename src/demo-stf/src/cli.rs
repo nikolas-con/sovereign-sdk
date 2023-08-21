@@ -278,7 +278,8 @@ pub async fn main() -> Result<(), anyhow::Error> {
                 let mut hex_string = String::new();
                 file.read_to_string(&mut hex_string)
                     .context("Unable to read the file")?;
-                hex_encoded_txs.push(hex_string);
+                let hex_string_trim = hex_string.trim().to_string();
+                hex_encoded_txs.push(hex_string_trim);
             }
 
             let blob = make_hex_blob(hex_encoded_txs.into_iter())?;

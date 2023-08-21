@@ -10,7 +10,7 @@ cargo run --bin demo-cli make-batch /tmp/update_name_tx.dat > /tmp/test_blob_tx.
 
 ### submit tx
 cargo run --bin demo-cli util print-namespace ### get namespace
-docker exec sov-celestia-local celestia-appd tx blob PayForBlobs ${NAMESPACE} $(cat /tmp/test_blob_tx.dat) --from validator --chain-id=test --fees=300utia -y
+docker exec sov-celestia-local celestia-appd tx blob PayForBlobs ${NAMESPACE} $(cat /tmp/test_blob_tx.dat | tr -d '\n') --from validator --chain-id=test --fees=300utia -y
 ```
 
 
