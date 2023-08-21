@@ -735,6 +735,7 @@ dependencies = [
  "sov-db",
  "sov-election",
  "sov-modules-api",
+ "sov-modules-stf-template",
  "sov-rollup-interface",
  "sov-sequencer",
  "sov-state",

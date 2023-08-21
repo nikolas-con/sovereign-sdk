@@ -10,7 +10,7 @@ pub mod test {
     use sov_rollup_interface::stf::StateTransitionFunction;
     use sov_state::{ProverStorage, WorkingSet};
 
-    use crate::genesis_config::{create_demo_config, DEMO_SEQUENCER_DA_ADDRESS, LOCKED_AMOUNT};
+    use crate::config::{create_demo_config, DEMO_SEQUENCER_DA_ADDRESS, LOCKED_AMOUNT};
     use crate::runtime::Runtime;
     use crate::tests::da_simulation::simulate_da;
     use crate::tests::{create_new_demo, TestBlob, C};

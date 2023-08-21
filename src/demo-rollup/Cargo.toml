@@ -27,6 +27,7 @@ demo-stf = { path = "../demo-stf" }
 sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", features = ["mocks"] }
 sov-sequencer = {  git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
 sov-db = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32"}
+sov-modules-stf-template = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" } # no features available
 sov-stf-runner = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
 sov-bank = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false }
 sov-election = {  git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false }
