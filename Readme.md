@@ -4,7 +4,11 @@
 ### Transaction
 
 ```sh
+### submit tx
 cargo run --bin demo-cli submit-transaction keys/token_deployer_key.json DemoModule "{ \"UpdateName\": { \"name\": \"gm\" } }" 0 http://127.0.0.1:12345
+
+### query data
+curl -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"demo_module_getName","params":[],"id":1}' http://127.0.0.1:12345
 ```
 
 <details>
@@ -16,7 +20,7 @@ cargo run --bin demo-cli submit-transaction keys/token_deployer_key.json DemoMod
 cargo run --bin demo-cli generate-transaction-from-json keys/token_deployer_key.json DemoModule "{ \"UpdateName\": { \"name\": \"gm\" } }" 0 > /tmp/update_name_tx.dat
 cargo run --bin demo-cli make-batch /tmp/update_name_tx.dat > /tmp/test_blob_tx.dat
 
-### submit tx
+### submit batch
 cargo run --bin demo-cli util print-namespace ### get namespace
 docker exec sov-celestia-local celestia-appd tx blob PayForBlobs ${NAMESPACE} $(cat /tmp/test_blob_tx.dat | tr -d '\n') --from validator --chain-id=test --fees=300utia -y
 ```
