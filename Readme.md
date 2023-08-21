@@ -6,6 +6,7 @@
 ```sh
 ### submit tx
 cargo run --bin demo-cli submit-transaction keys/token_deployer_key.json DemoModule "{ \"UpdateName\": { \"name\": \"gm\" } }" 0 http://127.0.0.1:12345
+cargo run --bin demo-cli publish-batch http://127.0.0.1:12345
 
 ### query data
 curl -X POST -H "Content-Type: application/json" -d '{"jsonrpc":"2.0","method":"demo_module_getName","params":[],"id":1}' http://127.0.0.1:12345
