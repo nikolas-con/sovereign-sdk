@@ -1,6 +1,14 @@
 
 
+
 ### Transaction
+
+```sh
+cargo run --bin demo-cli submit-transaction keys/token_deployer_key.json DemoModule "{ \"UpdateName\": { \"name\": \"gm\" } }" 0 http://127.0.0.1:12345
+```
+
+<details>
+<summary>Submitting a transaction manually</summary>
 
 ```sh
 
@@ -12,7 +20,7 @@ cargo run --bin demo-cli make-batch /tmp/update_name_tx.dat > /tmp/test_blob_tx.
 cargo run --bin demo-cli util print-namespace ### get namespace
 docker exec sov-celestia-local celestia-appd tx blob PayForBlobs ${NAMESPACE} $(cat /tmp/test_blob_tx.dat | tr -d '\n') --from validator --chain-id=test --fees=300utia -y
 ```
-
+</details>
 
 
 ### Setup
