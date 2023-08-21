@@ -23,14 +23,14 @@ tracing = { workspace = true }
 
 demo-module = { path = "../demo-module" }
 
-sov-modules-stf-template = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" } # no features available
+sov-modules-stf-template = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
 sov-sequencer-registry = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false }
 sov-accounts = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
 sov-bank = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false }
-sov-value-setter = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false }
+sov-value-setter = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
 sov-blob-storage = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
 sov-rollup-interface = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32"  }
-sov-election = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" , default-features = false }
+sov-election = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
 sov-modules-api = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false, features = ["macros"] }
 sov-sequencer = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32" }
 sov-state = { git = "https://github.com/Sovereign-Labs/sovereign-sdk", rev = "6371c32", default-features = false }
