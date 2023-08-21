@@ -5,12 +5,12 @@
 ```sh
 
 ### create batch
-cargo run --bin demo-cli generate-transaction-from-json test-data/token_deployer_key.json DemoModule test-data/update_name_tx.json 0
-cargo run --bin demo-cli make-batch test-data/update_name_tx.dat > test-data/test_blob_tx.dat
+cargo run --bin demo-cli generate-transaction-from-json keys/token_deployer_key.json DemoModule "{ \"UpdateName\": { \"name\": \"gm\" } }" 0 > /tmp/update_name_tx.dat
+cargo run --bin demo-cli make-batch /tmp/update_name_tx.dat > /tmp/test_blob_tx.dat
 
 ### submit tx
 cargo run --bin demo-cli util print-namespace ### get namespace
-docker exec sov-celestia-local celestia-appd tx blob PayForBlobs ${NAMESPACE} $(cat ../test-data/test_blob_tx.dat) --from validator --chain-id=test --fees=300utia -y
+docker exec sov-celestia-local celestia-appd tx blob PayForBlobs ${NAMESPACE} $(cat /tmp/test_blob_tx.dat) --from validator --chain-id=test --fees=300utia -y
 ```
 
 

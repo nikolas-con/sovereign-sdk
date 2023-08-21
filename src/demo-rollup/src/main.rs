@@ -48,7 +48,7 @@ struct HexKey {
 /// ```
 pub fn get_genesis_config(sequencer_address: &str) -> GenesisConfig<DefaultContext> {
     let hex_key: HexKey = serde_json::from_slice(include_bytes!(
-        "../../../test-data/token_deployer_key.json"
+        "../../../keys/token_deployer_key.json"
     ))
     .expect("Broken key data file");
     let sequencer_private_key = DefaultPrivateKey::from_hex(&hex_key.hex_priv_key).unwrap();

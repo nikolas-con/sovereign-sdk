@@ -1,5 +1,5 @@
 use std::fs::File;
-use std::io::{Read, Write};
+use std::io::Read;
 use std::path::{Path, PathBuf};
 use std::{fs, vec};
 
@@ -42,7 +42,7 @@ enum Commands {
         /// (eg: Bank, Accounts)
         module_name: String,
         /// Path to the json file containing the parameters for a module call
-        call_data_path: String,
+        call_data: String,
         /// Nonce for the transaction
         nonce: u64,
     },
@@ -55,7 +55,7 @@ enum Commands {
         /// (eg: Bank, Accounts)
         module_name: String,
         /// Path to the json file containing the parameters for a module call
-        call_data_path: String,
+        call_data: String,
         /// Nonce for the transaction
         nonce: u64,
         /// RPC endpoint with sequencer RPC
@@ -150,12 +150,12 @@ impl SerializedTx {
     fn new<P: AsRef<Path>>(
         sender_priv_key_path: P,
         module_name: &str,
-        call_data_path: P,
+        call_data: &str,
         nonce: u64,
     ) -> anyhow::Result<SerializedTx> {
         let sender_priv_key = Self::deserialize_priv_key(sender_priv_key_path)?;
         let sender_address = sender_priv_key.pub_key().to_address();
-        let message = Self::serialize_call_message(module_name, call_data_path)?;
+        let message = parse_call_message_json::<DefaultContext>(module_name, &call_data)?;
 
         let tx = Transaction::<C>::new_signed_tx(&sender_priv_key, message, nonce);
 
@@ -184,30 +184,18 @@ impl SerializedTx {
         )?)
     }
 
-    fn serialize_call_message<P: AsRef<Path>>(
-        module_name: &str,
-        call_data_path: P,
-    ) -> anyhow::Result<Vec<u8>> {
-        let call_data = std::fs::read_to_string(&call_data_path).with_context(|| {
-            format!(
-                "Failed to read call data from {:?}",
-                call_data_path.as_ref()
-            )
-        })?;
-        parse_call_message_json::<DefaultContext>(module_name, &call_data)
-    }
 }
 
 fn serialize_call(command: &Commands) -> Result<String, anyhow::Error> {
     if let Commands::GenerateTransactionFromJson {
         sender_priv_key_path,
         module_name,
-        call_data_path,
+        call_data,
         nonce,
     } = command
     {
         let serialized =
-            SerializedTx::new(&sender_priv_key_path, module_name, &call_data_path, *nonce)
+            SerializedTx::new(&sender_priv_key_path, module_name, &call_data, *nonce)
                 .context("Call message serialization error")?;
 
         Ok(hex::encode(serialized.raw.data))
@@ -237,26 +225,23 @@ pub async fn main() -> Result<(), anyhow::Error> {
 
     match cli.command {
         Commands::GenerateTransactionFromJson {
-            ref call_data_path, ..
+            ref call_data, ..
         } => {
             let raw_contents = serialize_call(&cli.command)?;
-            let mut bin_path = PathBuf::from(call_data_path);
+            let mut bin_path = PathBuf::from(call_data);
             bin_path.set_extension("dat");
 
-            let mut file = File::create(&bin_path)
-                .with_context(|| format!("Unable to create file {}", bin_path.display()))?;
-            file.write_all(raw_contents.as_bytes())
-                .with_context(|| format!("Unable to save file {}", bin_path.display()))?;
+            println!("{}", raw_contents)
         }
         Commands::SubmitTransaction {
             sender_priv_key_path,
             module_name,
-            call_data_path,
+            call_data,
             nonce,
             rpc_endpoint,
         } => {
             let serialized =
-                SerializedTx::new(&sender_priv_key_path, &module_name, &call_data_path, nonce)
+                SerializedTx::new(&sender_priv_key_path, &module_name, &call_data, nonce)
                     .context("Unable to serialize call transaction")?;
 
             let request = SubmitTransaction::new(serialized.raw.data);

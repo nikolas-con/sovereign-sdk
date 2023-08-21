@@ -52,10 +52,7 @@ mod test {
                 .unwrap()
                 .into(),
             module_name: "DemoModule".into(),
-            call_data_path: make_test_path("update_name_tx.json")
-                .to_str()
-                .unwrap()
-                .into(),
+            call_data: "{ \"UpdateName\": { \"name\": \"gm\" } }".to_owned(),
             nonce: 0,
         })
         .unwrap();
@@ -117,7 +114,7 @@ mod test {
         let mut sender_path = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
         sender_path.push("..");
         sender_path.push("..");
-        sender_path.push("test-data");
+        sender_path.push("keys");
 
         sender_path.push(path);
 
@@ -128,7 +125,7 @@ mod test {
         let serialized_tx = SerializedTx::new(
             make_test_path("token_deployer_key.json"),
             "DemoModule",
-            make_test_path("update_name_tx.json"),
+            "{ \"UpdateName\": { \"name\": \"gm\" } }",
             0,
         )
         .unwrap();
