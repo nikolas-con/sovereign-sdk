@@ -5,12 +5,12 @@
 ```sh
 
 ### create batch
-cargo run --bin sov-cli generate-transaction-from-json ../test-data/keys/token_deployer.json Bank ../test-data/requests/create_token.json 0
-cargo run --bin sov-cli make-batch ../test-data/requests/create_token.dat > ../test-data/requests/test_blob.dat
+cargo run --bin sov-cli generate-transaction-from-json ../test-data/token_deployer_key.json demo_module ../test-data/update_name_tx.json 0
+cargo run --bin sov-cli make-batch ../test-data/update_name_tx.dat > ../test-data/test_blob_tx.dat
 
 ### submit tx
 cargo run --bin sov-cli util print-namespace ### get namespace
-docker exec sov-celestia-local celestia-appd tx blob PayForBlobs ${NAMESPACE} $(cat ../test-data/requests/test_blob.dat) --from validator --chain-id=test --fees=300utia -y
+docker exec sov-celestia-local celestia-appd tx blob PayForBlobs ${NAMESPACE} $(cat ../test-data/test_blob_tx.dat) --from validator --chain-id=test --fees=300utia -y
 ```
 
 

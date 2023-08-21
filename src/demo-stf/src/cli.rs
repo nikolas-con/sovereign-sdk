@@ -390,16 +390,16 @@ mod test {
     }
 
     #[test]
-    fn test_create_token() {
+    fn test_update_name() {
         let tempdir = tempfile::tempdir().unwrap();
         let mut test_demo = TestDemo::with_path(tempdir.path().to_path_buf());
         let test_tx = serialize_call(&Commands::GenerateTransactionFromJson {
-            sender_priv_key_path: make_test_path("keys/token_deployer.json")
+            sender_priv_key_path: make_test_path("token_deployer_key.json")
                 .to_str()
                 .unwrap()
                 .into(),
-            module_name: "Bank".into(),
-            call_data_path: make_test_path("requests/create_token.json")
+            module_name: "DemoModule".into(),
+            call_data_path: make_test_path("update_name_tx.json")
                 .to_str()
                 .unwrap()
                 .into(),
@@ -472,19 +472,19 @@ mod test {
     }
 
     fn read_test_data() -> TestData {
-        let create_token = SerializedTx::new(
-            make_test_path("keys/token_deployer.json"),
-            "Bank",
-            make_test_path("requests/create_token.json"),
+        let serialized_tx = SerializedTx::new(
+            make_test_path("token_deployer_key.json"),
+            "DemoModule",
+            make_test_path("update_name_tx.json"),
             0,
         )
         .unwrap();
 
-        let data = vec![create_token.raw];
+        let data = vec![serialized_tx.raw];
 
         TestData {
-            token_deployer_address: create_token.sender,
-            minter_address: create_token.sender,
+            token_deployer_address: serialized_tx.sender,
+            minter_address: serialized_tx.sender,
             data,
         }
     }
