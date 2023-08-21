@@ -394,7 +394,7 @@ mod test {
         let tempdir = tempfile::tempdir().unwrap();
         let mut test_demo = TestDemo::with_path(tempdir.path().to_path_buf());
         let test_tx = serialize_call(&Commands::GenerateTransactionFromJson {
-            sender_priv_key_path: make_test_path("keys/token_deployer_private_key.json")
+            sender_priv_key_path: make_test_path("keys/token_deployer.json")
                 .to_str()
                 .unwrap()
                 .into(),
@@ -473,7 +473,7 @@ mod test {
 
     fn read_test_data() -> TestData {
         let create_token = SerializedTx::new(
-            make_test_path("keys/token_deployer_private_key.json"),
+            make_test_path("keys/token_deployer.json"),
             "Bank",
             make_test_path("requests/create_token.json"),
             0,

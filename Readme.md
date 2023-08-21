@@ -5,7 +5,7 @@
 ```sh
 
 ### create batch
-cargo run --bin sov-cli generate-transaction-from-json ../test-data/keys/token_deployer_private_key.json Bank ../test-data/requests/create_token.json 0
+cargo run --bin sov-cli generate-transaction-from-json ../test-data/keys/token_deployer.json Bank ../test-data/requests/create_token.json 0
 cargo run --bin sov-cli make-batch ../test-data/requests/create_token.dat > ../test-data/requests/test_blob.dat
 
 ### submit tx
